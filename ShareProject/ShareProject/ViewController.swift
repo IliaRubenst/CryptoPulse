@@ -15,5 +15,6 @@ class ViewController: UIViewController {
     }
 
     //118k$
+    //Vitaliy gde pravki?
 }
 
