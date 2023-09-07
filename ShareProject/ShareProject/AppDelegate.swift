@@ -1,8 +1,8 @@
 //
 //  AppDelegate.swift
-//  project1
+//  ShareProject
 //
-//  Created by Ilia Ilia on 17.06.2023.
+//  Created by Ilia Ilia on 07.09.2023.
 //
 
 import UIKit
