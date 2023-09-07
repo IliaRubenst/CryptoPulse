@@ -16,5 +16,6 @@ class ViewController: UIViewController {
 
     //118k$
     //Vitaliy gde pravki?
+    //Делаю пул реквест для помидора
 }
 
