@@ -14,6 +14,7 @@ class ViewController: UIViewController {
         // Do any additional setup after loading the view.
     }
 
-    //122k$
+    //118k$
+    //Vitaliy gde pravki?
 }
 
