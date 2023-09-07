@@ -18,5 +18,6 @@ class ViewController: UIViewController {
     //Vitaliy gde pravki?
     //Делаю пул реквест для помидора
     //Виталя пжлста
+    // НЕТ!
 }
 
