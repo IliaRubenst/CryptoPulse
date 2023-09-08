@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		49367CAC2AAAFE7100827BE9 /* CoinCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49367CAB2AAAFE7100827BE9 /* CoinCell.swift */; };
+		49367CAE2AAAFEB800827BE9 /* Coin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49367CAD2AAAFEB800827BE9 /* Coin.swift */; };
+		49367CB02AAB33BE00827BE9 /* MarketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49367CAF2AAB33BE00827BE9 /* MarketManager.swift */; };
 		496BEFDA2AA9EFDF00B15E0F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 496BEFD92AA9EFDF00B15E0F /* AppDelegate.swift */; };
 		496BEFDC2AA9EFDF00B15E0F /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 496BEFDB2AA9EFDF00B15E0F /* SceneDelegate.swift */; };
 		496BEFDE2AA9EFDF00B15E0F /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 496BEFDD2AA9EFDF00B15E0F /* ViewController.swift */; };
@@ -16,6 +19,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		49367CAB2AAAFE7100827BE9 /* CoinCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoinCell.swift; sourceTree = "<group>"; };
+		49367CAD2AAAFEB800827BE9 /* Coin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coin.swift; sourceTree = "<group>"; };
+		49367CAF2AAB33BE00827BE9 /* MarketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarketManager.swift; sourceTree = "<group>"; };
 		496BEFD62AA9EFDF00B15E0F /* ShareProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ShareProject.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		496BEFD92AA9EFDF00B15E0F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		496BEFDB2AA9EFDF00B15E0F /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -59,6 +65,9 @@
 				496BEFD92AA9EFDF00B15E0F /* AppDelegate.swift */,
 				496BEFDB2AA9EFDF00B15E0F /* SceneDelegate.swift */,
 				496BEFDD2AA9EFDF00B15E0F /* ViewController.swift */,
+				49367CAF2AAB33BE00827BE9 /* MarketManager.swift */,
+				49367CAB2AAAFE7100827BE9 /* CoinCell.swift */,
+				49367CAD2AAAFEB800827BE9 /* Coin.swift */,
 				496BEFDF2AA9EFDF00B15E0F /* Main.storyboard */,
 				496BEFE22AA9EFE100B15E0F /* Assets.xcassets */,
 				496BEFE42AA9EFE100B15E0F /* LaunchScreen.storyboard */,
@@ -139,7 +148,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				496BEFDE2AA9EFDF00B15E0F /* ViewController.swift in Sources */,
+				49367CB02AAB33BE00827BE9 /* MarketManager.swift in Sources */,
 				496BEFDA2AA9EFDF00B15E0F /* AppDelegate.swift in Sources */,
+				49367CAC2AAAFE7100827BE9 /* CoinCell.swift in Sources */,
+				49367CAE2AAAFEB800827BE9 /* Coin.swift in Sources */,
 				496BEFDC2AA9EFDF00B15E0F /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
