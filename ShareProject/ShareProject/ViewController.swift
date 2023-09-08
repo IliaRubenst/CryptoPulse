@@ -13,6 +13,11 @@ class ViewController: UICollectionViewController {
     let offSet: CGFloat = 4.0
     var coins = [Coin]()
     
+    
+    let binanceURL = "https://fapi.binance.com"     // перенести в Coin
+    var path = "/fapi/v1/exchangeInfo"                      // перенести в Coin
+    
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,11 +58,54 @@ class ViewController: UICollectionViewController {
     
     
     @objc func addTicker() {
-        
+        fetchRequest(path: path)
     }
     
     @objc func settings() {
         
     }
+    
+    
+    // эту часть кода мы перенесем в Coin class
+    func fetchRequest(path: String) {
+        let urlString = binanceURL + path
+        performRequest(urlString: urlString)
+        print(urlString)
+    }
+
+    func performRequest(urlString: String) {
+        // 1. Create a URL
+        if let url = URL(string: urlString) {
+            // 2. Create a URLSession
+            let session = URLSession(configuration: .default)
+            
+            // 3. Give the session a task
+            
+            let task = session.dataTask(with: url) { [self] (data, response, error) in
+                if error != nil {
+                    print(error!)
+                    return
+                }
+                
+                if let safeData = data {
+                    parseJSON(marketData: safeData)
+                }
+            }
+            // 4. Start the task
+            task.resume()
+        }
+    }
+    
+    func parseJSON(marketData: Data) {
+        let decoder = JSONDecoder()
+        do {
+            let decodedData = try decoder.decode(Coin.self, from: marketData)
+            
+            print(decodedData.assets[1].asset)
+        } catch {
+            print(error)
+        }
+    }
+        
 }
 

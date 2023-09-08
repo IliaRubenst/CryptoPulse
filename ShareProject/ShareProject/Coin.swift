@@ -7,7 +7,10 @@
 
 import UIKit
 
-class Coin: NSObject {
+class Coin: Decodable {
+    let assets: [Assets]
+}
 
-
+struct Assets: Decodable {
+    let asset: String
 }
