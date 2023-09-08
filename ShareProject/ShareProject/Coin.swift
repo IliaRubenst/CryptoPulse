@@ -21,6 +21,9 @@ struct Symbol: Decodable {
     let markPrice: String
 }
 
+struct SymbolsArray {
+    static var symbols = [Symbol]()
+}
 
     /*
 {

@@ -22,7 +22,7 @@ class ViewController: UICollectionViewController {
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 40
+        return SymbolsArray.symbols.count
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -40,8 +40,8 @@ class ViewController: UICollectionViewController {
             fatalError("Unable to dequeue CoinCell.")
         }
         
-        cell.tickerLabel.text = "Beta"
-        cell.currentPriceLabel.text = "2.95$"
+        cell.tickerLabel.text = SymbolsArray.symbols[indexPath.item].symbol
+        cell.currentPriceLabel.text = SymbolsArray.symbols[indexPath.item].markPrice
         
         cell.layer.borderWidth = 1
         cell.layer.cornerRadius = 5
@@ -52,7 +52,10 @@ class ViewController: UICollectionViewController {
     
     
     @objc func addTicker() {
-        marketManager.fetchRequest(path: path)
+        marketManager.fetchRequest(path: path, action: { [weak self] in
+            self?.collectionView.reloadData()
+            print("Вызвали action!")
+        })
     }
     
     @objc func settings() {

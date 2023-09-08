@@ -10,10 +10,11 @@ import Foundation
 struct MarketManager {
     let binanceURL = "https://fapi.binance.com"
     
-    func fetchRequest(path: String) {
+    func fetchRequest(path: String, action: () -> ()) {
         let urlString = binanceURL + path
         performRequest(urlString: urlString)
         print(urlString)
+        action()
     }
     
     func performRequest(urlString: String) {
@@ -44,9 +45,8 @@ struct MarketManager {
         do {
             let decodedData = try decoder.decode([Symbol].self, from: marketData)
             
-            let sortedData = Array(decodedData)
             for data in decodedData.sorted(by: { $0.symbol < $1.symbol }) {
-                print("\(data.symbol) = \(data.markPrice)$")
+                SymbolsArray.symbols.append(Symbol(symbol: data.symbol, markPrice: data.markPrice))
             }
         } catch {
             print(error)
