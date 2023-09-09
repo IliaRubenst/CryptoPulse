@@ -24,15 +24,3 @@ struct Symbol: Decodable {
 struct SymbolsArray {
     static var symbols = [Symbol]()
 }
-
-    /*
-{
-    "symbol": "BTCUSDT",
-    "markPrice": "11012.80409769",
-    "lastFundingRate": "-0.03750000",
-    "nextFundingTime": 1562569200000,
-    "time": 1562566020000
-}
-     */
-
-

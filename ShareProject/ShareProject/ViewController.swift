@@ -49,7 +49,19 @@ class ViewController: UICollectionViewController {
         return cell
     }
     
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let cell = collectionView.cellForItem(at: indexPath) as? CoinCell else { return }
+        openDetailView(indexPath: indexPath)
+    }
     
+    func openDetailView(indexPath: IndexPath) {
+        if let detailVC = storyboard?.instantiateViewController(identifier: "DetailData") as? DetailViewController {
+            detailVC.symbol = SymbolsArray.symbols[indexPath.item].symbol
+            detailVC.price = SymbolsArray.symbols[indexPath.item].markPrice
+
+            navigationController?.pushViewController(detailVC, animated: true)
+        }
+    }
     
     @objc func addTicker() {
         marketManager.fetchRequest(path: path, action: { [weak self] in
@@ -61,9 +73,5 @@ class ViewController: UICollectionViewController {
     @objc func settings() {
         
     }
-    
-    
-
-        
 }
 
