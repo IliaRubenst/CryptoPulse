@@ -13,7 +13,6 @@ struct MarketManager {
     func fetchRequest(path: String, action: () -> ()) {
         let urlString = binanceURL + path
         performRequest(urlString: urlString)
-        print(urlString)
         action()
     }
     

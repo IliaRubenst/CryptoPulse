@@ -24,3 +24,8 @@ struct Symbol: Decodable {
 struct SymbolsArray {
     static var symbols = [Symbol]()
 }
+
+struct ReceivedSocketData: Decodable {
+    var s: String
+    var p: String
+}

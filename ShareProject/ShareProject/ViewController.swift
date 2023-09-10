@@ -16,6 +16,7 @@ class ViewController: UICollectionViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        addTicker()
         
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Settings", style: .plain, target: self, action: #selector(settings))
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addTicker))
