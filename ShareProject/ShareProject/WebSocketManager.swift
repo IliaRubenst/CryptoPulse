@@ -6,24 +6,49 @@
 //
 
 import UIKit
+// wss://fstream.binance.com/stream?streams=bnbusdt@aggTrade/btcusdt@markPrice
 
+enum State: CaseIterable {
+    case aggTrade
+    case ticker
+}
 
 class WebSocketManager: NSObject, URLSessionWebSocketDelegate {
     private var webSocket: URLSessionWebSocketTask?
     
-    var onValueChanged: ((String, String) -> ())?
+    var onPriceChanged: ((String, String) -> ())?
+    var onVolumeChanged: ((String, String) -> ())?
     
+    var baseVolume = ""
+    var quoteVolume = "" {
+        didSet {
+            onVolumeChanged?(baseVolume, quoteVolume)
+        }
+    }
     var objectSymbol = ""
     var objectPrice = "" {
         didSet {
-            onValueChanged?(objectPrice, objectSymbol)
+            onPriceChanged?(objectPrice, objectSymbol)
         }
     }
     
+    var actualState = State.aggTrade
+    
     func webSocketConnect(symbol: String) {
-        let session = URLSession(configuration: .default, delegate: self, delegateQueue: .main)
+        var url: String
         let coinSymbol = symbol.lowercased()
-        guard let url = URL(string: "wss://stream.binance.com:443/ws/\(coinSymbol)@aggTrade") else { return }
+        
+        switch actualState {
+        case .aggTrade:
+            url = "wss://stream.binance.com:443/ws/\(coinSymbol)@aggTrade"
+            
+        case .ticker:
+            url = "wss://stream.binance.com:443/ws/\(coinSymbol)@ticker"
+        }
+        
+        let session = URLSession(configuration: .default, delegate: self, delegateQueue: .main)
+        
+        guard let url = URL(string: url) else { return }
         print(url)
         webSocket = session.webSocketTask(with: url)
         webSocket?.resume()
@@ -50,7 +75,9 @@ class WebSocketManager: NSObject, URLSessionWebSocketDelegate {
                 case .data(let data):
                     print("Got data: \(data)")
                 case .string(let message):
-                    self?.parseJSONWeb(socketString: message)
+                    if let state = self?.actualState {
+                        self?.parseJSONWeb(socketString: message, state: state)
+                    }
                 @unknown default:
                     break
                 }
@@ -72,16 +99,32 @@ class WebSocketManager: NSObject, URLSessionWebSocketDelegate {
         print("Did close connection with reason")
     }
     
-    func parseJSONWeb(socketString: String) {
+    func parseJSONWeb(socketString: String, state: State) {
         guard let socketData = socketString.data(using: String.Encoding.utf8) else { return }
+        
         let decoder = JSONDecoder()
-        do {
-            let decodedData = try decoder.decode(ReceivedSocketData.self, from: socketData)
-            objectSymbol = decodedData.s
-            objectPrice = decodedData.p
-        } catch {
-            print("Error JSON: \(error)")
+        switch state {
+        case .aggTrade:
+            do {
+                let decodedData = try decoder.decode(SymbolPriceData.self, from: socketData)
+                objectSymbol = decodedData.s
+                objectPrice = decodedData.p
+//                print("Тикер: \(objectSymbol), Цена: \(objectPrice)")
+            } catch {
+                print("Error JSON: \(error)")
+            }
+        case .ticker:
+            do {
+                let decodedData = try decoder.decode(VolumeData.self, from: socketData)
+                baseVolume = decodedData.v
+                quoteVolume = decodedData.q
+//                print("Объем в битках:\(baseVolume), Объем в USDT?: \(quoteVolume)")
+            } catch {
+                print("Error JSON: \(error)")
+            }
         }
+        
+        
     }
     
     func send() {

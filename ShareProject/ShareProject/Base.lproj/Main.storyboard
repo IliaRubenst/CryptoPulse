@@ -84,11 +84,19 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="DbG-jv-L0V">
-                                <rect key="frame" x="0.0" y="119" width="393" height="733"/>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="DbG-jv-L0V">
+                                <rect key="frame" x="0.0" y="119" width="393" height="150"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <color key="textColor" systemColor="labelColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="jWM-er-AkB" userLabel="Volume">
+                                <rect key="frame" x="0.0" y="277" width="393" height="150"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <color key="textColor" systemColor="labelColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="24"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                         </subviews>
@@ -106,6 +114,7 @@
                     </view>
                     <connections>
                         <outlet property="receiveDataText" destination="DbG-jv-L0V" id="SBf-oC-jmN"/>
+                        <outlet property="recieveVolumeText" destination="jWM-er-AkB" id="vXK-5D-xHm"/>
                         <outlet property="symbolLabel" destination="SeN-py-Phx" id="WnN-9g-07N"/>
                     </connections>
                 </viewController>
