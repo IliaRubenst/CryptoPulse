@@ -115,6 +115,7 @@ class DetailViewController: UIViewController, URLSessionWebSocketDelegate {
         let decoder = JSONDecoder()
         do {
             let decodedData = try decoder.decode(ReceivedSocketData.self, from: socketData)
+            let socketObject = ReceivedSocketData(symbol: decodedData.s, price: decodedData.p)
             objectSymbol = decodedData.s
             objectPrice = decodedData.p
             print(objectPrice)

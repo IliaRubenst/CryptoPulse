@@ -7,9 +7,8 @@
 
 import UIKit
 
-class ViewController: UICollectionViewController {
-    let amountCells = 2
-    let offSet: CGFloat = 4.0
+class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
+    let amountCells = 3
     var path = "/fapi/v1/premiumIndex"
     var coins = [Coin]()
     var marketManager = MarketManager()
@@ -28,11 +27,12 @@ class ViewController: UICollectionViewController {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let frameVC = collectionView.frame
+        let offSet: CGFloat = 4.0
         
         let widthCell = frameVC.width / CGFloat(amountCells)
-        let heightCell = widthCell
+        let heightCell = widthCell / 1.5
         
-        let spacing = CGFloat((amountCells + 4)) * offSet / CGFloat(amountCells)
+        let spacing = CGFloat((amountCells + 2)) * offSet / CGFloat(amountCells)
         return CGSize(width: widthCell - spacing, height: heightCell - (offSet * 3))
     }
     

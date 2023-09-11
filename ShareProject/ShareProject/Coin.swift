@@ -28,4 +28,9 @@ struct SymbolsArray {
 struct ReceivedSocketData: Decodable {
     var s: String
     var p: String
+    
+    init(symbol: String, price: String) {
+        self.s = symbol
+        self.p = price
+    }
 }
