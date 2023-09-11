@@ -8,7 +8,7 @@
 import UIKit
 
 class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
-    let amountCells = 3
+    let amountCells = 2
     var path = "/fapi/v1/premiumIndex"
     var coins = [Coin]()
     var marketManager = MarketManager()
@@ -22,6 +22,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        print("тикеров в массиве \(SymbolsArray.symbols.count)")
         return SymbolsArray.symbols.count
     }
     
@@ -30,7 +31,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
         let offSet: CGFloat = 4.0
         
         let widthCell = frameVC.width / CGFloat(amountCells)
-        let heightCell = widthCell / 1.5
+        let heightCell = widthCell / 2
         
         let spacing = CGFloat((amountCells + 2)) * offSet / CGFloat(amountCells)
         return CGSize(width: widthCell - spacing, height: heightCell - (offSet * 3))
@@ -53,6 +54,50 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let cell = collectionView.cellForItem(at: indexPath) as? CoinCell else { return }
         openDetailView(indexPath: indexPath)
+        
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPaths: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        let config = UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ in
+            
+            let remove = UIAction(title: "Remove",
+                                  image: UIImage(systemName: "trash"),
+                                  identifier: nil,
+                                  discoverabilityTitle: nil,
+                                  state: .off
+            ) { [weak self] _ in
+                let action = "remove"
+                self?.contextMenuAction(indexPaths, action: action)
+                collectionView.reloadData()
+            }
+            
+            let changeColor = UIAction(title: "Change color",
+                                       image: UIImage(systemName: "paintbrush"),
+                                       identifier: nil,
+                                       discoverabilityTitle: nil,
+                                       state: .off
+            ) { [weak self] _ in
+                let action = "change"
+                self?.contextMenuAction(indexPaths, action: action)
+            }
+            
+            return UIMenu(title: "Action",
+                          image: nil,
+                          identifier: nil,
+                          options: UIMenu.Options.displayInline,
+                          children: [remove, changeColor])
+        }
+        
+        return config
+    }
+    
+    func contextMenuAction(_ indexPath: IndexPath, action: String) {
+        guard let currentCell = collectionView.cellForItem(at: indexPath) as? CoinCell else { return }
+        if action == "change" {
+            currentCell.changeColor()
+        } else {
+            currentCell.removeCell(indexPath.item)
+        }
     }
     
     func openDetailView(indexPath: IndexPath) {
