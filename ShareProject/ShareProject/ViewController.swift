@@ -10,10 +10,13 @@ import UIKit
 class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
     let amountCells = 2
     var marketManager = MarketManager()
+    var defaults = DataLoader()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         loadTickers()
+        defaults.loadUserSymbols()
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(showTableView))
     }
@@ -70,6 +73,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
             ) { [weak self] _ in
                 let action = "remove"
                 self?.contextMenuAction(indexPaths, action: action)
+                self?.defaults.saveData()
                 collectionView.reloadData()
             }
             
@@ -115,8 +119,5 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
         marketManager.fetchRequest()
     }
     
-    @objc func settings() {
-        
-    }
 }
 

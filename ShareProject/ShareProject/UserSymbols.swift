@@ -7,6 +7,6 @@
 
 import Foundation
 
-struct UserSymbols {
+struct UserSymbols: Codable {
     static var savedSymbols = [Symbol]()
 }

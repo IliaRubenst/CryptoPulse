@@ -23,6 +23,7 @@
 		4979F2082AACAFC0000E039C /* WebSocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4979F2072AACAFC0000E039C /* WebSocketManager.swift */; };
 		D813653C2AB07643005930D2 /* SymbolsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D813653B2AB07643005930D2 /* SymbolsTableViewController.swift */; };
 		D813653E2AB07E6D005930D2 /* UserSymbols.swift in Sources */ = {isa = PBXBuildFile; fileRef = D813653D2AB07E6D005930D2 /* UserSymbols.swift */; };
+		D81365402AB092B9005930D2 /* DataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D813653F2AB092B9005930D2 /* DataLoader.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -46,6 +47,7 @@
 		CE911D65B09CFDE5FBDD2BB0 /* Pods_ShareProject.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ShareProject.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D813653B2AB07643005930D2 /* SymbolsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SymbolsTableViewController.swift; sourceTree = "<group>"; };
 		D813653D2AB07E6D005930D2 /* UserSymbols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSymbols.swift; sourceTree = "<group>"; };
+		D813653F2AB092B9005930D2 /* DataLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataLoader.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,6 +104,7 @@
 				49367CAD2AAAFEB800827BE9 /* Coin.swift */,
 				4974BE872AB030580070240F /* CoinModel.swift */,
 				49367CAB2AAAFE7100827BE9 /* CoinCell.swift */,
+				D813653F2AB092B9005930D2 /* DataLoader.swift */,
 				496BEFDF2AA9EFDF00B15E0F /* Main.storyboard */,
 				496BEFE22AA9EFE100B15E0F /* Assets.xcassets */,
 				496BEFE42AA9EFE100B15E0F /* LaunchScreen.storyboard */,
@@ -242,6 +245,7 @@
 				496BEFDA2AA9EFDF00B15E0F /* AppDelegate.swift in Sources */,
 				49367CAC2AAAFE7100827BE9 /* CoinCell.swift in Sources */,
 				49367CAE2AAAFEB800827BE9 /* Coin.swift in Sources */,
+				D81365402AB092B9005930D2 /* DataLoader.swift in Sources */,
 				D813653C2AB07643005930D2 /* SymbolsTableViewController.swift in Sources */,
 				496BEFDC2AA9EFDF00B15E0F /* SceneDelegate.swift in Sources */,
 				4979F2062AAC3905000E039C /* DetailViewController.swift in Sources */,

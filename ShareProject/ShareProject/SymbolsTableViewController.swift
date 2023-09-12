@@ -40,6 +40,7 @@ class SymbolsTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let item = SymbolsArray.symbols[indexPath.item]
         UserSymbols.savedSymbols.append(item)
+        mainView.defaults.saveData()
         mainView.collectionView.reloadData()
         dismiss(animated: true)
     }
