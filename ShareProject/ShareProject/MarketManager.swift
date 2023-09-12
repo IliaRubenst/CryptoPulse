@@ -9,11 +9,11 @@ import Foundation
 
 struct MarketManager {
     let binanceURL = "https://fapi.binance.com"
+    var path = "/fapi/v1/premiumIndex"
     
-    func fetchRequest(path: String, action: () -> ()) {
+    func fetchRequest() {
         let urlString = binanceURL + path
         performRequest(urlString: urlString)
-        action()
     }
     
     func performRequest(urlString: String) {
