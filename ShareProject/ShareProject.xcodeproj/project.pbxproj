@@ -7,23 +7,29 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		106F0C10DC4B17426987E520 /* Pods_ShareProject.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE911D65B09CFDE5FBDD2BB0 /* Pods_ShareProject.framework */; };
 		49367CAC2AAAFE7100827BE9 /* CoinCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49367CAB2AAAFE7100827BE9 /* CoinCell.swift */; };
 		49367CAE2AAAFEB800827BE9 /* Coin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49367CAD2AAAFEB800827BE9 /* Coin.swift */; };
 		49367CB02AAB33BE00827BE9 /* MarketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49367CAF2AAB33BE00827BE9 /* MarketManager.swift */; };
+		495003B82AAFA557004B331E /* ChartManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 495003B72AAFA557004B331E /* ChartManager.swift */; };
 		496BEFDA2AA9EFDF00B15E0F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 496BEFD92AA9EFDF00B15E0F /* AppDelegate.swift */; };
 		496BEFDC2AA9EFDF00B15E0F /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 496BEFDB2AA9EFDF00B15E0F /* SceneDelegate.swift */; };
 		496BEFDE2AA9EFDF00B15E0F /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 496BEFDD2AA9EFDF00B15E0F /* ViewController.swift */; };
 		496BEFE12AA9EFDF00B15E0F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 496BEFDF2AA9EFDF00B15E0F /* Main.storyboard */; };
 		496BEFE32AA9EFE100B15E0F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 496BEFE22AA9EFE100B15E0F /* Assets.xcassets */; };
 		496BEFE62AA9EFE100B15E0F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 496BEFE42AA9EFE100B15E0F /* LaunchScreen.storyboard */; };
+		4974BE882AB030580070240F /* CoinModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4974BE872AB030580070240F /* CoinModel.swift */; };
 		4979F2062AAC3905000E039C /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4979F2052AAC3905000E039C /* DetailViewController.swift */; };
 		4979F2082AACAFC0000E039C /* WebSocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4979F2072AACAFC0000E039C /* WebSocketManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		035FB156A67A7395BA1B2111 /* Pods-ShareProject.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ShareProject.debug.xcconfig"; path = "Target Support Files/Pods-ShareProject/Pods-ShareProject.debug.xcconfig"; sourceTree = "<group>"; };
+		1C45C2A8B2185C3AC151D8D8 /* Pods-ShareProject.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ShareProject.release.xcconfig"; path = "Target Support Files/Pods-ShareProject/Pods-ShareProject.release.xcconfig"; sourceTree = "<group>"; };
 		49367CAB2AAAFE7100827BE9 /* CoinCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoinCell.swift; sourceTree = "<group>"; };
 		49367CAD2AAAFEB800827BE9 /* Coin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coin.swift; sourceTree = "<group>"; };
 		49367CAF2AAB33BE00827BE9 /* MarketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarketManager.swift; sourceTree = "<group>"; };
+		495003B72AAFA557004B331E /* ChartManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartManager.swift; sourceTree = "<group>"; };
 		496BEFD62AA9EFDF00B15E0F /* ShareProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ShareProject.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		496BEFD92AA9EFDF00B15E0F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		496BEFDB2AA9EFDF00B15E0F /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -32,8 +38,10 @@
 		496BEFE22AA9EFE100B15E0F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		496BEFE52AA9EFE100B15E0F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		496BEFE72AA9EFE100B15E0F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4974BE872AB030580070240F /* CoinModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoinModel.swift; sourceTree = "<group>"; };
 		4979F2052AAC3905000E039C /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		4979F2072AACAFC0000E039C /* WebSocketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketManager.swift; sourceTree = "<group>"; };
+		CE911D65B09CFDE5FBDD2BB0 /* Pods_ShareProject.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ShareProject.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -41,17 +49,29 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				106F0C10DC4B17426987E520 /* Pods_ShareProject.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		156C68D63A26ECC5C9B69F83 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				035FB156A67A7395BA1B2111 /* Pods-ShareProject.debug.xcconfig */,
+				1C45C2A8B2185C3AC151D8D8 /* Pods-ShareProject.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		496BEFCD2AA9EFDF00B15E0F = {
 			isa = PBXGroup;
 			children = (
 				496BEFD82AA9EFDF00B15E0F /* ShareProject */,
 				496BEFD72AA9EFDF00B15E0F /* Products */,
+				156C68D63A26ECC5C9B69F83 /* Pods */,
+				7E0A0C748C77B63B062971F5 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -70,16 +90,26 @@
 				496BEFDB2AA9EFDF00B15E0F /* SceneDelegate.swift */,
 				496BEFDD2AA9EFDF00B15E0F /* ViewController.swift */,
 				4979F2052AAC3905000E039C /* DetailViewController.swift */,
+				495003B72AAFA557004B331E /* ChartManager.swift */,
 				49367CAF2AAB33BE00827BE9 /* MarketManager.swift */,
-				49367CAD2AAAFEB800827BE9 /* Coin.swift */,
-				49367CAB2AAAFE7100827BE9 /* CoinCell.swift */,
 				4979F2072AACAFC0000E039C /* WebSocketManager.swift */,
+				49367CAD2AAAFEB800827BE9 /* Coin.swift */,
+				4974BE872AB030580070240F /* CoinModel.swift */,
+				49367CAB2AAAFE7100827BE9 /* CoinCell.swift */,
 				496BEFDF2AA9EFDF00B15E0F /* Main.storyboard */,
 				496BEFE22AA9EFE100B15E0F /* Assets.xcassets */,
 				496BEFE42AA9EFE100B15E0F /* LaunchScreen.storyboard */,
 				496BEFE72AA9EFE100B15E0F /* Info.plist */,
 			);
 			path = ShareProject;
+			sourceTree = "<group>";
+		};
+		7E0A0C748C77B63B062971F5 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				CE911D65B09CFDE5FBDD2BB0 /* Pods_ShareProject.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -89,9 +119,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 496BEFEA2AA9EFE100B15E0F /* Build configuration list for PBXNativeTarget "ShareProject" */;
 			buildPhases = (
+				3CC6A713734365B33C615F60 /* [CP] Check Pods Manifest.lock */,
 				496BEFD22AA9EFDF00B15E0F /* Sources */,
 				496BEFD32AA9EFDF00B15E0F /* Frameworks */,
 				496BEFD42AA9EFDF00B15E0F /* Resources */,
+				D961F05C1CEC48024EF4D66B /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -148,13 +180,57 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		3CC6A713734365B33C615F60 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-ShareProject-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D961F05C1CEC48024EF4D66B /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ShareProject/Pods-ShareProject-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ShareProject/Pods-ShareProject-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ShareProject/Pods-ShareProject-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		496BEFD22AA9EFDF00B15E0F /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4974BE882AB030580070240F /* CoinModel.swift in Sources */,
 				496BEFDE2AA9EFDF00B15E0F /* ViewController.swift in Sources */,
 				49367CB02AAB33BE00827BE9 /* MarketManager.swift in Sources */,
+				495003B82AAFA557004B331E /* ChartManager.swift in Sources */,
 				4979F2082AACAFC0000E039C /* WebSocketManager.swift in Sources */,
 				496BEFDA2AA9EFDF00B15E0F /* AppDelegate.swift in Sources */,
 				49367CAC2AAAFE7100827BE9 /* CoinCell.swift in Sources */,
@@ -302,6 +378,7 @@
 		};
 		496BEFEB2AA9EFE100B15E0F /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 035FB156A67A7395BA1B2111 /* Pods-ShareProject.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -332,6 +409,7 @@
 		};
 		496BEFEC2AA9EFE100B15E0F /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1C45C2A8B2185C3AC151D8D8 /* Pods-ShareProject.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;

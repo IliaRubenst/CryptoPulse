@@ -12,10 +12,6 @@ struct Coin: Decodable {
     let symbols: Symbol
 }
 
-//struct Assets: Decodable {
-//    let asset: String
-//}
-
 struct Symbol: Decodable {
     let symbol: String
     let markPrice: String
@@ -38,9 +34,17 @@ struct SymbolPriceData: Decodable {
 struct VolumeData: Decodable {
     var v: String
     var q: String
+    var c: String
+    var o: String
+    var h: String
+    var l: String
     
-    init(v: String, q: String) {
-        self.v = v
-        self.q = q
+    init(volumeBase: String, volumeQuote: String, closePrice: String, openPrice: String, highPrice: String, lowPrice: String) {
+        self.v = volumeBase
+        self.q = volumeQuote
+        self.c = closePrice
+        self.o = openPrice
+        self.h = highPrice
+        self.l = lowPrice
     }
 }

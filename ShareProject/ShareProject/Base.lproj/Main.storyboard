@@ -78,44 +78,43 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SeN-py-Phx">
-                                <rect key="frame" x="10" y="89" width="373" height="0.0"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="DbG-jv-L0V">
-                                <rect key="frame" x="0.0" y="119" width="393" height="150"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                <color key="textColor" systemColor="labelColor"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                            </textView>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="jWM-er-AkB" userLabel="Volume">
-                                <rect key="frame" x="0.0" y="277" width="393" height="150"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                <color key="textColor" systemColor="labelColor"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="24"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                            </textView>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="DJM-11-s5x">
+                                <rect key="frame" x="0.0" y="59" width="393" height="100"/>
+                                <subviews>
+                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="DbG-jv-L0V">
+                                        <rect key="frame" x="0.0" y="0.0" width="393" height="50"/>
+                                        <color key="backgroundColor" systemColor="systemGray6Color"/>
+                                        <color key="textColor" systemColor="labelColor"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                    </textView>
+                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="jWM-er-AkB" userLabel="Volume">
+                                        <rect key="frame" x="0.0" y="50" width="393" height="50"/>
+                                        <color key="backgroundColor" systemColor="systemGray6Color"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="50" id="ofG-vl-x5U"/>
+                                        </constraints>
+                                        <color key="textColor" systemColor="labelColor"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                    </textView>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="100" id="prH-XP-nRE"/>
+                                </constraints>
+                            </stackView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="E5L-0x-exD"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="DbG-jv-L0V" firstAttribute="top" secondItem="SeN-py-Phx" secondAttribute="bottom" constant="30" id="9Z8-Ry-5L7"/>
-                            <constraint firstItem="SeN-py-Phx" firstAttribute="top" secondItem="E5L-0x-exD" secondAttribute="top" constant="30" id="FQh-rv-rzk"/>
-                            <constraint firstAttribute="bottom" secondItem="DbG-jv-L0V" secondAttribute="bottom" id="Iws-lH-9DY"/>
-                            <constraint firstItem="E5L-0x-exD" firstAttribute="trailing" secondItem="SeN-py-Phx" secondAttribute="trailing" constant="10" id="L7e-OX-SxE"/>
-                            <constraint firstItem="DbG-jv-L0V" firstAttribute="trailing" secondItem="E5L-0x-exD" secondAttribute="trailing" id="S0J-Nl-Frx"/>
-                            <constraint firstItem="SeN-py-Phx" firstAttribute="leading" secondItem="E5L-0x-exD" secondAttribute="leading" constant="10" id="bZ4-Fq-wfa"/>
-                            <constraint firstItem="DbG-jv-L0V" firstAttribute="leading" secondItem="E5L-0x-exD" secondAttribute="leading" id="n7x-pS-KjP"/>
+                            <constraint firstItem="DJM-11-s5x" firstAttribute="leading" secondItem="E5L-0x-exD" secondAttribute="leading" id="OTT-mD-vff"/>
+                            <constraint firstItem="DJM-11-s5x" firstAttribute="top" secondItem="E5L-0x-exD" secondAttribute="top" id="W2E-gK-qke"/>
+                            <constraint firstItem="DJM-11-s5x" firstAttribute="trailing" secondItem="E5L-0x-exD" secondAttribute="trailing" id="aXJ-Vw-0pL"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="receiveDataText" destination="DbG-jv-L0V" id="SBf-oC-jmN"/>
                         <outlet property="recieveVolumeText" destination="jWM-er-AkB" id="vXK-5D-xHm"/>
-                        <outlet property="symbolLabel" destination="SeN-py-Phx" id="WnN-9g-07N"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="aMo-bQ-rBa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -147,6 +146,9 @@
         </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemGray6Color">
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

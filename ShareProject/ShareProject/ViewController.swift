@@ -22,7 +22,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        print("тикеров в массиве \(SymbolsArray.symbols.count)")
+//        print("тикеров в массиве \(SymbolsArray.symbols.count)")
         return SymbolsArray.symbols.count
     }
     
@@ -52,7 +52,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
     }
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let cell = collectionView.cellForItem(at: indexPath) as? CoinCell else { return }
+//        guard let cell = collectionView.cellForItem(at: indexPath) as? CoinCell else { return }
         openDetailView(indexPath: indexPath)
         
     }
@@ -112,7 +112,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
     @objc func addTicker() {
         marketManager.fetchRequest(path: path, action: { [weak self] in
             self?.collectionView.reloadData()
-            print("Вызвали action!")
+//            print("Вызвали action!")
         })
     }
     

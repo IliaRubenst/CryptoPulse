@@ -8,6 +8,11 @@
 import UIKit
 // wss://fstream.binance.com/stream?streams=bnbusdt@aggTrade/btcusdt@markPrice
 
+protocol WebSocketManagerDelegate {
+    func didUpdateCandle(_ websocketManager: WebSocketManager, coinModel: CoinModel)
+    
+}
+
 enum State: CaseIterable {
     case aggTrade
     case ticker
@@ -15,6 +20,8 @@ enum State: CaseIterable {
 
 class WebSocketManager: NSObject, URLSessionWebSocketDelegate {
     private var webSocket: URLSessionWebSocketTask?
+    
+    var delegate: WebSocketManagerDelegate?
     
     var onPriceChanged: ((String, String) -> ())?
     var onVolumeChanged: ((String, String) -> ())?
@@ -31,6 +38,10 @@ class WebSocketManager: NSObject, URLSessionWebSocketDelegate {
             onPriceChanged?(objectPrice, objectSymbol)
         }
     }
+    var openPrice = ""
+    var highPrice = ""
+    var lowPrice = ""
+    var closePrice = ""
     
     var actualState = State.aggTrade
     
@@ -77,6 +88,7 @@ class WebSocketManager: NSObject, URLSessionWebSocketDelegate {
                 case .string(let message):
                     if let state = self?.actualState {
                         self?.parseJSONWeb(socketString: message, state: state)
+                        
                     }
                 @unknown default:
                     break
@@ -99,31 +111,43 @@ class WebSocketManager: NSObject, URLSessionWebSocketDelegate {
         print("Did close connection with reason")
     }
     
-    func parseJSONWeb(socketString: String, state: State) {
-        guard let socketData = socketString.data(using: String.Encoding.utf8) else { return }
-        
-        let decoder = JSONDecoder()
-        switch state {
-        case .aggTrade:
-            do {
-                let decodedData = try decoder.decode(SymbolPriceData.self, from: socketData)
-                objectSymbol = decodedData.s
-                objectPrice = decodedData.p
-//                print("Тикер: \(objectSymbol), Цена: \(objectPrice)")
-            } catch {
-                print("Error JSON: \(error)")
+    func parseJSONWeb(socketString: String, state: State) -> CoinModel? {
+        guard let socketData = socketString.data(using: String.Encoding.utf8) else { return nil }
+            let decoder = JSONDecoder()
+            switch state {
+            case .aggTrade:
+                do {
+                    let decodedData = try decoder.decode(SymbolPriceData.self, from: socketData)
+                    objectSymbol = decodedData.s
+                    objectPrice = decodedData.p
+                    //                print("Тикер: \(objectSymbol), Цена: \(objectPrice)")
+                    
+                    return nil
+                } catch {
+                    print("Error JSON: \(error)")
+                    
+                    return nil
+                }
+            case .ticker:
+                do {
+                    let decodedData = try decoder.decode(VolumeData.self, from: socketData)
+                    //              сделать получение данных через структуру
+                    let currentStreamData = CoinModel(closePrice: decodedData.c, openPrice: decodedData.o, highPrice: decodedData.h, lowPrice: decodedData.l)
+                    baseVolume = decodedData.v
+                    quoteVolume = decodedData.q
+                    
+                    //                print("Объем в битках:\(baseVolume), Объем в USDT?: \(quoteVolume)")
+                    
+                    print(currentStreamData)
+                    delegate?.didUpdateCandle(WebSocketManager(), coinModel: currentStreamData)
+//                    delegate?.didUpdateCandle(self, coinModel: currentStreamData)
+                    return currentStreamData
+                } catch {
+                    print("Error JSON: \(error)")
+                    
+                    return nil
+                }
             }
-        case .ticker:
-            do {
-                let decodedData = try decoder.decode(VolumeData.self, from: socketData)
-                baseVolume = decodedData.v
-                quoteVolume = decodedData.q
-//                print("Объем в битках:\(baseVolume), Объем в USDT?: \(quoteVolume)")
-            } catch {
-                print("Error JSON: \(error)")
-            }
-        }
-        
         
     }
     
