@@ -21,6 +21,8 @@
 		4974BE882AB030580070240F /* CoinModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4974BE872AB030580070240F /* CoinModel.swift */; };
 		4979F2062AAC3905000E039C /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4979F2052AAC3905000E039C /* DetailViewController.swift */; };
 		4979F2082AACAFC0000E039C /* WebSocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4979F2072AACAFC0000E039C /* WebSocketManager.swift */; };
+		D813653C2AB07643005930D2 /* SymbolsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D813653B2AB07643005930D2 /* SymbolsTableViewController.swift */; };
+		D813653E2AB07E6D005930D2 /* UserSymbols.swift in Sources */ = {isa = PBXBuildFile; fileRef = D813653D2AB07E6D005930D2 /* UserSymbols.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,6 +44,8 @@
 		4979F2052AAC3905000E039C /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		4979F2072AACAFC0000E039C /* WebSocketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketManager.swift; sourceTree = "<group>"; };
 		CE911D65B09CFDE5FBDD2BB0 /* Pods_ShareProject.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ShareProject.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D813653B2AB07643005930D2 /* SymbolsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SymbolsTableViewController.swift; sourceTree = "<group>"; };
+		D813653D2AB07E6D005930D2 /* UserSymbols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSymbols.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,10 +93,12 @@
 				496BEFD92AA9EFDF00B15E0F /* AppDelegate.swift */,
 				496BEFDB2AA9EFDF00B15E0F /* SceneDelegate.swift */,
 				496BEFDD2AA9EFDF00B15E0F /* ViewController.swift */,
+				D813653B2AB07643005930D2 /* SymbolsTableViewController.swift */,
 				4979F2052AAC3905000E039C /* DetailViewController.swift */,
 				495003B72AAFA557004B331E /* ChartManager.swift */,
 				49367CAF2AAB33BE00827BE9 /* MarketManager.swift */,
 				4979F2072AACAFC0000E039C /* WebSocketManager.swift */,
+				D813653D2AB07E6D005930D2 /* UserSymbols.swift */,
 				49367CAD2AAAFEB800827BE9 /* Coin.swift */,
 				4974BE872AB030580070240F /* CoinModel.swift */,
 				49367CAB2AAAFE7100827BE9 /* CoinCell.swift */,
@@ -227,6 +233,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D813653E2AB07E6D005930D2 /* UserSymbols.swift in Sources */,
 				4974BE882AB030580070240F /* CoinModel.swift in Sources */,
 				496BEFDE2AA9EFDF00B15E0F /* ViewController.swift in Sources */,
 				49367CB02AAB33BE00827BE9 /* MarketManager.swift in Sources */,
@@ -235,6 +242,7 @@
 				496BEFDA2AA9EFDF00B15E0F /* AppDelegate.swift in Sources */,
 				49367CAC2AAAFE7100827BE9 /* CoinCell.swift in Sources */,
 				49367CAE2AAAFEB800827BE9 /* Coin.swift in Sources */,
+				D813653C2AB07643005930D2 /* SymbolsTableViewController.swift in Sources */,
 				496BEFDC2AA9EFDF00B15E0F /* SceneDelegate.swift in Sources */,
 				4979F2062AAC3905000E039C /* DetailViewController.swift in Sources */,
 			);

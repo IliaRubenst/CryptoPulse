@@ -12,7 +12,7 @@ class CoinCell: UICollectionViewCell {
     @IBOutlet weak var currentPriceLabel: UILabel!
     
     func removeCell(_ index: Int) {
-        SymbolsArray.symbols.remove(at: index)
+        UserSymbols.savedSymbols.remove(at: index)
     }
     
     func changeColor() {

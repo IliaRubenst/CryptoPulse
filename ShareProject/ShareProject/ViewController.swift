@@ -9,21 +9,23 @@ import UIKit
 
 class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
     let amountCells = 2
-    var path = "/fapi/v1/premiumIndex"
-    var coins = [Coin]()
     var marketManager = MarketManager()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        addTicker()
+        loadTickers()
         
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Settings", style: .plain, target: self, action: #selector(settings))
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addTicker))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(showTableView))
+    }
+    
+    @objc func showTableView() {
+        let tableView = SymbolsTableViewController()
+        tableView.mainView = self
+        present(tableView, animated: true)
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-//        print("тикеров в массиве \(SymbolsArray.symbols.count)")
-        return SymbolsArray.symbols.count
+        return UserSymbols.savedSymbols.count
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -42,8 +44,8 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
             fatalError("Unable to dequeue CoinCell.")
         }
         
-        cell.tickerLabel.text = SymbolsArray.symbols[indexPath.item].symbol
-        cell.currentPriceLabel.text = SymbolsArray.symbols[indexPath.item].markPrice
+        cell.tickerLabel.text = UserSymbols.savedSymbols[indexPath.item].symbol
+        cell.currentPriceLabel.text = UserSymbols.savedSymbols[indexPath.item].markPrice
         
         cell.layer.borderWidth = 1
         cell.layer.cornerRadius = 5
@@ -102,18 +104,15 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
     
     func openDetailView(indexPath: IndexPath) {
         if let detailVC = storyboard?.instantiateViewController(identifier: "DetailData") as? DetailViewController {
-            detailVC.symbol = SymbolsArray.symbols[indexPath.item].symbol
-            detailVC.price = SymbolsArray.symbols[indexPath.item].markPrice
+            detailVC.symbol = UserSymbols.savedSymbols[indexPath.item].symbol
+            detailVC.price = UserSymbols.savedSymbols[indexPath.item].markPrice
 
             navigationController?.pushViewController(detailVC, animated: true)
         }
     }
     
-    @objc func addTicker() {
-        marketManager.fetchRequest(path: path, action: { [weak self] in
-            self?.collectionView.reloadData()
-//            print("Вызвали action!")
-        })
+    @objc func loadTickers() {
+        marketManager.fetchRequest()
     }
     
     @objc func settings() {
