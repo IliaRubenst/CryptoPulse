@@ -10,3 +10,7 @@ import Foundation
 struct UserSymbols: Codable {
     static var savedSymbols = [Symbol]()
 }
+
+struct SymbolsArray {
+    static var symbols = [Symbol]()
+}

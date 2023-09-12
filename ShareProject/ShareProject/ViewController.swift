@@ -46,7 +46,6 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Coin", for: indexPath) as? CoinCell else {
             fatalError("Unable to dequeue CoinCell.")
         }
-        
         cell.tickerLabel.text = UserSymbols.savedSymbols[indexPath.item].symbol
         cell.currentPriceLabel.text = UserSymbols.savedSymbols[indexPath.item].markPrice
         
@@ -57,9 +56,9 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
     }
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-//        guard let cell = collectionView.cellForItem(at: indexPath) as? CoinCell else { return }
+        guard let cell = collectionView.cellForItem(at: indexPath) as? CoinCell else { return }
+        cell.reloadInputViews()
         openDetailView(indexPath: indexPath)
-        
     }
     
     override func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPaths: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
@@ -118,6 +117,5 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
     @objc func loadTickers() {
         marketManager.fetchRequest()
     }
-    
 }
 

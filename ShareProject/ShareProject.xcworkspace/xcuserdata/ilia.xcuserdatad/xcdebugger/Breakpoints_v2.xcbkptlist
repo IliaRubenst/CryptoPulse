@@ -7,47 +7,62 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "45083E57-2E45-4FBA-B40A-D0FB16DEF63C"
+            uuid = "9251152A-BF4C-42C4-B11D-C98550ED8CCA"
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "ShareProject/DetailViewController.swift"
+            filePath = "ShareProject/ViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "249"
-            endingLineNumber = "249"
-            landmarkName = "didUpdateCandle(_:candleModel:)"
+            startingLineNumber = "60"
+            endingLineNumber = "60"
+            landmarkName = "collectionView(_:didSelectItemAt:)"
             landmarkType = "7">
             <Locations>
                <Location
-                  uuid = "45083E57-2E45-4FBA-B40A-D0FB16DEF63C - 84bbdc974b0a63e8"
+                  uuid = "9251152A-BF4C-42C4-B11D-C98550ED8CCA - de6dae76fa3140fa"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "ShareProject.DetailViewController.didUpdateCandle(_: ShareProject.WebSocketManager, coinModel: ShareProject.CoinModel) -&gt; ()"
+                  symbolName = "ShareProject.ViewController.collectionView(_: __C.UICollectionView, didSelectItemAt: Foundation.IndexPath) -&gt; ()"
                   moduleName = "ShareProject"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/ilia/SharedRepo/ShareProject/ShareProject/DetailViewController.swift"
+                  urlString = "file:///Users/ilia/SharedRepo/ShareProject/ShareProject/ViewController.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "249"
-                  endingLineNumber = "249"
-                  offsetFromSymbolStart = "112">
+                  startingLineNumber = "61"
+                  endingLineNumber = "61"
+                  offsetFromSymbolStart = "128">
                </Location>
                <Location
-                  uuid = "45083E57-2E45-4FBA-B40A-D0FB16DEF63C - 84bbdc974b0a63aa"
+                  uuid = "9251152A-BF4C-42C4-B11D-C98550ED8CCA - de6dae76fa31409b"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "ShareProject.DetailViewController.didUpdateCandle(_: ShareProject.WebSocketManager, coinModel: ShareProject.CoinModel) -&gt; ()"
+                  symbolName = "ShareProject.ViewController.collectionView(_: __C.UICollectionView, didSelectItemAt: Foundation.IndexPath) -&gt; ()"
                   moduleName = "ShareProject"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/ilia/SharedRepo/ShareProject/ShareProject/DetailViewController.swift"
+                  urlString = "file:///Users/ilia/SharedRepo/ShareProject/ShareProject/ViewController.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "251"
-                  endingLineNumber = "251"
-                  offsetFromSymbolStart = "112">
+                  startingLineNumber = "60"
+                  endingLineNumber = "60"
+                  offsetFromSymbolStart = "404">
+               </Location>
+               <Location
+                  uuid = "9251152A-BF4C-42C4-B11D-C98550ED8CCA - de6dae76fa31409b"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ShareProject.ViewController.collectionView(_: __C.UICollectionView, didSelectItemAt: Foundation.IndexPath) -&gt; ()"
+                  moduleName = "ShareProject"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/ilia/SharedRepo/ShareProject/ShareProject/ViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "60"
+                  endingLineNumber = "60"
+                  offsetFromSymbolStart = "400">
                </Location>
             </Locations>
          </BreakpointContent>

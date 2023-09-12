@@ -8,7 +8,6 @@
 import UIKit
 
 struct Coin: Codable {
-//    let assets: [Assets]
     let symbols: Symbol
 }
 
@@ -17,9 +16,6 @@ struct Symbol: Codable {
     let markPrice: String
 }
 
-struct SymbolsArray {
-    static var symbols = [Symbol]()
-}
 
 struct SymbolPriceData: Codable {
     var s: String
