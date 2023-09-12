@@ -226,8 +226,9 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
                 CandlestickData(time: .string("2019-05-21"), open: 187.13, high: 192.52, low: 186.34, close: 191.45),
                 CandlestickData(time: .string("2019-05-22"), open: 190.49, high: 192.22, low: 188.05, close: 188.91),
                 CandlestickData(time: .string("2019-05-23"), open: 188.45, high: 192.54, low: 186.27, close: 192.00),
-                CandlestickData(time: .string("2019-05-24"), open: openPrice, high: highPrice, low: lowPrice, close: Double(price))
+                CandlestickData(time: .string("2019-05-24"), open: openPrice, high: highPrice, low: lowPrice, close: closePrice)
             ]
+//            print("Candle: \(closePrice!)")
             series.setData(data: data)
             self.series = series
         }
@@ -245,17 +246,18 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
         }
     }
     
-    func didUpdateCandle(_ websocketManager: WebSocketManager, coinModel: CoinModel) {
-        openPrice = Double(coinModel.openPrice)
-        highPrice = Double(coinModel.highPrice)
-        lowPrice = Double(coinModel.lowPrice)
-        closePrice = Double(coinModel.closePrice)
+    func didUpdateCandle(_ websocketManager: WebSocketManager, candleModel: CurrentCandleModel) {
+        closePrice = Double(candleModel.closePrice)
+        openPrice = Double(candleModel.openPrice)
+        highPrice = Double(candleModel.highPrice)
+        lowPrice = Double(candleModel.lowPrice)
+        
         setupData()
-        print("update met \(openPrice!), \(highPrice!), \(lowPrice!), \(Double(price)!) ")
     }
     
     func startManagers() {
         for state in State.allCases {
+            
             let manager = WebSocketManager()
             manager.delegate = self
             manager.actualState = state
@@ -275,6 +277,8 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
                         }
                     }
                 }
+            case .currentCandleData:
+                print("")
                 
 //                manager.onCoinModel = { closePrice, highPrice, lowPrice, openPrice in
 //                    if let closePrice = Double(closePrice) {

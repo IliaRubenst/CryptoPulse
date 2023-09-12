@@ -9,13 +9,14 @@ import UIKit
 // wss://fstream.binance.com/stream?streams=bnbusdt@aggTrade/btcusdt@markPrice
 
 protocol WebSocketManagerDelegate {
-    func didUpdateCandle(_ websocketManager: WebSocketManager, coinModel: CoinModel)
+    func didUpdateCandle(_ websocketManager: WebSocketManager, candleModel: CurrentCandleModel)
     
 }
 
 enum State: CaseIterable {
     case aggTrade
     case ticker
+    case currentCandleData
 }
 
 class WebSocketManager: NSObject, URLSessionWebSocketDelegate {
@@ -45,11 +46,7 @@ class WebSocketManager: NSObject, URLSessionWebSocketDelegate {
             onPriceChanged?(objectPrice, objectSymbol)
         }
     }
-    var openPrice = ""
-    var highPrice = ""
-    var lowPrice = ""
-    var closePrice = ""
-    
+
     var actualState = State.aggTrade
     
     func webSocketConnect(symbol: String) {
@@ -58,10 +55,13 @@ class WebSocketManager: NSObject, URLSessionWebSocketDelegate {
         
         switch actualState {
         case .aggTrade:
-            url = "wss://stream.binance.com:443/ws/\(coinSymbol)@aggTrade"
+            url = "wss://fstream.binance.com:443/ws/\(coinSymbol)@aggTrade"
             
         case .ticker:
-            url = "wss://stream.binance.com:443/ws/\(coinSymbol)@ticker"
+            url = "wss://fstream.binance.com:443/ws/\(coinSymbol)@ticker"
+            
+        case .currentCandleData:
+            url = "wss://fstream.binance.com:443/ws/\(coinSymbol)_perpetual@continuousKline_1m"
         }
         
         let session = URLSession(configuration: .default, delegate: self, delegateQueue: .main)
@@ -117,43 +117,55 @@ class WebSocketManager: NSObject, URLSessionWebSocketDelegate {
         print("Did close connection with reason")
     }
     
-    func parseJSONWeb(socketString: String, state: State) -> CoinModel? {
+    func parseJSONWeb(socketString: String, state: State) -> CurrentCandleModel? {
         guard let socketData = socketString.data(using: String.Encoding.utf8) else { return nil }
-            let decoder = JSONDecoder()
-            switch state {
-            case .aggTrade:
-                do {
-                    let decodedData = try decoder.decode(SymbolPriceData.self, from: socketData)
-                    objectSymbol = decodedData.s
-                    objectPrice = decodedData.p
-                    //                print("Тикер: \(objectSymbol), Цена: \(objectPrice)")
-                    
-                    return nil
-                } catch {
-                    print("Error JSON: \(error)")
-                    
-                    return nil
-                }
-            case .ticker:
-                do {
-                    let decodedData = try decoder.decode(VolumeData.self, from: socketData)
-                    //              сделать получение данных через структуру
-                    let currentStreamData = CoinModel(closePrice: decodedData.c, openPrice: decodedData.o, highPrice: decodedData.h, lowPrice: decodedData.l)
-                    baseVolume = decodedData.v
-                    quoteVolume = decodedData.q
-                    
-                    //                print("Объем в битках:\(baseVolume), Объем в USDT?: \(quoteVolume)")
-                    
-//                    print(currentStreamData)
-                    delegate.didUpdateCandle(self, coinModel: currentStreamData)
-                    return currentStreamData
-                } catch {
-                    print("Error JSON: \(error)")
-                    
-                    return nil
-                }
+        let decoder = JSONDecoder()
+        switch state {
+        case .aggTrade:
+            do {
+                let decodedData = try decoder.decode(SymbolPriceData.self, from: socketData)
+                objectSymbol = decodedData.s
+                objectPrice = decodedData.p
+                
+                return nil
+            } catch {
+                print("Error JSON: \(error)")
+                
+                return nil
             }
-        
+        case .ticker:
+            do {
+                let decodedData = try decoder.decode(VolumeData.self, from: socketData)
+//                let currentStreamData = CoinModel(closePrice: decodedData.c, openPrice: decodedData.o, highPrice: decodedData.h, lowPrice: decodedData.l)
+                baseVolume = decodedData.v
+                quoteVolume = decodedData.q
+
+                return nil
+            } catch {
+                print("Error JSON: \(error)")
+                
+                return nil
+            }
+        case .currentCandleData:
+            do {
+                let decodedData = try decoder.decode(CurrentCandleData.self, from: socketData)
+//                let eventTime = decodedData.E
+//                let pair = decodedData.ps
+//                let interval = decodedData.k.i
+//                let openPrice = decodedData.k.o
+                let closePrice = decodedData.k.c
+                print("Recieved \(closePrice)")
+//                let highPrice = decodedData.k.h
+//                let lowPrice = decodedData.k.l
+                
+                let currentCandleModel = CurrentCandleModel(eventTime: decodedData.E, pair: decodedData.ps, interval: decodedData.k.i, openPrice: decodedData.k.o, closePrice: decodedData.k.c, highPrice: decodedData.k.h, lowPrice: decodedData.k.l)
+                delegate.didUpdateCandle(self, candleModel: currentCandleModel)
+                return currentCandleModel
+            } catch {
+                print("Error JSON: \(error)")
+            }
+            return nil
+        }
     }
     
     func send() {

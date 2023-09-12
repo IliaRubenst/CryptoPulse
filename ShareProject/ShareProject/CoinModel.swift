@@ -14,3 +14,13 @@ struct CoinModel {
     var highPrice: String
     var lowPrice: String
 }
+
+struct CurrentCandleModel {
+    let eventTime: Int
+    let pair: String
+    let interval: String
+    let openPrice: String
+    let closePrice: String
+    let highPrice: String
+    let lowPrice: String
+}

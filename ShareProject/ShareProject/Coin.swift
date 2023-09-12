@@ -7,12 +7,12 @@
 
 import UIKit
 
-struct Coin: Decodable {
+struct Coin: Codable {
 //    let assets: [Assets]
     let symbols: Symbol
 }
 
-struct Symbol: Decodable {
+struct Symbol: Codable {
     let symbol: String
     let markPrice: String
 }
@@ -21,7 +21,7 @@ struct SymbolsArray {
     static var symbols = [Symbol]()
 }
 
-struct SymbolPriceData: Decodable {
+struct SymbolPriceData: Codable {
     var s: String
     var p: String
     
@@ -31,7 +31,7 @@ struct SymbolPriceData: Decodable {
     }
 }
 
-struct VolumeData: Decodable {
+struct VolumeData: Codable {
     var v: String
     var q: String
     var c: String
@@ -48,3 +48,22 @@ struct VolumeData: Decodable {
         self.l = lowPrice
     }
 }
+
+struct CurrentCandleData: Codable {
+    let E: Int
+    let ps: String
+    let k: K
+
+}
+
+struct K: Codable {
+    let t: Int
+    let T: Int
+    let i: String
+    let o: String
+    let c: String
+    let h: String
+    let l: String
+    let x: Bool
+}
+
