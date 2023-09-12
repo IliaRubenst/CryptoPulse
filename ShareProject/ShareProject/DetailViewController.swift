@@ -250,12 +250,14 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
         highPrice = Double(coinModel.highPrice)
         lowPrice = Double(coinModel.lowPrice)
         closePrice = Double(coinModel.closePrice)
-        print("update met \(openPrice), \(highPrice)")
+        setupData()
+        print("update met \(openPrice!), \(highPrice!), \(lowPrice!), \(Double(price)!) ")
     }
     
     func startManagers() {
         for state in State.allCases {
             let manager = WebSocketManager()
+            manager.delegate = self
             manager.actualState = state
             manager.webSocketConnect(symbol: symbol)
             
@@ -269,9 +271,22 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
                     if let quote = Double(quote) {
                         if let base = Double(base) {
                             self.recieveVolumeText.text = String(format: "Base Volume: \(base.rounded())\nUSDT Volume: %.2f$", quote)
+                            
                         }
                     }
                 }
+                
+//                manager.onCoinModel = { closePrice, highPrice, lowPrice, openPrice in
+//                    if let closePrice = Double(closePrice) {
+//                        if let highPrice = Double(highPrice) {
+//                            if let lowPrice = Double(lowPrice) {
+//                                if let openPrice = Double(openPrice) {
+//
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
             }
             webSocketManagers.append(manager)
         }

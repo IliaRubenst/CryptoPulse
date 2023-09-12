@@ -14,17 +14,49 @@
             filePath = "ShareProject/WebSocketManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "143"
-            endingLineNumber = "143"
+            startingLineNumber = "148"
+            endingLineNumber = "148"
             landmarkName = "parseJSONWeb(socketString:state:)"
             landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "2814BBF1-16C4-48B5-B67D-6100A8A72836 - b220ef31c9e294f8"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ShareProject.WebSocketManager.parseJSONWeb(socketString: Swift.String, state: ShareProject.State) -&gt; Swift.Optional&lt;ShareProject.CoinModel&gt;"
+                  moduleName = "ShareProject"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/ilia/SharedRepo/ShareProject/ShareProject/WebSocketManager.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "142"
+                  endingLineNumber = "142"
+                  offsetFromSymbolStart = "1480">
+               </Location>
+               <Location
+                  uuid = "2814BBF1-16C4-48B5-B67D-6100A8A72836 - b220ef31c9e294f8"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ShareProject.WebSocketManager.parseJSONWeb(socketString: Swift.String, state: ShareProject.State) -&gt; Swift.Optional&lt;ShareProject.CoinModel&gt;"
+                  moduleName = "ShareProject"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/ilia/SharedRepo/ShareProject/ShareProject/WebSocketManager.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "142"
+                  endingLineNumber = "142"
+                  offsetFromSymbolStart = "1516">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "45083E57-2E45-4FBA-B40A-D0FB16DEF63C"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ShareProject/DetailViewController.swift"
@@ -34,6 +66,38 @@
             endingLineNumber = "248"
             landmarkName = "didUpdateCandle(_:coinModel:)"
             landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "45083E57-2E45-4FBA-B40A-D0FB16DEF63C - 84bbdc974b0a63e8"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ShareProject.DetailViewController.didUpdateCandle(_: ShareProject.WebSocketManager, coinModel: ShareProject.CoinModel) -&gt; ()"
+                  moduleName = "ShareProject"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/ilia/SharedRepo/ShareProject/ShareProject/DetailViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "249"
+                  endingLineNumber = "249"
+                  offsetFromSymbolStart = "112">
+               </Location>
+               <Location
+                  uuid = "45083E57-2E45-4FBA-B40A-D0FB16DEF63C - 84bbdc974b0a63aa"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ShareProject.DetailViewController.didUpdateCandle(_: ShareProject.WebSocketManager, coinModel: ShareProject.CoinModel) -&gt; ()"
+                  moduleName = "ShareProject"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/ilia/SharedRepo/ShareProject/ShareProject/DetailViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "251"
+                  endingLineNumber = "251"
+                  offsetFromSymbolStart = "112">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

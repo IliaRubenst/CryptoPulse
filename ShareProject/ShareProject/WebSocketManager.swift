@@ -21,10 +21,17 @@ enum State: CaseIterable {
 class WebSocketManager: NSObject, URLSessionWebSocketDelegate {
     private var webSocket: URLSessionWebSocketTask?
     
-    var delegate: WebSocketManagerDelegate?
+    var delegate: WebSocketManagerDelegate!
     
     var onPriceChanged: ((String, String) -> ())?
     var onVolumeChanged: ((String, String) -> ())?
+    var onCoinModel: ((String, String, String, String) -> ())?
+    
+    var coinModel: CoinModel? {
+        didSet {
+            onCoinModel?(coinModel!.closePrice, coinModel!.highPrice, coinModel!.lowPrice, coinModel!.openPrice)
+        }
+    }
     
     var baseVolume = ""
     var quoteVolume = "" {
@@ -88,7 +95,6 @@ class WebSocketManager: NSObject, URLSessionWebSocketDelegate {
                 case .string(let message):
                     if let state = self?.actualState {
                         self?.parseJSONWeb(socketString: message, state: state)
-                        
                     }
                 @unknown default:
                     break
@@ -138,9 +144,8 @@ class WebSocketManager: NSObject, URLSessionWebSocketDelegate {
                     
                     //                print("Объем в битках:\(baseVolume), Объем в USDT?: \(quoteVolume)")
                     
-                    print(currentStreamData)
-                    delegate?.didUpdateCandle(WebSocketManager(), coinModel: currentStreamData)
-//                    delegate?.didUpdateCandle(self, coinModel: currentStreamData)
+//                    print(currentStreamData)
+                    delegate.didUpdateCandle(self, coinModel: currentStreamData)
                     return currentStreamData
                 } catch {
                     print("Error JSON: \(error)")
