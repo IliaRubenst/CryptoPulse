@@ -75,7 +75,6 @@ class WebSocketManager: NSObject, URLSessionWebSocketDelegate {
         webSocket?.cancel(with: .goingAway, reason: "Demo ended".data(using: .utf8))
     }
     
-   
     func recieve() {
         webSocket?.receive(completionHandler: { [weak self] result in
             switch result {
@@ -131,8 +130,17 @@ class WebSocketManager: NSObject, URLSessionWebSocketDelegate {
         case .currentCandleData:
             do {
                 let decodedData = try decoder.decode(CurrentCandleData.self, from: socketData)
-                let currentCandleModel = CurrentCandleModel(eventTime: decodedData.E, pair: decodedData.ps, interval: decodedData.k.i, openPrice: decodedData.k.o, closePrice: decodedData.k.c, highPrice: decodedData.k.h, lowPrice: decodedData.k.l)
-                delegate?.didUpdateCandle(self, candleModel: currentCandleModel)
+                let currentCandleModel = CurrentCandleModel(eventTime: decodedData.E,
+                                                            pair: decodedData.ps,
+                                                            interval: decodedData.k.i,
+                                                            openPrice: decodedData.k.o,
+                                                            closePrice: decodedData.k.c,
+                                                            highPrice: decodedData.k.h,
+                                                            lowPrice: decodedData.k.l,
+                                                            isKlineClose: decodedData.k.x)
+                if delegate != nil {
+                    delegate!.didUpdateCandle(self, candleModel: currentCandleModel)
+                }
             } catch {
                 print("Error JSON: \(error)")
             }

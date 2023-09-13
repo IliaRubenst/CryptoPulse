@@ -212,49 +212,17 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "3C17FE9B-2FB4-436F-8565-12B49E3DDD80"
+            uuid = "3DC2E064-59F7-45A2-8EBE-D9FAEA041603"
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "ShareProject/WebSocketManager.swift"
+            filePath = "ShareProject/DetailViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "135"
-            endingLineNumber = "135"
-            landmarkName = "parseJSONWeb(socketString:state:)"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "3C17FE9B-2FB4-436F-8565-12B49E3DDD80 - 4d3e41a59113d6b0"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "ShareProject.WebSocketManager.parseJSONWeb(socketString: Swift.String, state: ShareProject.State) -&gt; ()"
-                  moduleName = "ShareProject"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/ilia/SharedRepo/ShareProject/ShareProject/WebSocketManager.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "135"
-                  endingLineNumber = "135"
-                  offsetFromSymbolStart = "1884">
-               </Location>
-               <Location
-                  uuid = "3C17FE9B-2FB4-436F-8565-12B49E3DDD80 - 4d3e41a59113d6b0"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "ShareProject.WebSocketManager.parseJSONWeb(socketString: Swift.String, state: ShareProject.State) -&gt; ()"
-                  moduleName = "ShareProject"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/ilia/SharedRepo/ShareProject/ShareProject/WebSocketManager.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "135"
-                  endingLineNumber = "135"
-                  offsetFromSymbolStart = "1920">
-               </Location>
-            </Locations>
+            startingLineNumber = "227"
+            endingLineNumber = "227"
+            landmarkName = "DetailViewController"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

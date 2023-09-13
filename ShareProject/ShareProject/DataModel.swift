@@ -15,4 +15,5 @@ struct CurrentCandleModel {
     let closePrice: String
     let highPrice: String
     let lowPrice: String
+    let isKlineClose: Bool
 }
