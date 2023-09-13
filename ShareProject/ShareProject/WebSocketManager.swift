@@ -20,7 +20,7 @@ enum State: CaseIterable {
 class WebSocketManager: NSObject, URLSessionWebSocketDelegate {
     private var webSocket: URLSessionWebSocketTask?
     
-    var delegate: WebSocketManagerDelegate!
+    var delegate: WebSocketManagerDelegate?
     
     var onPriceChanged: ((String, String) -> ())?
     var onVolumeChanged: ((String, String) -> ())?
@@ -132,7 +132,7 @@ class WebSocketManager: NSObject, URLSessionWebSocketDelegate {
             do {
                 let decodedData = try decoder.decode(CurrentCandleData.self, from: socketData)
                 let currentCandleModel = CurrentCandleModel(eventTime: decodedData.E, pair: decodedData.ps, interval: decodedData.k.i, openPrice: decodedData.k.o, closePrice: decodedData.k.c, highPrice: decodedData.k.h, lowPrice: decodedData.k.l)
-                delegate.didUpdateCandle(self, candleModel: currentCandleModel)
+                delegate?.didUpdateCandle(self, candleModel: currentCandleModel)
             } catch {
                 print("Error JSON: \(error)")
             }
