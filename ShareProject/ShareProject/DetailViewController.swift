@@ -19,6 +19,8 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
     var webSocketManager = WebSocketManager()
     //    var chartManager = ChartManager()
     
+    var candles = [PreviousCandlesModel]()
+    
     var symbol: String!
     var price: String!
     var base = ""

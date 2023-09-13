@@ -24,6 +24,7 @@
 		D813653C2AB07643005930D2 /* SymbolsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D813653B2AB07643005930D2 /* SymbolsTableViewController.swift */; };
 		D813653E2AB07E6D005930D2 /* UserSymbols.swift in Sources */ = {isa = PBXBuildFile; fileRef = D813653D2AB07E6D005930D2 /* UserSymbols.swift */; };
 		D81365402AB092B9005930D2 /* DataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D813653F2AB092B9005930D2 /* DataLoader.swift */; };
+		D81365E62AB1ED78005930D2 /* PreviousCandlesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D81365E52AB1ED78005930D2 /* PreviousCandlesManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -48,6 +49,7 @@
 		D813653B2AB07643005930D2 /* SymbolsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SymbolsTableViewController.swift; sourceTree = "<group>"; };
 		D813653D2AB07E6D005930D2 /* UserSymbols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSymbols.swift; sourceTree = "<group>"; };
 		D813653F2AB092B9005930D2 /* DataLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataLoader.swift; sourceTree = "<group>"; };
+		D81365E52AB1ED78005930D2 /* PreviousCandlesManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviousCandlesManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -93,6 +95,7 @@
 			isa = PBXGroup;
 			children = (
 				496BEFD92AA9EFDF00B15E0F /* AppDelegate.swift */,
+				D81365E52AB1ED78005930D2 /* PreviousCandlesManager.swift */,
 				496BEFDB2AA9EFDF00B15E0F /* SceneDelegate.swift */,
 				496BEFDD2AA9EFDF00B15E0F /* ViewController.swift */,
 				D813653B2AB07643005930D2 /* SymbolsTableViewController.swift */,
@@ -249,6 +252,7 @@
 				D813653C2AB07643005930D2 /* SymbolsTableViewController.swift in Sources */,
 				496BEFDC2AA9EFDF00B15E0F /* SceneDelegate.swift in Sources */,
 				4979F2062AAC3905000E039C /* DetailViewController.swift in Sources */,
+				D81365E62AB1ED78005930D2 /* PreviousCandlesManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
