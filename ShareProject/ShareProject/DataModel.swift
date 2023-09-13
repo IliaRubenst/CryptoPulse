@@ -17,3 +17,17 @@ struct CurrentCandleModel {
     let lowPrice: String
     let isKlineClose: Bool
 }
+
+struct PreviousCandlesModel {
+    let openTime: Int
+    let openPrice: String
+    let highPrice: String
+    let lowPrice: String
+    let closePrice: String
+    let volume: String
+    let closeTime: Int
+    let quoteAssetVolume: String
+    let numberOfTrades: Int
+    let takerBuyVolume: String
+    let takerBuyQuoteAssetVolume: String
+}
