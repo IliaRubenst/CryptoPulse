@@ -225,7 +225,7 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
     }
 
     private func tick() {
-        let lastClose = self.lastClose ?? 0
+//        let lastClose = self.lastClose ?? 0
         
         ticksInCurrentBar += 1
         if ticksInCurrentBar == 1 {
