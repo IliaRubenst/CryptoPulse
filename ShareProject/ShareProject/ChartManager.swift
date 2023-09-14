@@ -202,7 +202,7 @@ class ChartManager {
     }
 
     func tick() {
-        let lastClose = self.lastClose ?? 0
+//        let lastClose = self.lastClose ?? 0
         
         ticksInCurrentBar += 1
         if ticksInCurrentBar == 1 {
@@ -265,5 +265,4 @@ class ChartManager {
         let components = Calendar.current.dateComponents(in: timeZone, from: date)
         return BusinessDay(year: components.year!, month: components.month! + 1, day: components.day!)
     }
-    
 }

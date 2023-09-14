@@ -18,7 +18,8 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
     
     var candles = [PreviousCandlesModel]()
     
-    var symbol: String!
+    
+    var symbol: String = ""
     var price: String!
     var base = ""
     var quote = ""
@@ -27,13 +28,19 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
     var lowPrice: Double = 0
     var closePrice: Double = 0
     var isKlineClose = false
+    var alarm: Double = 0
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "bell"), style: .plain, target: self, action: #selector(addAlarm))
         updateView(symbol: symbol, price: price)
         startWebSocketManagers()
         startChartManager()
+        
+       
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -59,8 +66,37 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
         let noisedPrice = closePrice
         
         chartManager.mergeTickToBar(noisedPrice)
+        
         if isKlineClose {
             chartManager.tick()
+        }
+        alarmObserver()
+    }
+    
+    
+    func alarmObserver() {
+        let upToDown = "пересекла сверху вниз"
+        let downToUp = "пересекла снизу вверх"
+//        let check = (closePrice > alarm) ? (closePrice - alarm) : (alarm - closePrice)
+                        
+        print("alarm \(alarm)")
+        print("price \(closePrice)")
+//        print(check)
+        
+        print(closePrice - alarm)
+
+        if closePrice > alarm {
+            if (closePrice - alarm) <= 0  {
+                let ac = UIAlertController(title: "Alarm for \(symbol)", message: "The price crossed \(alarm) \(upToDown) ", preferredStyle: .alert)
+                ac.addAction(UIAlertAction(title: "Apply", style: .default))
+                present(ac, animated: true)
+            }
+        } else {
+            if closePrice >= alarm {
+                let ac = UIAlertController(title: "Alarm for \(symbol)", message: "The price crossed \(alarm) \(downToUp) ", preferredStyle: .alert)
+                ac.addAction(UIAlertAction(title: "Apply", style: .default))
+                present(ac, animated: true)
+            }
         }
     }
     
@@ -97,6 +133,18 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
             }
             webSocketManagers.append(manager)
         }
+    }
+    
+    @objc func addAlarm() {
+        let ac = UIAlertController(title: "Set alarm for \(symbol)", message: nil, preferredStyle: .alert)
+        ac.addTextField()
+        
+        ac.addAction(UIAlertAction(title: "Apply", style: .default) { [weak self] _ in
+            guard let text = ac.textFields?[0].text else { return }
+
+            self!.alarm = Double(text)!
+        })
+        present(ac, animated: true)
     }
 }
 
