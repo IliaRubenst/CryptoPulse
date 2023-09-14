@@ -16,7 +16,6 @@ struct Symbol: Codable {
     let markPrice: String
 }
 
-
 struct SymbolPriceData: Codable {
     var s: String
     var p: String

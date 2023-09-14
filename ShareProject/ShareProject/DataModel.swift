@@ -31,3 +31,14 @@ struct PreviousCandlesModel {
     let takerBuyVolume: String
     let takerBuyQuoteAssetVolume: String
 }
+
+struct AlarmModel {
+    let symbol: String
+    let alarmPrice: Double
+    let isUpper: Bool
+    var isActive: Bool
+}
+
+struct AlarmModelsArray {
+    static var alarms = [AlarmModel]()
+}

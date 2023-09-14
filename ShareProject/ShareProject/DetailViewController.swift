@@ -81,21 +81,26 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
                         
         print("alarm \(alarm)")
         print("price \(closePrice)")
-//        print(check)
-        
-        print(closePrice - alarm)
 
-        if closePrice > alarm {
-            if (closePrice - alarm) <= 0  {
-                let ac = UIAlertController(title: "Alarm for \(symbol)", message: "The price crossed \(alarm) \(upToDown) ", preferredStyle: .alert)
-                ac.addAction(UIAlertAction(title: "Apply", style: .default))
-                present(ac, animated: true)
-            }
-        } else {
-            if closePrice >= alarm {
-                let ac = UIAlertController(title: "Alarm for \(symbol)", message: "The price crossed \(alarm) \(downToUp) ", preferredStyle: .alert)
-                ac.addAction(UIAlertAction(title: "Apply", style: .default))
-                present(ac, animated: true)
+        
+        var check = AlarmModelsArray.alarms
+        print(AlarmModelsArray.alarms)
+        for (index, state) in check.enumerated() where state.isActive {
+            if state.isUpper {
+                if closePrice >= alarm {
+//                    state.isActive.toggle()
+                    let ac = UIAlertController(title: "Alarm for \(symbol)", message: "The price crossed \(alarm) \(upToDown) ", preferredStyle: .alert)
+                    ac.addAction(UIAlertAction(title: "Apply", style: .default))
+                    present(ac, animated: true)
+                    check.remove(at: index)
+                }
+            } else {
+                if closePrice <= alarm {
+                    let ac = UIAlertController(title: "Alarm for \(symbol)", message: "The price crossed \(alarm) \(downToUp) ", preferredStyle: .alert)
+                    ac.addAction(UIAlertAction(title: "Apply", style: .default))
+                    present(ac, animated: true)
+                    check.remove(at: index)
+                }
             }
         }
     }
@@ -141,8 +146,14 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
         
         ac.addAction(UIAlertAction(title: "Apply", style: .default) { [weak self] _ in
             guard let text = ac.textFields?[0].text else { return }
-
             self!.alarm = Double(text)!
+            var isAlarmUpper = false
+            if self!.alarm > self!.closePrice {
+                isAlarmUpper = true
+            }
+            AlarmModelsArray.alarms.append(AlarmModel(symbol: self!.symbol, alarmPrice: self!.alarm, isUpper: isAlarmUpper, isActive: true))
+            
+//            print(AlarmModelsArray.alarms)
         })
         present(ac, animated: true)
     }
