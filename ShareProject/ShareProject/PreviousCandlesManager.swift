@@ -42,9 +42,20 @@ struct PreviousCandlesManager {
         do {
             if let decodedData = try JSONSerialization.jsonObject(with: marketData, options: []) as? [[Any]] {
                 for i in 0..<decodedData.count {
-                    let candle = PreviousCandlesModel(openTime: decodedData[i][0] as! Int, openPrice: decodedData[i][1] as! String, highPrice: decodedData[i][2] as! String, lowPrice: decodedData[i][3] as! String, closePrice: decodedData[i][4] as! String, volume: decodedData[i][5] as! String, closeTime: decodedData[i][6] as! Int, quoteAssetVolume: decodedData[i][7] as! String, numberOfTrades: decodedData[i][8] as! Int, takerBuyVolume: decodedData[i][9] as! String, takerBuyQuoteAssetVolume: decodedData[i][10] as! String)
+                    let candle = PreviousCandlesModel(openTime: decodedData[i][0] as! Double,
+                                                      openPrice: decodedData[i][1] as! String,
+                                                      highPrice: decodedData[i][2] as! String,
+                                                      lowPrice: decodedData[i][3] as! String,
+                                                      closePrice: decodedData[i][4] as! String,
+                                                      volume: decodedData[i][5] as! String,
+                                                      closeTime: decodedData[i][6] as! Int,
+                                                      quoteAssetVolume: decodedData[i][7] as! String,
+                                                      numberOfTrades: decodedData[i][8] as! Int,
+                                                      takerBuyVolume: decodedData[i][9] as! String,
+                                                      takerBuyQuoteAssetVolume: decodedData[i][10] as! String)
                     delegate.candles.append(candle)
                 }
+                print("Loaded \(delegate.candles.count) candles")
             } else {
                 print("Ошибка приведения типа")
             }
@@ -54,28 +65,3 @@ struct PreviousCandlesManager {
         
     }
 }
-
-
-/*if let openTime = decodedData[i][0] as? Int {
-    if let openPrice = decodedData[i][1] as? String {
-        if let highPrice = decodedData[i][2] as? String {
-            if let lowPrice = decodedData[i][3] as? String {
-                if let closePrice = decodedData[i][4] as? String {
-                    if let volume = decodedData[i][5] as? String {
-                        if let closeTime = decodedData[i][6] as? Int {
-                            if let quoteAssetVolume = decodedData[i][7] as? String {
-                                if let numberOfTrades = decodedData[i][8] as? Int {
-                                    if let takerBuyVolume = decodedData[i][9] as? String {
-                                        if let takerBuyQuoteAssetVolume = decodedData[i][10] as? String {
-                                            
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-}*/
