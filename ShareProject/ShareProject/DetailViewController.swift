@@ -13,13 +13,12 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
     @IBOutlet weak var recieveVolumeText: UITextView!
     
     var webSocketManagers = [WebSocketManager]()
-    var webSocketManager = WebSocketManager()
     var chartManager = ChartManager()
     
     var candles = [PreviousCandlesModel]()
+    var data = [CandlestickData]()    
     
-    
-    var symbol: String = ""
+    var symbol: String!
     var price: String!
     var base = ""
     var quote = ""
@@ -30,23 +29,37 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
     var isKlineClose = false
     var alarm: Double = 0
     
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "bell"), style: .plain, target: self, action: #selector(addAlarm))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "bell"), style: .plain, target: self, action: #selector(updateData))
         updateView(symbol: symbol, price: price)
-        startWebSocketManagers()
+        startCandlesManager()
         startChartManager()
-        
-       
+        startWebSocketManagers()
+    }
+    
+    // Вынести метод в модель chartManager. Заленился.
+    @objc func updateData() {
+       for i in 0..<candles.count {
+            let doubleOpenTime = Double(candles[i].openTime)
+            
+            let newCandle = CandlestickData(time: .utc(timestamp: doubleOpenTime / 1000), open: Double(candles[i].openPrice), high: Double(candles[i].highPrice), low: Double(candles[i].lowPrice), close: Double(candles[i].closePrice))
+            chartManager.data.append(newCandle)
+            
+            /*chartManager.data[i].time = .utc(timestamp: doubleOpenTime / 1000)
+            chartManager.data[i].open = Double(candles[i].openPrice)
+            chartManager.data[i].high = Double(candles[i].highPrice)
+            chartManager.data[i].low = Double(candles[i].lowPrice)
+            chartManager.data[i].close = Double(candles[i].closePrice)*/
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         for manager in webSocketManagers {
             manager.close()
         }
+        candles.removeAll()
+        chartManager.data.removeAll()
     }
     
     func updateView(symbol: String, price: String) {
@@ -70,11 +83,11 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
         if isKlineClose {
             chartManager.tick()
         }
-        alarmObserver()
+//        alarmObserver()
     }
     
     
-    func alarmObserver() {
+    /*func alarmObserver() {
         let upToDown = "пересекла сверху вниз"
         let downToUp = "пересекла снизу вверх"
 //        let check = (closePrice > alarm) ? (closePrice - alarm) : (alarm - closePrice)
@@ -98,12 +111,18 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
                 present(ac, animated: true)
             }
         }
-    }
+    }*/
     
     func startChartManager() {
         chartManager.delegate = self
         chartManager.setupChart()
         chartManager.setupSeries()
+    }
+    
+    func startCandlesManager() {
+        var candlesManager = PreviousCandlesManager(pair: symbol, interval: "1m")
+        candlesManager.delegate = self
+        candlesManager.fetchRequest()
     }
     
     func startWebSocketManagers() {
@@ -135,7 +154,7 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
         }
     }
     
-    @objc func addAlarm() {
+    /*@objc func addAlarm() {
         let ac = UIAlertController(title: "Set alarm for \(symbol)", message: nil, preferredStyle: .alert)
         ac.addTextField()
         
@@ -145,6 +164,6 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
             self!.alarm = Double(text)!
         })
         present(ac, animated: true)
-    }
+    }*/
 }
 

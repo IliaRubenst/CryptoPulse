@@ -19,7 +19,7 @@ struct CurrentCandleModel {
 }
 
 struct PreviousCandlesModel {
-    let openTime: Int
+    let openTime: Double
     let openPrice: String
     let highPrice: String
     let lowPrice: String
