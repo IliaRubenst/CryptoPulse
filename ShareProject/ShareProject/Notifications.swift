@@ -9,7 +9,7 @@ import Foundation
 
 struct TelegramNotifications {
     let urlTelegramAPI = "https://api.telegram.org/bot"
-    let botToken = "6620191491:AAHKCwMWZuLgs34U1OS7ZNgbpzRGYVBjBRg"
+    let botToken = "" // сюда вставлять апи ключ
     var user_ID = 133744737
     var message = String()
     var sendMessageMethodPath: String {
