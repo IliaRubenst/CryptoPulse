@@ -6,7 +6,16 @@
 //
 
 import UIKit
+import Foundation
 import LightweightCharts
+
+extension String {
+    var isNumeric: Bool {
+        guard self.count > 0 else { return false }
+        let nums: Set<Character> = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "."]
+        return Set(self).isSubset(of: nums)
+    }
+}
 
 class DetailViewController: UIViewController, WebSocketManagerDelegate {
     @IBOutlet weak var receiveDataText: UITextView!
@@ -22,16 +31,17 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
     var price: String!
     var base = ""
     var quote = ""
-    var openPrice: Double = 0
-    var highPrice: Double = 0
-    var lowPrice: Double = 0
     var closePrice: Double = 0
     var isKlineClose = false
     var alarm: Double = 0
+    var isAlertShowing: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "bell"), style: .plain, target: self, action: #selector(updateData))
+        
+        let setAlarmButton = UIBarButtonItem(image: UIImage(systemName: "bell"), style: .plain, target: self, action: #selector(addAlarm))
+        navigationItem.rightBarButtonItems = [setAlarmButton]
+                                              
         updateView(symbol: symbol, price: price)
         startCandlesManager()
         startChartManager()
@@ -70,53 +80,47 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
     
     func didUpdateCandle(_ websocketManager: WebSocketManager, candleModel: CurrentCandleModel) {
         closePrice = Double(candleModel.closePrice)!
-        openPrice = Double(candleModel.openPrice)!
-        highPrice = Double(candleModel.highPrice)!
-        lowPrice = Double(candleModel.lowPrice)!
         isKlineClose = candleModel.isKlineClose
         
-        
-        let noisedPrice = closePrice
-        
-        chartManager.mergeTickToBar(noisedPrice)
+        chartManager.mergeTickToBar(closePrice)
         
         if isKlineClose {
             chartManager.tick()
         }
-//        alarmObserver()
+        alarmObserver()
     }
     
     
-    /*func alarmObserver() {
+    func alarmObserver() {
         let upToDown = "пересекла сверху вниз"
         let downToUp = "пересекла снизу вверх"
-//        let check = (closePrice > alarm) ? (closePrice - alarm) : (alarm - closePrice)
-                        
-        print("alarm \(alarm)")
-        print("price \(closePrice)")
-
-        
-        var check = AlarmModelsArray.alarms
-        print(AlarmModelsArray.alarms)
-        for (index, state) in check.enumerated() where state.isActive {
-            if state.isUpper {
-                if closePrice >= alarm {
-//                    state.isActive.toggle()
-                    let ac = UIAlertController(title: "Alarm for \(symbol)", message: "The price crossed \(alarm) \(upToDown) ", preferredStyle: .alert)
-                    ac.addAction(UIAlertAction(title: "Apply", style: .default))
+        for (index, state) in AlarmModelsArray.alarms.enumerated() where state.isActive {
+            if state.isAlarmUpper {
+                if closePrice >= state.alarmPrice && !isAlertShowing {
+                    let ac = UIAlertController(title: "Alarm for \(state.symbol)", message: "The price crossed \(state.alarmPrice) \(downToUp) ", preferredStyle: .alert)
+                    isAlertShowing = true
+                    ac.addAction(UIAlertAction(title: "OK", style: .default) { [weak self] _ in
+                        self?.isAlertShowing = false
+                    })
                     present(ac, animated: true)
-                    check.remove(at: index)
+                    
+                    chartManager.removeAlarmLine(index)
+                    AlarmModelsArray.alarms.remove(at: index)
                 }
             } else {
-                if closePrice <= alarm {
-                    let ac = UIAlertController(title: "Alarm for \(symbol)", message: "The price crossed \(alarm) \(downToUp) ", preferredStyle: .alert)
-                    ac.addAction(UIAlertAction(title: "Apply", style: .default))
+                if closePrice <= state.alarmPrice && !isAlertShowing {
+                    let ac = UIAlertController(title: "Alarm for \(state.symbol)", message: "The price crossed \(state.alarmPrice) \(upToDown) ", preferredStyle: .alert)
+                    isAlertShowing = true
+                    ac.addAction(UIAlertAction(title: "OK", style: .default) { [weak self] _ in
+                        self?.isAlertShowing = false
+                    })
                     present(ac, animated: true)
-                    check.remove(at: index)
+                    chartManager.removeAlarmLine(index)
+                    AlarmModelsArray.alarms.remove(at: index)
                 }
             }
         }
-    }*/
+    }
     
     func startChartManager() {
         chartManager.delegate = self
@@ -148,7 +152,6 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
                     if let quote = Double(quote) {
                         if let base = Double(base) {
                             self.recieveVolumeText.text = String(format: "Base Volume: \(base.rounded())\nUSDT Volume: %.2f$", quote)
-                            
                         }
                     }
                 }
@@ -159,22 +162,24 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
         }
     }
     
-    /*@objc func addAlarm() {
-        let ac = UIAlertController(title: "Set alarm for \(symbol)", message: nil, preferredStyle: .alert)
+    @objc func addAlarm() {
+        let ac = UIAlertController(title: "Set alarm for \(symbol!)", message: nil, preferredStyle: .alert)
         ac.addTextField()
         
         ac.addAction(UIAlertAction(title: "Apply", style: .default) { [weak self] _ in
             guard let text = ac.textFields?[0].text else { return }
-            self!.alarm = Double(text)!
-            var isAlarmUpper = false
-            if self!.alarm > self!.closePrice {
-                isAlarmUpper = true
+            if text != "" && text.isNumeric {
+                self!.alarm = Double(text)!
+                var isAlarmUpper = false
+                if self!.alarm > self!.closePrice {
+                    isAlarmUpper = true
+                }
+                AlarmModelsArray.alarms.append(AlarmModel(symbol: self!.symbol, alarmPrice: self!.alarm, isAlarmUpper: isAlarmUpper, isActive: true))
+                self?.chartManager.setupAlarmLine(self!.alarm)
             }
-            AlarmModelsArray.alarms.append(AlarmModel(symbol: self!.symbol, alarmPrice: self!.alarm, isUpper: isAlarmUpper, isActive: true))
-            
-//            print(AlarmModelsArray.alarms)
         })
+        ac.addAction(UIAlertAction(title: "Cancel", style: .cancel))
         present(ac, animated: true)
-    }*/
+    }
 }
 

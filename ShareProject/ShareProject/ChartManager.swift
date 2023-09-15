@@ -13,6 +13,7 @@ class ChartManager {
     
     private var chart: LightweightCharts!
     private var series: CandlestickSeries!
+    private var alarmLine: PriceLine!
     
     var openPrice: Double = 0
     var highPrice: Double = 0
@@ -61,8 +62,6 @@ class ChartManager {
     }
 
     func tick() {
-//        let lastClose = self.lastClose ?? 0
-        
         ticksInCurrentBar += 1
         if ticksInCurrentBar == 1 {
             // move to next bar
@@ -123,5 +122,22 @@ class ChartManager {
         let date = Calendar.current.date(from: dateComponents)!
         let components = Calendar.current.dateComponents(in: timeZone, from: date)
         return BusinessDay(year: components.year!, month: components.month! + 1, day: components.day!)
+    }
+    
+    func setupAlarmLine(_ alarmPrice: Double) {
+        let options = PriceLineOptions(
+            price: alarmPrice,
+            color: "#f00",
+            lineWidth: .one,
+            lineStyle: .solid
+        )
+        
+        alarmLine = series.createPriceLine(options: options)
+        AlarmModelsArray.alarmaLine.append(alarmLine)
+    }
+    
+    func removeAlarmLine(_ index: Int) {
+        series.removePriceLine(line: AlarmModelsArray.alarmaLine[index])
+        AlarmModelsArray.alarmaLine.remove(at: index)
     }
 }

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import LightweightCharts
 
 struct CurrentCandleModel {
     let eventTime: Int
@@ -35,10 +36,12 @@ struct PreviousCandlesModel {
 struct AlarmModel {
     let symbol: String
     let alarmPrice: Double
-    let isUpper: Bool
+    let isAlarmUpper: Bool
     var isActive: Bool
 }
 
 struct AlarmModelsArray {
     static var alarms = [AlarmModel]()
+    static var alarmaLine = [PriceLine]()
 }
+

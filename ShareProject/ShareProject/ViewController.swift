@@ -56,7 +56,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
     }
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let cell = collectionView.cellForItem(at: indexPath) as? CoinCell else { return }
+//        guard let cell = collectionView.cellForItem(at: indexPath) as? CoinCell else { return }
 //        cell.reloadInputViews()
         openDetailView(indexPath: indexPath)
     }
