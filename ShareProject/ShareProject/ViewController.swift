@@ -19,6 +19,20 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
         defaults.loadUserSymbols()
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(showTableView))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(sendMessage))
+    }
+    
+    @objc func sendMessage() {
+        var notificationManager = TelegramNotifications()
+        let ac = UIAlertController(title: "Send message", message: "This message will be sent to telegram bot", preferredStyle: .alert)
+        ac.addTextField()
+        ac.addAction(UIAlertAction(title: "Send", style: .default) { [weak ac] _ in
+            guard let message = ac?.textFields?[0].text else { return }
+            notificationManager.message = message
+            notificationManager.fetchRequest()
+        })
+        ac.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        present(ac, animated: true)
     }
     
     @objc func showTableView() {
