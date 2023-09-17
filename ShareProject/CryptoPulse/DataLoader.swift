@@ -32,6 +32,4 @@ struct DataLoader {
             print("Failed to save symbols")
         }
     }
-    
-    
 }

@@ -20,6 +20,12 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(showTableView))
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(sendMessage))
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(loadList), name: NSNotification.Name(rawValue: "newSymbolAdded"), object: nil)
+    }
+    
+    @objc func loadList(notification: NSNotification){
+        self.collectionView.reloadData()
     }
     
     @objc func sendMessage() {
@@ -36,9 +42,8 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
     }
     
     @objc func showTableView() {
-        let tableView = SymbolsTableViewController()
-        tableView.mainView = self
-        present(tableView, animated: true)
+        let detailVC = storyboard?.instantiateViewController(identifier: "SymbolList") as? SymbolsListController
+        present(detailVC!, animated: true)
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
