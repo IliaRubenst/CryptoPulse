@@ -20,17 +20,15 @@ class ChartManager {
     var lowPrice: Double = 0
     var closePrice: Double = 0
     var isKlineClose = false
+    var isFirstKline = true
     
     var data = [CandlestickData]()
     
     private lazy var lastClose = data.last!.close
-    private lazy var lastIndex = data.endIndex - 1
-    private lazy var targetIndex = lastIndex + 105 + Int((Double.random(in: 0...1) + 30).rounded())
-//    private lazy var targetPrice = closePrice
-    private lazy var currentIndex = lastIndex + 1
-    private var ticksInCurrentBar = 0
-    private var currentBusinessDay = BusinessDay(year: 2023, month: 9, day: 14)
-    private lazy var currentBar = CandlestickData(time: .businessDay(currentBusinessDay), open: nil, high: nil, low: nil, close: nil)
+    private lazy var targetPrice = closePrice
+    private var currentBusinessDay = BusinessDay(year: Calendar.current.component(.year, from: Date()), month: Calendar.current.component(.month, from: Date()), day: Calendar.current.component(.day, from: Date()))
+    private lazy var currentBar = CandlestickData(time: .businessDay(currentBusinessDay), open: openPrice, high: highPrice, low: lowPrice, close: closePrice)
+   
     
     func setupChart() {
         let options = ChartOptions(crosshair: CrosshairOptions(mode: .normal))
@@ -62,24 +60,20 @@ class ChartManager {
     }
 
     func tick() {
-        ticksInCurrentBar += 1
-        if ticksInCurrentBar == 1 {
-            // move to next bar
-            currentIndex += 1
-            currentBusinessDay = nextBusinessDay(currentBusinessDay)
-            currentBar = CandlestickData(time: .businessDay(currentBusinessDay), open: nil, high: nil, low: nil, close: nil)
-            ticksInCurrentBar = 0
-            if currentIndex == 5000 {
-                reset()
-                return
-            }
-            if currentIndex == targetIndex {
-                self.lastClose = closePrice
-                lastIndex = currentIndex
-                targetIndex = lastIndex + 2
-//                targetPrice = closePrice
-            }
+//            currentIndex += 1
+        print(isFirstKline)
+        if isFirstKline {
+            print("currentBusinessDay \(currentBusinessDay)")
+//            isFirstKline = false
+        } else {
+//            currentIndex -= 1
+        
+            print("nextBusinessDay \(currentBusinessDay)")
         }
+        currentBusinessDay = nextBusinessDay(currentBusinessDay)
+//        currentBar = CandlestickData(time: .businessDay(currentBusinessDay), open: openPrice, high: highPrice, low: lowPrice, close: closePrice)
+            currentBar = CandlestickData(time: .businessDay(currentBusinessDay), open: nil, high: nil, low: nil, close: nil)
+
     }
     
     func mergeTickToBar(_ price: BarPrice) {
@@ -94,20 +88,6 @@ class ChartManager {
             currentBar.low = min(currentBar.low ?? price, price)
         }
         series.update(bar: currentBar)
-    }
-    
-    func reset() {
-        series.setData(data: data)
-        
-        lastClose = data.last!.close
-        lastIndex = data.endIndex - 1
-        
-        targetIndex = lastIndex + 5 + Int((Double.random(in: 0...1) + 30).rounded())
-//        targetPrice = closePrice
-        
-        currentIndex = lastIndex + 1
-        currentBusinessDay = BusinessDay(year: 2023, month: 9, day: 14)
-        ticksInCurrentBar = 0
     }
     
     func nextBusinessDay(_ time: BusinessDay) -> BusinessDay {
@@ -141,3 +121,18 @@ class ChartManager {
         AlarmModelsArray.alarmaLine.remove(at: index)
     }
 }
+
+
+//    func reset() {
+//        series.setData(data: data)
+        
+//        lastClose = data.last!.close
+//        lastIndex = data.endIndex - 1
+//
+//        targetIndex = lastIndex + 5 + Int((Double.random(in: 0...1) + 30).rounded())
+////        targetPrice = closePrice
+        
+//        currentIndex = lastIndex + 1
+//        currentBusinessDay = BusinessDay(year: Calendar.current.component(.year, from: Date()), month: Calendar.current.component(.month, from: Date()), day: Calendar.current.component(.day, from: Date()))
+//        ticksInCurrentBar = 0
+//    }

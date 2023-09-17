@@ -74,7 +74,7 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
     
     func updateView(symbol: String, price: String) {
         if let doublePrice = Double(price) {
-            receiveDataText.text = String(format: "Current price of \(symbol)\n is %.6f$", doublePrice)
+            receiveDataText.text = String(format: "\(symbol)\n%.6f$", doublePrice)
         }
     }
     
@@ -86,6 +86,7 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
         
         if isKlineClose {
             chartManager.tick()
+            chartManager.isFirstKline = false
         }
         alarmObserver()
     }
