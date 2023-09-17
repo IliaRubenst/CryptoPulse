@@ -26,6 +26,7 @@
 		D81365402AB092B9005930D2 /* DataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D813653F2AB092B9005930D2 /* DataLoader.swift */; };
 		D81365E62AB1ED78005930D2 /* PreviousCandlesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D81365E52AB1ED78005930D2 /* PreviousCandlesManager.swift */; };
 		D81365EC2AB207A1005930D2 /* ChartManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D81365EB2AB207A1005930D2 /* ChartManager.swift */; };
+		D81366362AB4C577005930D2 /* Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = D81366352AB4C577005930D2 /* Notifications.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -52,6 +53,7 @@
 		D813653F2AB092B9005930D2 /* DataLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataLoader.swift; sourceTree = "<group>"; };
 		D81365E52AB1ED78005930D2 /* PreviousCandlesManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviousCandlesManager.swift; sourceTree = "<group>"; };
 		D81365EB2AB207A1005930D2 /* ChartManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartManager.swift; sourceTree = "<group>"; };
+		D81366352AB4C577005930D2 /* Notifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notifications.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,6 +102,7 @@
 				D81365E52AB1ED78005930D2 /* PreviousCandlesManager.swift */,
 				496BEFDB2AA9EFDF00B15E0F /* SceneDelegate.swift */,
 				496BEFDD2AA9EFDF00B15E0F /* ViewController.swift */,
+				D81366352AB4C577005930D2 /* Notifications.swift */,
 				D813653B2AB07643005930D2 /* SymbolsTableViewController.swift */,
 				4979F2052AAC3905000E039C /* DetailViewController.swift */,
 				49367CAF2AAB33BE00827BE9 /* MarketManager.swift */,
@@ -250,6 +253,7 @@
 				4979F2082AACAFC0000E039C /* WebSocketManager.swift in Sources */,
 				496BEFDA2AA9EFDF00B15E0F /* AppDelegate.swift in Sources */,
 				4987EBD92AB220D8001E70E2 /* TelegramNotification.swift in Sources */,
+				D81366362AB4C577005930D2 /* Notifications.swift in Sources */,
 				49367CAC2AAAFE7100827BE9 /* CoinCell.swift in Sources */,
 				49367CAE2AAAFEB800827BE9 /* DataCodable.swift in Sources */,
 				D81365402AB092B9005930D2 /* DataLoader.swift in Sources */,
