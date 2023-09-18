@@ -15,19 +15,19 @@ class ChartManager {
     private var series: CandlestickSeries!
     private var alarmLine: PriceLine!
     
-    var openPrice: Double = 0
-    var highPrice: Double = 0
-    var lowPrice: Double = 0
-    var closePrice: Double = 0
-    var isKlineClose = false
+//    var openPrice: Double = 0
+//    var highPrice: Double = 0
+//    var lowPrice: Double = 0
+//    var closePrice: Double = 0
+//    var isKlineClose = false
     var isFirstKline = true
     
     var data = [CandlestickData]()
     
-    private lazy var lastClose = data.last!.close
-    private lazy var targetPrice = closePrice
+//    private lazy var lastClose = data.last!.close
+//    private lazy var targetPrice = closePrice
     private var currentBusinessDay = Date().timeIntervalSince1970 //BusinessDay(year: Calendar.current.component(.year, from: Date()), month: Calendar.current.component(.month, from: Date()), day: Calendar.current.component(.day, from: Date()))
-    private lazy var currentBar = CandlestickData(time: .utc(timestamp: currentBusinessDay), open: nil, high: nil, low: nil, close: nil)
+    lazy var currentBar = CandlestickData(time: .utc(timestamp: currentBusinessDay), open: nil, high: nil, low: nil, close: nil)
    
     
     func setupChart() {
@@ -53,13 +53,24 @@ class ChartManager {
         while delegate.candles.count != 500 {
             continue
         }
-        
         delegate.updateData()
         data.removeLast()
+        
         series.setData(data: data)
     }
 
     func tick() {
+        if isFirstKline {
+            guard let open = Double(delegate.currentCandelModel.openPrice),
+                  let high = Double(delegate.currentCandelModel.highPrice),
+                  let low = Double(delegate.currentCandelModel.lowPrice),
+                  let close = Double(delegate.currentCandelModel.openPrice) else { return }
+            
+            currentBar = CandlestickData(time: .utc(timestamp: currentBusinessDay), open: open, high: high, low: low, close: close)
+            
+            isFirstKline = false
+        }
+        
         if delegate.isKlineClose {
             if let nextMinute = nextMinute(currentBusinessDay) {
                 currentBusinessDay = nextMinute
@@ -67,7 +78,8 @@ class ChartManager {
                 print("nextBusinessDay \(currentBusinessDay)")
             }
         }
-        mergeTickToBar(delegate.closePrice)
+        
+        mergeTickToBar(delegate.closePrice) //Вот этот момент я бы поправил, беря данные из обновляемой модели, а не из конкретной переменной, которая загружается из didUpdateCandle.
     }
     
     func mergeTickToBar(_ price: BarPrice) {

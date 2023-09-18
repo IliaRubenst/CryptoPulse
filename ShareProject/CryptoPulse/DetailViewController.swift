@@ -25,13 +25,16 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
     var chartManager = ChartManager()
     
     var candles = [PreviousCandlesModel]()
-    var data = [CandlestickData]()    
+    var data = [CandlestickData]()
+    
+    var currentCandelModel: CurrentCandleModel!
     
     var symbol: String!
     var price: String!
     var base = ""
     var quote = ""
     var closePrice: Double = 0
+    
     var isKlineClose = false
     var alarm: Double = 0
     var isAlertShowing: Bool = false
@@ -56,12 +59,6 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
             
             let newCandle = CandlestickData(time: .utc(timestamp: doubleOpenTime / 1000), open: Double(candles[i].openPrice), high: Double(candles[i].highPrice), low: Double(candles[i].lowPrice), close: Double(candles[i].closePrice))
             chartManager.data.append(newCandle)
-            
-            /*chartManager.data[i].time = .utc(timestamp: doubleOpenTime / 1000)
-            chartManager.data[i].open = Double(candles[i].openPrice)
-            chartManager.data[i].high = Double(candles[i].highPrice)
-            chartManager.data[i].low = Double(candles[i].lowPrice)
-            chartManager.data[i].close = Double(candles[i].closePrice)*/
         }
     }
     
@@ -82,6 +79,8 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
     func didUpdateCandle(_ websocketManager: WebSocketManager, candleModel: CurrentCandleModel) {
         closePrice = Double(candleModel.closePrice)!
         isKlineClose = candleModel.isKlineClose
+        
+        currentCandelModel = candleModel
         
         chartManager.tick()
         alarmObserver()
