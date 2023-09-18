@@ -28,6 +28,8 @@ class ChartManager {
     private lazy var targetPrice = closePrice
     private var currentBusinessDay = Date().timeIntervalSince1970 //BusinessDay(year: Calendar.current.component(.year, from: Date()), month: Calendar.current.component(.month, from: Date()), day: Calendar.current.component(.day, from: Date()))
     private lazy var currentBar = CandlestickData(time: .utc(timestamp: currentBusinessDay), open: nil, high: nil, low: nil, close: nil)
+    
+    private let tooltipView = TooltipView(accentColor: UIColor(red: 0, green: 150/255.0, blue: 136/255.0, alpha: 1))
    
     
     func setupChart() {
