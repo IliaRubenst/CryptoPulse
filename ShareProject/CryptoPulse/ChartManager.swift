@@ -28,6 +28,8 @@ class ChartManager {
     private lazy var targetPrice = closePrice
     private var currentBusinessDay = BusinessDay(year: Calendar.current.component(.year, from: Date()), month: Calendar.current.component(.month, from: Date()), day: Calendar.current.component(.day, from: Date()))
     private lazy var currentBar = CandlestickData(time: .businessDay(currentBusinessDay), open: openPrice, high: highPrice, low: lowPrice, close: closePrice)
+    
+    private let tooltipView = TooltipView(accentColor: UIColor(red: 0, green: 150/255.0, blue: 136/255.0, alpha: 1))
    
     
     func setupChart() {
@@ -43,6 +45,20 @@ class ChartManager {
         ])
         
         self.chart = chart
+        
+        delegate.view.addSubview(tooltipView)
+        
+        tooltipView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            tooltipView.leadingAnchor.constraint(equalTo: delegate.view.safeAreaLayoutGuide.leadingAnchor),
+            tooltipView.trailingAnchor.constraint(equalTo: delegate.view.safeAreaLayoutGuide.trailingAnchor),
+            tooltipView.topAnchor.constraint(equalTo: delegate.recieveVolumeText.bottomAnchor),
+        ])
+
+        
+        tooltipView.isHidden = true
+        
+        delegate.view.bringSubviewToFront(tooltipView)
     }
     
     func setupSeries() {
@@ -119,6 +135,32 @@ class ChartManager {
     func removeAlarmLine(_ index: Int) {
         series.removePriceLine(line: AlarmModelsArray.alarmaLine[index])
         AlarmModelsArray.alarmaLine.remove(at: index)
+    }
+    
+    func setupSubscription() {
+        chart.delegate = self
+        chart.subscribeCrosshairMove()
+    }
+    
+}
+
+extension ChartManager: ChartDelegate {
+    
+    func didClick(onChart chart: ChartApi, parameters: MouseEventParams) {
+    }
+    
+    func didCrosshairMove(onChart chart: ChartApi, parameters: MouseEventParams) {
+        if case let .utc(timestamp: date) = parameters.time,
+           case let .barData(data) = parameters.price(forSeries: series) {
+            tooltipView.update(title: "open:\(data.open!), high:\(data.high!), low:\(data.low!), close:\(data.close!)")
+            tooltipView.isHidden = false
+        } else {
+            self.tooltipView.isHidden = true
+        }
+    }
+    
+    func didVisibleTimeRangeChange(onChart chart: ChartApi, parameters: TimeRange?) {
+        
     }
 }
 

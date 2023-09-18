@@ -25,7 +25,7 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
     var chartManager = ChartManager()
     
     var candles = [PreviousCandlesModel]()
-    var data = [CandlestickData]()    
+    var data = [CandlestickData]()
     
     var symbol: String!
     var price: String!
@@ -39,8 +39,17 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+//        let backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+//        navigationItem.backBarButtonItem = backBarButtonItem
+        
+        navigationItem.backButtonTitle = ""
         let setAlarmButton = UIBarButtonItem(image: UIImage(systemName: "bell"), style: .plain, target: self, action: #selector(addAlarm))
         navigationItem.rightBarButtonItems = [setAlarmButton]
+        
+        let coinInfo = UILabel()
+        coinInfo.text = "\(symbol ?? "error")\n\(closePrice)"
+        let button = UIBarButtonItem(customView: coinInfo)
+        
                                               
         updateView(symbol: symbol, price: price)
         startCandlesManager()
@@ -127,6 +136,7 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
         chartManager.delegate = self
         chartManager.setupChart()
         chartManager.setupSeries()
+        chartManager.setupSubscription()
     }
     
     func startCandlesManager() {
@@ -165,7 +175,10 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
     
     @objc func addAlarm() {
         let ac = UIAlertController(title: "Set alarm for \(symbol!)", message: nil, preferredStyle: .alert)
-        ac.addTextField()
+        ac.addTextField { textField in
+            textField.placeholder = "00.00"
+            textField.keyboardType = UIKeyboardType.decimalPad
+        }
         
         ac.addAction(UIAlertAction(title: "Apply", style: .default) { [weak self] _ in
             guard let text = ac.textFields?[0].text else { return }
