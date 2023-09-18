@@ -7,16 +7,21 @@
 
 import UIKit
 
-class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
+class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout, WebSocketManagerDelegate {
     let amountCells = 2
     var marketManager = MarketManager()
     var defaults = DataLoader()
+    
+
+    private var timer: Timer?
+    var webSocketManagers = [WebSocketManager]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         loadTickers()
         defaults.loadUserSymbols()
+        getSymbolToWebSocket()
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(showTableView))
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(sendMessage))
@@ -24,7 +29,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
         NotificationCenter.default.addObserver(self, selector: #selector(loadList), name: NSNotification.Name(rawValue: "newSymbolAdded"), object: nil)
     }
     
-    @objc func loadList(notification: NSNotification){
+    @objc func loadList(notification: NSNotification) {
         self.collectionView.reloadData()
     }
     
@@ -135,6 +140,33 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
     
     @objc func loadTickers() {
         marketManager.fetchRequest()
+    }
+    
+    func didUpdateCandle(_ websocketManager: WebSocketManager, candleModel: CurrentCandleModel) {
+        var checkedArray = UserSymbols.savedSymbols
+        let gotSymbol = candleModel.pair
+        let currentPrice = candleModel.closePrice
+        
+        checkedArray = UserSymbols.savedSymbols.map ({ checkedArray in
+            if checkedArray.symbol == gotSymbol {
+                checkedArray.markPrice = currentPrice
+                collectionView.reloadData()
+            }
+            return checkedArray
+        })
+    }
+    
+    func getSymbolToWebSocket() {
+        for symbol in UserSymbols.savedSymbols {
+            setConnetcForSymbols(symbol.symbol)
+        }
+    }
+    
+    func setConnetcForSymbols(_ symbol: String) {
+        let delegate = WebSocketManager()
+        delegate.delegate = self
+        delegate.webSocketConnect(symbol: symbol)
+        webSocketManagers.append(delegate)
     }
 }
 

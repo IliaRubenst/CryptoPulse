@@ -46,10 +46,10 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
         let setAlarmButton = UIBarButtonItem(image: UIImage(systemName: "bell"), style: .plain, target: self, action: #selector(addAlarm))
         navigationItem.rightBarButtonItems = [setAlarmButton]
         
-        let coinInfo = UILabel()
-        coinInfo.text = "\(symbol ?? "error")\n\(closePrice)"
-        let button = UIBarButtonItem(customView: coinInfo)
-        
+//        let coinInfo = UILabel()
+//        coinInfo.text = "\(symbol ?? "error")\n\(closePrice)"
+//        let button = UIBarButtonItem(customView: coinInfo)
+//        
                                               
         updateView(symbol: symbol, price: price)
         startCandlesManager()
@@ -143,17 +143,16 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
     
     func startWebSocketManagers() {
         for state in State.allCases {
-            
             let manager = WebSocketManager()
             manager.delegate = self
             manager.actualState = state
             manager.webSocketConnect(symbol: symbol)
             
             switch state {
-            case .aggTrade:
-                manager.onPriceChanged = { price, symbol in
-                    self.updateView(symbol: symbol, price: price)
-                }
+//            case .aggTrade:
+//                manager.onPriceChanged = { price, symbol in
+//                    self.updateView(symbol: symbol, price: price)
+//                }
             case .ticker:
                 manager.onVolumeChanged = { base, quote in
                     if let quote = Double(quote) {
@@ -166,6 +165,7 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
                 print("")
             }
             webSocketManagers.append(manager)
+            print(webSocketManagers)
         }
     }
     

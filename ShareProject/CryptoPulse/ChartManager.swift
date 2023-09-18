@@ -80,7 +80,6 @@ class ChartManager {
             if let nextMinute = nextMinute(currentBusinessDay) {
                 currentBusinessDay = nextMinute
                 currentBar = CandlestickData(time: .utc(timestamp: currentBusinessDay), open: nil, high: nil, low: nil, close: nil)
-                print("nextBusinessDay \(currentBusinessDay)")
             }
         }
         mergeTickToBar(delegate.closePrice)
@@ -157,7 +156,7 @@ extension ChartManager: ChartDelegate {
     }
     
     func didCrosshairMove(onChart chart: ChartApi, parameters: MouseEventParams) {
-        if case let .utc(timestamp: date) = parameters.time,
+        if case .utc(timestamp: _) = parameters.time,
            case let .barData(data) = parameters.price(forSeries: series) {
             tooltipView.update(title: "open:\(data.open!), high:\(data.high!), low:\(data.low!), close:\(data.close!)")
             tooltipView.isHidden = false

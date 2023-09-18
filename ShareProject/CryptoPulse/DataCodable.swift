@@ -8,12 +8,17 @@
 import UIKit
 
 struct Coin: Codable {
-    let symbols: Symbol
+    var symbols: Symbol
 }
 
-struct Symbol: Codable {
-    let symbol: String
-    let markPrice: String
+class Symbol: Codable {
+    var symbol: String
+    var markPrice: String
+    
+    init(symbol: String, markPrice: String) {
+        self.symbol = symbol
+        self.markPrice = markPrice
+    }
 }
 
 struct SymbolPriceData: Codable {
