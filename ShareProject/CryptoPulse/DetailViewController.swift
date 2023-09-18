@@ -52,6 +52,7 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
     @objc func updateData() {
        for i in 0..<candles.count {
             let doubleOpenTime = Double(candles[i].openTime)
+           
             
             let newCandle = CandlestickData(time: .utc(timestamp: doubleOpenTime / 1000), open: Double(candles[i].openPrice), high: Double(candles[i].highPrice), low: Double(candles[i].lowPrice), close: Double(candles[i].closePrice))
             chartManager.data.append(newCandle)
@@ -82,12 +83,7 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
         closePrice = Double(candleModel.closePrice)!
         isKlineClose = candleModel.isKlineClose
         
-        chartManager.mergeTickToBar(closePrice)
-        
-        if isKlineClose {
-            chartManager.tick()
-            chartManager.isFirstKline = false
-        }
+        chartManager.tick()
         alarmObserver()
     }
     

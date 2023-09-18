@@ -26,8 +26,8 @@ class ChartManager {
     
     private lazy var lastClose = data.last!.close
     private lazy var targetPrice = closePrice
-    private var currentBusinessDay = BusinessDay(year: Calendar.current.component(.year, from: Date()), month: Calendar.current.component(.month, from: Date()), day: Calendar.current.component(.day, from: Date()))
-    private lazy var currentBar = CandlestickData(time: .businessDay(currentBusinessDay), open: openPrice, high: highPrice, low: lowPrice, close: closePrice)
+    private var currentBusinessDay = Date().timeIntervalSince1970 //BusinessDay(year: Calendar.current.component(.year, from: Date()), month: Calendar.current.component(.month, from: Date()), day: Calendar.current.component(.day, from: Date()))
+    private lazy var currentBar = CandlestickData(time: .utc(timestamp: currentBusinessDay), open: nil, high: nil, low: nil, close: nil)
    
     
     func setupChart() {
@@ -49,31 +49,25 @@ class ChartManager {
         let series = chart.addCandlestickSeries(options: nil)
         self.series = series
         
-        // Здесь точка синхрнизации. Ждет, пока не загрузит массив свечек. Решение, наверное, так себе, но с GCD я пока хз как завести.
+        // Здесь точка синхрнизации. Ждет, пока не загрузит массив свечек. Решение, наверное, так себе, но с GCD я пока хз как завести. Периодически вызывает краш приложения.
         while delegate.candles.count != 500 {
             continue
         }
         
         delegate.updateData()
+        data.removeLast()
         series.setData(data: data)
-        tick()
     }
 
     func tick() {
-//            currentIndex += 1
-        print(isFirstKline)
-        if isFirstKline {
-            print("currentBusinessDay \(currentBusinessDay)")
-//            isFirstKline = false
-        } else {
-//            currentIndex -= 1
-        
-            print("nextBusinessDay \(currentBusinessDay)")
+        if delegate.isKlineClose {
+            if let nextMinute = nextMinute(currentBusinessDay) {
+                currentBusinessDay = nextMinute
+                currentBar = CandlestickData(time: .utc(timestamp: currentBusinessDay), open: nil, high: nil, low: nil, close: nil)
+                print("nextBusinessDay \(currentBusinessDay)")
+            }
         }
-        currentBusinessDay = nextBusinessDay(currentBusinessDay)
-//        currentBar = CandlestickData(time: .businessDay(currentBusinessDay), open: openPrice, high: highPrice, low: lowPrice, close: closePrice)
-            currentBar = CandlestickData(time: .businessDay(currentBusinessDay), open: nil, high: nil, low: nil, close: nil)
-
+        mergeTickToBar(delegate.closePrice)
     }
     
     func mergeTickToBar(_ price: BarPrice) {
@@ -90,6 +84,18 @@ class ChartManager {
         series.update(bar: currentBar)
     }
     
+    func nextMinute(_ time: TimeInterval) -> TimeInterval? {
+        let date = Date(timeIntervalSince1970: time)
+        var dateComponents = Calendar.current.dateComponents(in: Calendar.current.timeZone, from: date)
+        dateComponents.minute! += 1
+        guard let timeInterval = Calendar.current.date(from: dateComponents)?.timeIntervalSince1970 else {
+            print("Error in nextMinute methode, can't get TimeInterval")
+            return nil
+        }
+        return timeInterval
+        
+    }
+    
     func nextBusinessDay(_ time: BusinessDay) -> BusinessDay {
         let timeZone = TimeZone(identifier: "UTC")!
         let dateComponents = DateComponents(
@@ -104,7 +110,8 @@ class ChartManager {
         return BusinessDay(year: components.year!, month: components.month! + 1, day: components.day!)
     }
     
-    func setupAlarmLine(_ alarmPrice: Double) {
+    
+func setupAlarmLine(_ alarmPrice: Double) {
         let options = PriceLineOptions(
             price: alarmPrice,
             color: "#f00",
