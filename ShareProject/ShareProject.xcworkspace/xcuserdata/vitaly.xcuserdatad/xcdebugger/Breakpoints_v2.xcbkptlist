@@ -46,10 +46,58 @@
             filePath = "CryptoPulse/DetailViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "82"
-            endingLineNumber = "82"
+            startingLineNumber = "79"
+            endingLineNumber = "79"
             landmarkName = "didUpdateCandle(_:candleModel:)"
             landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "CA1FF593-BE52-40EF-91C6-CE8BD07BCA60"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CryptoPulse/ChartManager.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "63"
+            endingLineNumber = "63"
+            landmarkName = "tick()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "CA1FF593-BE52-40EF-91C6-CE8BD07BCA60 - 6a5447c81cd2719f"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "CyptoPulse.ChartManager.tick() -&gt; ()"
+                  moduleName = "CyptoPulse"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/vitalybelikov/Documents/sharedRepo/ShareProject/CryptoPulse/ChartManager.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "65"
+                  endingLineNumber = "65"
+                  offsetFromSymbolStart = "96">
+               </Location>
+               <Location
+                  uuid = "CA1FF593-BE52-40EF-91C6-CE8BD07BCA60 - 6a5447c81cd2719f"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "CyptoPulse.ChartManager.tick() -&gt; ()"
+                  moduleName = "CyptoPulse"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/vitalybelikov/Documents/sharedRepo/ShareProject/CryptoPulse/ChartManager.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "65"
+                  endingLineNumber = "65"
+                  offsetFromSymbolStart = "136">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
