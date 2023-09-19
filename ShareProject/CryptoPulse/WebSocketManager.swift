@@ -21,13 +21,14 @@ class WebSocketManager: NSObject, URLSessionWebSocketDelegate {
     private var webSocket: URLSessionWebSocketTask?
     var delegate: WebSocketManagerDelegate?
     
-    var onVolumeChanged: ((String, String) -> ())?
+//    var onVolumeChanged: ((String, String) -> ())?
     var baseVolume = ""
-    var quoteVolume = "" {
-        didSet {
-            onVolumeChanged?(baseVolume, quoteVolume)
-        }
-    }
+    var quoteVolume = ""
+//    var quoteVolume = "" {
+//        didSet {
+//            onVolumeChanged?(baseVolume, quoteVolume)
+//        }
+//    }
 
     var actualState = State.currentCandleData
     

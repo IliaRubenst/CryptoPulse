@@ -21,6 +21,10 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
     @IBOutlet weak var recieveVolumeText: UITextView!
     let navView = UIView(frame: CGRect(x: 0, y: 0, width: 300, height: 50))
     lazy var label = UILabel(frame: CGRect(x: 0, y: 0, width: navView.frame.width - 3, height: navView.frame.height))
+    let stackView = UIStackView()
+    let leftPartView = UILabel()
+    let middlePartView = UILabel()
+    let rightPartView = UILabel()
     
     var webSocketManagers = [WebSocketManager]()
     var chartManager: ChartManager!
@@ -40,7 +44,6 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         label.font = .systemFont(ofSize: 13)
         label.numberOfLines = 2
         label.text = "\(symbol!)\n\(price!)"
@@ -56,6 +59,52 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
 //        startCandlesManager()
         startChartManager()
 //        startWebSocketManagers()
+        
+        leftPartView.translatesAutoresizingMaskIntoConstraints = false
+        leftPartView.backgroundColor = #colorLiteral(red: 0.560276866, green: 0.9771239161, blue: 0.967977345, alpha: 1)
+        leftPartView.heightAnchor.constraint(equalToConstant: self.view.frame.width / 3).isActive = true
+        leftPartView.widthAnchor.constraint(equalToConstant: self.view.frame.width / 3).isActive = true
+        leftPartView.font = .systemFont(ofSize: 13)
+        leftPartView.numberOfLines = 2
+        leftPartView.text = "Нива стоит\n\(price!)$"
+        leftPartView.textAlignment = .center
+
+        middlePartView.translatesAutoresizingMaskIntoConstraints = false
+        middlePartView.backgroundColor = #colorLiteral(red: 0.994946897, green: 0.8199744821, blue: 0.7828269601, alpha: 1)
+        middlePartView.heightAnchor.constraint(equalToConstant: self.view.frame.width / 3).isActive = true
+        middlePartView.widthAnchor.constraint(equalToConstant: self.view.frame.width / 3).isActive = true
+        middlePartView.font = .systemFont(ofSize: 13)
+        middlePartView.numberOfLines = 2
+        middlePartView.text = "Жигули стоят\n\(price!)$"
+        middlePartView.textAlignment = .center
+
+        rightPartView.translatesAutoresizingMaskIntoConstraints = false
+        rightPartView.backgroundColor = #colorLiteral(red: 0.7728006244, green: 0.9726731181, blue: 0.6611604691, alpha: 1)
+        rightPartView.heightAnchor.constraint(equalToConstant: self.view.frame.width / 3).isActive = true
+        rightPartView.widthAnchor.constraint(equalToConstant: self.view.frame.width / 3).isActive = true
+        rightPartView.font = .systemFont(ofSize: 13)
+        rightPartView.numberOfLines = 2
+        rightPartView.text = "Виталя сделал берпи? \(isKlineClose)"
+        rightPartView.textAlignment = .center
+
+        stackView.axis = NSLayoutConstraint.Axis.horizontal
+        stackView.distribution = .fillEqually
+        stackView.alignment = .center
+        stackView.backgroundColor = .clear
+        stackView.spacing = 5.0
+        
+        stackView.addArrangedSubview(leftPartView)
+        stackView.addArrangedSubview(middlePartView)
+        stackView.addArrangedSubview(rightPartView)
+        
+        self.view.addSubview(stackView)
+        
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 10).isActive = true
+        stackView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -10).isActive = true
+        stackView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor).isActive = true
+        stackView.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        
     }
     
     // Вынести метод в модель chartManager. Заленился.
@@ -85,12 +134,17 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
     
     func didUpdateCandle(_ websocketManager: WebSocketManager, candleModel: CurrentCandleModel) {
         closePrice = Double(candleModel.closePrice)!
+        var openPrice = Double(candleModel.openPrice)!
+        var lowPrice = Double(candleModel.lowPrice)!
         isKlineClose = candleModel.isKlineClose
         currentCandelModel = candleModel
         
         chartManager.tick()
         alarmObserver()
         label.text = "\(symbol!)\n\(closePrice)"
+        leftPartView.text = "Нива стоит\n\(openPrice)$"
+        middlePartView.text = "Жигули стоят\n\(lowPrice)$"
+        rightPartView.text = "Виталя сделал берпи? \(isKlineClose)"
     }
     
     
@@ -152,18 +206,18 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
 //                    self.updateView(symbol: symbol, price: price)
 //                }
             case .ticker:
-                manager.onVolumeChanged = { base, quote in
-                    if let quote = Double(quote) {
-                        if let base = Double(base) {
-                            self.recieveVolumeText.text = String(format: "Base Volume: \(base.rounded())\nUSDT Volume: %.2f$", quote)
-                        }
-                    }
-                }
+//                manager.onVolumeChanged = { base, quote in
+//                    if let quote = Double(quote) {
+//                        if let base = Double(base) {
+//                            self.recieveVolumeText.text = String(format: "Base Volume: \(base.rounded())\nUSDT Volume: %.2f$", quote)
+//                        }
+//                    }
+//                }
+                _ = 1
             case .currentCandleData:
                 print("")
             }
             webSocketManagers.append(manager)
-            print(webSocketManagers)
         }
     }
     
