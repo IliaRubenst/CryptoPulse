@@ -11,6 +11,10 @@ import LightweightCharts
 class ChartManager {
     var delegate: DetailViewController!
     
+    var pair: String
+    var interval: String
+    let binanceURL = "https://fapi.binance.com"
+    
     private var chart: LightweightCharts!
     private var series: CandlestickSeries!
     private var alarmLine: PriceLine!
@@ -31,6 +35,82 @@ class ChartManager {
     
     private let tooltipView = TooltipView(accentColor: UIColor(red: 0, green: 150/255.0, blue: 136/255.0, alpha: 1))
    
+    init(delegate: DetailViewController, pair: String, interval: String) {
+        self.delegate = delegate
+        self.pair = pair
+        self.interval = interval
+    }
+    
+    func fetchRequest() {
+        let path = "/fapi/v1/continuousKlines?pair=\(pair)&contractType=PERPETUAL&interval=\(interval)"
+        let urlString = binanceURL + path
+        print(urlString)
+        performRequest(urlString: urlString)
+    }
+    
+    func performRequest(urlString: String)  {
+        if let url = URL(string: urlString) {
+            let session = URLSession(configuration: .default)
+            let task = session.dataTask(with: url) { [self] (data, response, error) in
+                if error != nil {
+                    print(error!)
+                    return
+                }
+                if let safeData = data {
+                    parseJSON(marketData: safeData)
+                    
+                }
+            }
+            task.resume()
+        }
+    }
+    
+    func parseJSON(marketData: Data)  {
+        do {
+            if let decodedData = try JSONSerialization.jsonObject(with: marketData, options: []) as? [[Any]] {
+                for i in 0..<decodedData.count {
+//                    let candle = PreviousCandlesModel(openTime: decodedData[i][0] as! Double,
+//                                                      openPrice: decodedData[i][1] as! String,
+//                                                      highPrice: decodedData[i][2] as! String,
+//                                                      lowPrice: decodedData[i][3] as! String,
+//                                                      closePrice: decodedData[i][4] as! String,
+//                                                      volume: decodedData[i][5] as! String,
+//                                                      closeTime: decodedData[i][6] as! Int,
+//                                                      quoteAssetVolume: decodedData[i][7] as! String,
+//                                                      numberOfTrades: decodedData[i][8] as! Int,
+//                                                      takerBuyVolume: decodedData[i][9] as! String,
+//                                                      takerBuyQuoteAssetVolume: decodedData[i][10] as! String)
+//                    delegate.candles.append(candle)
+                    let openPrice = decodedData[i][1] as! String
+                    let highPrice = decodedData[i][2] as! String
+                    let lowPrice = decodedData[i][3] as! String
+                    let closePrice = decodedData[i][4] as! String
+
+                    let candle = CandlestickData(time: .utc(timestamp: (decodedData[i][0] as! Double) / 1000),
+                                                 open: (Double(openPrice)),
+                                                 high: (Double(highPrice)),
+                                                 low: (Double(lowPrice)),
+                                                 close: (Double(closePrice)))
+//                    delegate.chartManager.data.append(candle)
+                    data.append(candle)
+                }
+                print("Loaded \(data.count) candles")
+//                setupChart()
+                
+                DispatchQueue.main.async {
+                    self.setupSeries()
+                }
+                
+                delegate.startWebSocketManagers()
+            } else {
+                print("Ошибка приведения типа")
+            }
+        } catch let error as NSError {
+            print("Failed to load: \(error.localizedDescription)")
+        }
+        
+    }
+    
     
     func setupChart() {
         let options = ChartOptions(crosshair: CrosshairOptions(mode: .normal))
@@ -66,11 +146,12 @@ class ChartManager {
         self.series = series
         
         // Здесь точка синхрнизации. Ждет, пока не загрузит массив свечек. Решение, наверное, так себе, но с GCD я пока хз как завести. Периодически вызывает краш приложения.
-        while delegate.candles.count != 500 {
-            continue
-        }
-        delegate.updateData()
+//        while delegate.candles.count != 500 {
+//            continue
+//        }
+//        delegate.updateData()
         data.removeLast()
+        
         series.setData(data: data)
     }
 

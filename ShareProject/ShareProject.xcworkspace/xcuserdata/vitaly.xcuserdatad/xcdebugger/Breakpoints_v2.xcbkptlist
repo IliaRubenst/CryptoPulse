@@ -39,22 +39,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "1CEFE511-A0E2-41C2-BCF0-F1B9D61819AB"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "CryptoPulse/DetailViewController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "79"
-            endingLineNumber = "79"
-            landmarkName = "didUpdateCandle(_:candleModel:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "CA1FF593-BE52-40EF-91C6-CE8BD07BCA60"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -62,9 +46,9 @@
             filePath = "CryptoPulse/ChartManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "63"
-            endingLineNumber = "63"
-            landmarkName = "tick()"
+            startingLineNumber = "143"
+            endingLineNumber = "143"
+            landmarkName = "nextBusinessDay(_:)"
             landmarkType = "7">
             <Locations>
                <Location

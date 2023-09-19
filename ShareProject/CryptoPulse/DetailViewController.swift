@@ -23,7 +23,7 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
     lazy var label = UILabel(frame: CGRect(x: 0, y: 0, width: navView.frame.width - 3, height: navView.frame.height))
     
     var webSocketManagers = [WebSocketManager]()
-    var chartManager = ChartManager()
+    var chartManager: ChartManager!
     var candles = [PreviousCandlesModel]()
     var data = [CandlestickData]()
     var currentCandelModel: CurrentCandleModel!
@@ -53,9 +53,9 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
         navigationItem.rightBarButtonItems = [setAlarmButton]
                                               
 //        updateView(symbol: symbol, price: price)
-        startCandlesManager()
+//        startCandlesManager()
         startChartManager()
-        startWebSocketManagers()
+//        startWebSocketManagers()
     }
     
     // Вынести метод в модель chartManager. Заленился.
@@ -73,7 +73,7 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
         for manager in webSocketManagers {
             manager.close()
         }
-        candles.removeAll()
+//        candles.removeAll()
         chartManager.data.removeAll()
     }
     
@@ -126,17 +126,18 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
     }
     
     func startChartManager() {
-        chartManager.delegate = self
+        chartManager = ChartManager(delegate: self, pair: symbol, interval: "1m")
+        chartManager.fetchRequest()
         chartManager.setupChart()
-        chartManager.setupSeries()
+        
         chartManager.setupSubscription()
     }
     
-    func startCandlesManager() {
-        var candlesManager = PreviousCandlesManager(pair: symbol, interval: "1m")
-        candlesManager.delegate = self
-        candlesManager.fetchRequest()
-    }
+//    func startCandlesManager() {
+//        var candlesManager = PreviousCandlesManager(pair: symbol, interval: "1m")
+//        candlesManager.delegate = self
+//        candlesManager.fetchRequest()
+//    }
     
     func startWebSocketManagers() {
         for state in State.allCases {
