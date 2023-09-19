@@ -19,26 +19,16 @@ enum State: CaseIterable {
 
 class WebSocketManager: NSObject, URLSessionWebSocketDelegate {
     private var webSocket: URLSessionWebSocketTask?
-    
     var delegate: WebSocketManagerDelegate?
     
-//    var onPriceChanged: ((String, String) -> ())?
     var onVolumeChanged: ((String, String) -> ())?
-    
     var baseVolume = ""
     var quoteVolume = "" {
         didSet {
             onVolumeChanged?(baseVolume, quoteVolume)
         }
     }
-//    var objectSymbol = ""
-//    var objectPrice = "" {
-//        didSet {
-//            onPriceChanged?(objectPrice, objectSymbol)
-//        }
-//    }
 
-//    var actualState = State.aggTrade
     var actualState = State.currentCandleData
     
     func webSocketConnect(symbol: String) {
@@ -149,8 +139,6 @@ class WebSocketManager: NSObject, URLSessionWebSocketDelegate {
             }
         }
     }
-    
-    
     
     func send() {
         /*if !isClose {

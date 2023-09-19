@@ -78,42 +78,26 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="DJM-11-s5x">
-                                <rect key="frame" x="0.0" y="59" width="393" height="100"/>
-                                <subviews>
-                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="DbG-jv-L0V">
-                                        <rect key="frame" x="0.0" y="0.0" width="393" height="50"/>
-                                        <color key="backgroundColor" systemColor="systemGray6Color"/>
-                                        <color key="textColor" systemColor="labelColor"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                                    </textView>
-                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="jWM-er-AkB" userLabel="Volume">
-                                        <rect key="frame" x="0.0" y="50" width="393" height="50"/>
-                                        <color key="backgroundColor" systemColor="systemGray6Color"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="50" id="ofG-vl-x5U"/>
-                                        </constraints>
-                                        <color key="textColor" systemColor="labelColor"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                                    </textView>
-                                </subviews>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="jWM-er-AkB" userLabel="Volume">
+                                <rect key="frame" x="0.0" y="59" width="393" height="50"/>
+                                <color key="backgroundColor" systemColor="systemGray6Color"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="100" id="prH-XP-nRE"/>
+                                    <constraint firstAttribute="height" constant="50" id="Nnk-zF-HCn"/>
                                 </constraints>
-                            </stackView>
+                                <color key="textColor" systemColor="labelColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="E5L-0x-exD"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="DJM-11-s5x" firstAttribute="leading" secondItem="E5L-0x-exD" secondAttribute="leading" id="OTT-mD-vff"/>
-                            <constraint firstItem="DJM-11-s5x" firstAttribute="top" secondItem="E5L-0x-exD" secondAttribute="top" id="W2E-gK-qke"/>
-                            <constraint firstItem="DJM-11-s5x" firstAttribute="trailing" secondItem="E5L-0x-exD" secondAttribute="trailing" id="aXJ-Vw-0pL"/>
+                            <constraint firstItem="jWM-er-AkB" firstAttribute="leading" secondItem="E5L-0x-exD" secondAttribute="leading" id="Cyw-4C-Tlk"/>
+                            <constraint firstItem="jWM-er-AkB" firstAttribute="trailing" secondItem="E5L-0x-exD" secondAttribute="trailing" id="R7y-3q-8YR"/>
+                            <constraint firstItem="jWM-er-AkB" firstAttribute="top" secondItem="E5L-0x-exD" secondAttribute="top" id="Vq7-FD-lWA"/>
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="receiveDataText" destination="DbG-jv-L0V" id="SBf-oC-jmN"/>
                         <outlet property="recieveVolumeText" destination="jWM-er-AkB" id="vXK-5D-xHm"/>
                     </connections>
                 </viewController>

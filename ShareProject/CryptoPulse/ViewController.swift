@@ -11,6 +11,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
     let amountCells = 2
     var marketManager = MarketManager()
     var defaults = DataLoader()
+    var webSocket = WebSocketManager()
     var isSelected = false
     var isReload = false
     
@@ -49,8 +50,9 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
     }
     
     @objc func showTableView() {
-        let detailVC = storyboard?.instantiateViewController(identifier: "SymbolList") as? SymbolsListController
-        present(detailVC!, animated: true)
+        let detailVC = storyboard?.instantiateViewController(identifier: "SymbolList") as! SymbolsListController
+        detailVC.viewCtr = self
+        present(detailVC, animated: true)
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -154,7 +156,6 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
         let gotSymbol = candleModel.pair
         let currentPrice = candleModel.closePrice
         
-
         checkedArray = UserSymbols.savedSymbols.map ({ checkedArray in
             if checkedArray.symbol == gotSymbol {
                 let index = UserSymbols.savedSymbols.firstIndex { $0.symbol == gotSymbol }
@@ -165,14 +166,13 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
             }
             return checkedArray
         })
-        print(isReload)
     }
     
     func reloadCurrentCellData(_ index: Int) {
         if !isReload {
             collectionView.reloadItems(at: [IndexPath(row: index, section: 0)])
             isReload = true
-            DispatchQueue.global().asyncAfter(deadline: .now() + 1, qos: .default) { [self] in
+            DispatchQueue.global().asyncAfter(deadline: .now() + 0.5, qos: .default) { [self] in
                 isReload = false
             }
         }
@@ -183,12 +183,18 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
             setConnetcForSymbols(symbol.symbol)
         }
     }
-    
+
     func setConnetcForSymbols(_ symbol: String) {
         let delegate = WebSocketManager()
         delegate.delegate = self
         delegate.webSocketConnect(symbol: symbol)
         webSocketManagers.append(delegate)
+    }
+
+    func closeConnection() {
+        for delegate in webSocketManagers {
+            delegate.close()
+        }
     }
 }
 

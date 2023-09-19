@@ -18,15 +18,14 @@ extension String {
 }
 
 class DetailViewController: UIViewController, WebSocketManagerDelegate {
-    @IBOutlet weak var receiveDataText: UITextView!
     @IBOutlet weak var recieveVolumeText: UITextView!
+    let navView = UIView(frame: CGRect(x: 0, y: 0, width: 300, height: 50))
+    lazy var label = UILabel(frame: CGRect(x: 0, y: 0, width: navView.frame.width - 3, height: navView.frame.height))
     
     var webSocketManagers = [WebSocketManager]()
     var chartManager = ChartManager()
-    
     var candles = [PreviousCandlesModel]()
     var data = [CandlestickData]()
-    
     var currentCandelModel: CurrentCandleModel!
     
     var symbol: String!
@@ -42,11 +41,18 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        label.font = .systemFont(ofSize: 13)
+        label.numberOfLines = 2
+        label.text = "\(symbol!)\n\(price!)"
+        label.textAlignment = .left
+        navView.addSubview(label)
+        
+        self.navigationItem.titleView = navView
 
         let setAlarmButton = UIBarButtonItem(image: UIImage(systemName: "bell"), style: .plain, target: self, action: #selector(addAlarm))
         navigationItem.rightBarButtonItems = [setAlarmButton]
                                               
-        updateView(symbol: symbol, price: price)
+//        updateView(symbol: symbol, price: price)
         startCandlesManager()
         startChartManager()
         startWebSocketManagers()
@@ -71,20 +77,20 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
         chartManager.data.removeAll()
     }
     
-    func updateView(symbol: String, price: String) {
-        if let doublePrice = Double(price) {
-            receiveDataText.text = String(format: "\(symbol)\n%.6f$", doublePrice)
-        }
-    }
+//    func updateView(symbol: String, price: String) {
+//        if let doublePrice = Double(price) {
+//            receiveDataText.text = String(format: "\(symbol)\n%.6f$", doublePrice)
+//        }
+//    }
     
     func didUpdateCandle(_ websocketManager: WebSocketManager, candleModel: CurrentCandleModel) {
         closePrice = Double(candleModel.closePrice)!
         isKlineClose = candleModel.isKlineClose
-        
         currentCandelModel = candleModel
         
         chartManager.tick()
         alarmObserver()
+        label.text = "\(symbol!)\n\(closePrice)"
     }
     
     

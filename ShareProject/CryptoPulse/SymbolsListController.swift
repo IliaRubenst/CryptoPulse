@@ -12,6 +12,8 @@ class SymbolsListController: UIViewController, UITableViewDataSource, UITableVie
     @IBOutlet weak var searchBar: UISearchBar!
     var filteredSymbols = [Symbol]()
     var dataLoader = DataLoader()
+    var webSocket = WebSocketManager()
+    var viewCtr: ViewController!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,6 +44,8 @@ class SymbolsListController: UIViewController, UITableViewDataSource, UITableVie
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let item = filteredSymbols[indexPath.item]
         UserSymbols.savedSymbols.append(item)
+        viewCtr.closeConnection()
+        viewCtr.getSymbolToWebSocket()
         dataLoader.saveData()
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "newSymbolAdded"), object: nil)
         dismiss(animated: true)
