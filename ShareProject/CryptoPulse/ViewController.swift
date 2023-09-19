@@ -11,9 +11,8 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
     let amountCells = 2
     var marketManager = MarketManager()
     var defaults = DataLoader()
+    var isSelected = false
     
-
-    private var timer: Timer?
     var webSocketManagers = [WebSocketManager]()
     
     override func viewDidLoad() {
@@ -22,6 +21,8 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
         loadTickers()
         defaults.loadUserSymbols()
         getSymbolToWebSocket()
+        
+        self.navigationItem.title = ""
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(showTableView))
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(sendMessage))
@@ -86,8 +87,8 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
     }
     
     override func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPaths: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
-        let config = UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ in
-            
+        let config = UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { [self] _ in
+//            isSelected = true
             let remove = UIAction(title: "Remove",
                                   image: UIImage(systemName: "trash"),
                                   identifier: nil,
@@ -116,7 +117,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
                           options: UIMenu.Options.displayInline,
                           children: [remove, changeColor])
         }
-        
+
         return config
     }
     
@@ -127,6 +128,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
         } else {
             currentCell.removeCell(indexPath.item)
         }
+//        isSelected = false
     }
     
     func openDetailView(indexPath: IndexPath) {
@@ -149,11 +151,15 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
         
         checkedArray = UserSymbols.savedSymbols.map ({ checkedArray in
             if checkedArray.symbol == gotSymbol {
+                let index = UserSymbols.savedSymbols.firstIndex { $0.symbol == gotSymbol }
                 checkedArray.markPrice = currentPrice
-                collectionView.reloadData()
+                if !isSelected {
+                    collectionView.reloadItems(at: [IndexPath(row: index!, section: 0)])
+                }
             }
             return checkedArray
         })
+//        print(isSelected)
     }
     
     func getSymbolToWebSocket() {

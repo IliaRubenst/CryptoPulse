@@ -39,17 +39,9 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-//        let backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
-//        navigationItem.backBarButtonItem = backBarButtonItem
-        
-        navigationItem.backButtonTitle = ""
+
         let setAlarmButton = UIBarButtonItem(image: UIImage(systemName: "bell"), style: .plain, target: self, action: #selector(addAlarm))
         navigationItem.rightBarButtonItems = [setAlarmButton]
-        
-//        let coinInfo = UILabel()
-//        coinInfo.text = "\(symbol ?? "error")\n\(closePrice)"
-//        let button = UIBarButtonItem(customView: coinInfo)
-//        
                                               
         updateView(symbol: symbol, price: price)
         startCandlesManager()

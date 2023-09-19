@@ -12,7 +12,7 @@
         <!--View Controller-->
         <scene sceneID="pW3-Hb-6x1">
             <objects>
-                <collectionViewController id="yFX-FB-xpB" customClass="ViewController" customModule="ShareProject" customModuleProvider="target" sceneMemberID="viewController">
+                <collectionViewController id="yFX-FB-xpB" customClass="ViewController" customModule="CyptoPulse" customModuleProvider="target" sceneMemberID="viewController">
                     <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="0Tc-07-Liv">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -25,7 +25,7 @@
                             <inset key="sectionInset" minX="3" minY="3" maxX="3" maxY="3"/>
                         </collectionViewFlowLayout>
                         <cells>
-                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="Coin" id="FxM-Ds-Hig" customClass="CoinCell" customModule="ShareProject" customModuleProvider="target">
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="Coin" id="FxM-Ds-Hig" customClass="CoinCell" customModule="CyptoPulse" customModuleProvider="target">
                                 <rect key="frame" x="3" y="3" width="125" height="70"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="gia-KR-zew">
@@ -73,7 +73,7 @@
         <!--Detail View Controller-->
         <scene sceneID="sAR-rT-Y9X">
             <objects>
-                <viewController storyboardIdentifier="DetailData" id="kOB-cQ-9bX" customClass="DetailViewController" customModule="ShareProject" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="DetailData" id="kOB-cQ-9bX" customClass="DetailViewController" customModule="CyptoPulse" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="dS3-JT-9RH">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -124,7 +124,7 @@
         <!--Symbols List Controller-->
         <scene sceneID="SwH-YG-egc">
             <objects>
-                <viewController storyboardIdentifier="SymbolList" id="GY7-eo-FkO" customClass="SymbolsListController" customModule="ShareProject" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="SymbolList" id="GY7-eo-FkO" customClass="SymbolsListController" customModule="CyptoPulse" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="568-BU-N4S">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
