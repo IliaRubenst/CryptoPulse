@@ -12,6 +12,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
     var marketManager = MarketManager()
     var defaults = DataLoader()
     var isSelected = false
+    var isReload = false
     
     var webSocketManagers = [WebSocketManager]()
     
@@ -83,12 +84,14 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
 //        guard let cell = collectionView.cellForItem(at: indexPath) as? CoinCell else { return }
 //        cell.reloadInputViews()
+
         openDetailView(indexPath: indexPath)
     }
     
     override func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPaths: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        isSelected = true
         let config = UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { [self] _ in
-//            isSelected = true
+            
             let remove = UIAction(title: "Remove",
                                   image: UIImage(systemName: "trash"),
                                   identifier: nil,
@@ -117,7 +120,6 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
                           options: UIMenu.Options.displayInline,
                           children: [remove, changeColor])
         }
-
         return config
     }
     
@@ -125,10 +127,13 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
         guard let currentCell = collectionView.cellForItem(at: indexPath) as? CoinCell else { return }
         if action == "change" {
             currentCell.changeColor()
-        } else {
+        } else if action == "remove" {
             currentCell.removeCell(indexPath.item)
         }
-//        isSelected = false
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, willEndContextMenuInteraction configuration: UIContextMenuConfiguration, animator: UIContextMenuInteractionAnimating?) {
+        isSelected = false
     }
     
     func openDetailView(indexPath: IndexPath) {
@@ -149,17 +154,28 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
         let gotSymbol = candleModel.pair
         let currentPrice = candleModel.closePrice
         
+
         checkedArray = UserSymbols.savedSymbols.map ({ checkedArray in
             if checkedArray.symbol == gotSymbol {
                 let index = UserSymbols.savedSymbols.firstIndex { $0.symbol == gotSymbol }
                 checkedArray.markPrice = currentPrice
                 if !isSelected {
-                    collectionView.reloadItems(at: [IndexPath(row: index!, section: 0)])
+                    reloadCurrentCellData(index!)
                 }
             }
             return checkedArray
         })
-//        print(isSelected)
+        print(isReload)
+    }
+    
+    func reloadCurrentCellData(_ index: Int) {
+        if !isReload {
+            collectionView.reloadItems(at: [IndexPath(row: index, section: 0)])
+            isReload = true
+            DispatchQueue.global().asyncAfter(deadline: .now() + 1, qos: .default) { [self] in
+                isReload = false
+            }
+        }
     }
     
     func getSymbolToWebSocket() {
