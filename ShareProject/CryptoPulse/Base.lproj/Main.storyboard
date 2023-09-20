@@ -77,28 +77,9 @@
                     <view key="view" contentMode="scaleToFill" id="dS3-JT-9RH">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="jWM-er-AkB" userLabel="Volume">
-                                <rect key="frame" x="0.0" y="59" width="393" height="50"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="50" id="Nnk-zF-HCn"/>
-                                </constraints>
-                                <color key="textColor" systemColor="labelColor"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                            </textView>
-                        </subviews>
                         <viewLayoutGuide key="safeArea" id="E5L-0x-exD"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <constraints>
-                            <constraint firstItem="jWM-er-AkB" firstAttribute="leading" secondItem="E5L-0x-exD" secondAttribute="leading" id="Cyw-4C-Tlk"/>
-                            <constraint firstItem="jWM-er-AkB" firstAttribute="trailing" secondItem="E5L-0x-exD" secondAttribute="trailing" id="R7y-3q-8YR"/>
-                            <constraint firstItem="jWM-er-AkB" firstAttribute="top" secondItem="E5L-0x-exD" secondAttribute="top" id="Vq7-FD-lWA"/>
-                        </constraints>
                     </view>
-                    <connections>
-                        <outlet property="recieveVolumeText" destination="jWM-er-AkB" id="vXK-5D-xHm"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="aMo-bQ-rBa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -189,9 +170,6 @@
         </scene>
     </scenes>
     <resources>
-        <systemColor name="labelColor">
-            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

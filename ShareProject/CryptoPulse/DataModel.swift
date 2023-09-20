@@ -13,7 +13,15 @@ struct MarkPriceStreamModel {
     var markPrice: String
     var indexPrice: String
     var fundingRate: String
-    var nextFindingTime: Double
+    var nextFundingTime: Double
+    
+    func timeTodateFormat(nextFindingTime: Double) -> String {
+        let dateTime = DateFormatter()
+        dateTime.dateFormat = "HH:mm:ss"
+        let nextFundingTime = Date(timeIntervalSince1970: nextFindingTime)
+        
+        return dateTime.string(from: nextFundingTime)
+    }
 }
 
 struct CurrentCandleModel {
@@ -25,6 +33,16 @@ struct CurrentCandleModel {
     let highPrice: String
     let lowPrice: String
     let isKlineClose: Bool
+}
+
+struct IndividualSymbolTickerStreamsModel {
+    let volumeBase: String
+    let volumeQuote: String
+    let closePrice: String
+    let openPrice: String
+    let highPrice: String
+    let lowPrice: String
+    let priceChangePercent: String
 }
 
 struct PreviousCandlesModel {

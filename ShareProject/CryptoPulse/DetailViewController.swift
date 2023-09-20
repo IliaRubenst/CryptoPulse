@@ -18,10 +18,11 @@ extension String {
 }
 
 class DetailViewController: UIViewController, WebSocketManagerDelegate {
-    @IBOutlet weak var recieveVolumeText: UITextView!
-    let navView = UIView(frame: CGRect(x: 0, y: 0, width: 300, height: 50))
-    lazy var label = UILabel(frame: CGRect(x: 0, y: 0, width: navView.frame.width - 3, height: navView.frame.height))
-    let stackView = UIStackView()
+    let upperStackView = UIStackView()
+    let leftNavLabel = UILabel()
+    let rightNavLabel = UILabel()
+    
+    let lowerStackView = UIStackView()
     let leftPartView = UILabel()
     let middlePartView = UILabel()
     let rightPartView = UILabel()
@@ -32,91 +33,112 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
     var data = [CandlestickData]()
     var currentCandelModel: CurrentCandleModel!
     
-//    var symbol: String!
-    var price: String!
-    var base = ""
-    var quote = ""
+    var price: String = ""
+    
+    // data from CurrentCandleData
     var closePrice: Double = 0
     
     // data from MarkPriceStream
     var symbol: String = ""
     var fundingRate: String = "0.0"
-    var nextFindingTime: Double = 0.0
+    var nextFundingTime: String = "00:00:00"
+    
+    //data from IndividualSymbolTickerStreams
+    var priceChangePercent: String = "0.0"
+    var volume24h: String = "0.0"
+    var maxPrice: String = "0.0"
+    var minPrice: String = "0.0"
     
     var isKlineClose = false
     var alarm: Double = 0
     var isAlertShowing: Bool = false
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        label.font = .systemFont(ofSize: 13)
-        label.numberOfLines = 2
-//        label.text = "\(symbol!)\n\(price!)"
-        label.textAlignment = .left
-        navView.addSubview(label)
+    override func loadView() {
+        super.loadView()
         
-        self.navigationItem.titleView = navView
-
-        let setAlarmButton = UIBarButtonItem(image: UIImage(systemName: "bell"), style: .plain, target: self, action: #selector(addAlarm))
-        navigationItem.rightBarButtonItems = [setAlarmButton]
-                                              
-//        updateView(symbol: symbol, price: price)
-//        startCandlesManager()
-        startChartManager()
-//        startWebSocketManagers()
+        leftNavLabel.translatesAutoresizingMaskIntoConstraints = false
+//        leftNavLabel.backgroundColor = #colorLiteral(red: 0.9078041315, green: 0.9078041315, blue: 0.9078040719, alpha: 1)
+        leftNavLabel.heightAnchor.constraint(equalToConstant: self.view.frame.height).isActive = true
+        leftNavLabel.widthAnchor.constraint(equalToConstant: 70).isActive = true
+        leftNavLabel.font = .systemFont(ofSize: 13)
+        leftNavLabel.text = "\(symbol)"
+        leftNavLabel.textAlignment = .center
+        
+        rightNavLabel.translatesAutoresizingMaskIntoConstraints = false
+//        rightNavLabel.backgroundColor = #colorLiteral(red: 0.9078041315, green: 0.9078041315, blue: 0.9078040719, alpha: 1)
+        rightNavLabel.heightAnchor.constraint(equalToConstant: self.view.frame.height).isActive = true
+        rightNavLabel.widthAnchor.constraint(equalToConstant: 170).isActive = true
+        rightNavLabel.font = .systemFont(ofSize: 13)
+        rightNavLabel.numberOfLines = 2
+        rightNavLabel.text = "\(closePrice)\n\(priceChangePercent)"
+        rightNavLabel.textAlignment = .center
+        
+        upperStackView.spacing = 5.0
+        
+        upperStackView.addArrangedSubview(leftNavLabel)
+        upperStackView.addArrangedSubview(rightNavLabel)
+        
+        self.navigationItem.titleView = upperStackView
         
         leftPartView.translatesAutoresizingMaskIntoConstraints = false
-        leftPartView.backgroundColor = #colorLiteral(red: 0.9078041315, green: 0.9078041315, blue: 0.9078040719, alpha: 1)
+//        leftPartView.backgroundColor = #colorLiteral(red: 0.9078041315, green: 0.9078041315, blue: 0.9078040719, alpha: 1)
         leftPartView.heightAnchor.constraint(equalToConstant: self.view.frame.width / 3).isActive = true
         leftPartView.widthAnchor.constraint(equalToConstant: self.view.frame.width / 3).isActive = true
         leftPartView.font = .systemFont(ofSize: 13)
         leftPartView.numberOfLines = 2
-//        leftPartView.text = "Нива стоит\n\(price!)$"
+        leftPartView.text = "24h volume\n\(volume24h)"
         leftPartView.textAlignment = .center
 
         middlePartView.translatesAutoresizingMaskIntoConstraints = false
-        middlePartView.backgroundColor = #colorLiteral(red: 0.9078041315, green: 0.9078041315, blue: 0.9078040719, alpha: 1)
+//        middlePartView.backgroundColor = #colorLiteral(red: 0.9078041315, green: 0.9078041315, blue: 0.9078040719, alpha: 1)
         middlePartView.heightAnchor.constraint(equalToConstant: self.view.frame.width / 3).isActive = true
         middlePartView.widthAnchor.constraint(equalToConstant: self.view.frame.width / 3).isActive = true
         middlePartView.font = .systemFont(ofSize: 13)
         middlePartView.numberOfLines = 2
-//        middlePartView.text = "Жигули стоят\n\(price!)$"
+        middlePartView.text = "max: \(maxPrice)\nmin: \(minPrice)"
         middlePartView.textAlignment = .center
 
         rightPartView.translatesAutoresizingMaskIntoConstraints = false
-        rightPartView.backgroundColor = #colorLiteral(red: 0.9078041315, green: 0.9078041315, blue: 0.9078040719, alpha: 1)
+//        rightPartView.backgroundColor = #colorLiteral(red: 0.9078041315, green: 0.9078041315, blue: 0.9078040719, alpha: 1)
         rightPartView.heightAnchor.constraint(equalToConstant: self.view.frame.width / 3).isActive = true
         rightPartView.widthAnchor.constraint(equalToConstant: self.view.frame.width / 3).isActive = true
         rightPartView.font = .systemFont(ofSize: 13)
         rightPartView.numberOfLines = 2
-        rightPartView.text = "funding: \(fundingRate)\nnext funding:\(nextFindingTime)"
-        rightPartView.textAlignment = .left
+        rightPartView.text = "funding: \(fundingRate)%\nnext:\(nextFundingTime)"
+        rightPartView.textAlignment = .center
 
-        stackView.axis = NSLayoutConstraint.Axis.horizontal
-        stackView.distribution = .fillEqually
-        stackView.alignment = .center
-        stackView.backgroundColor = .clear
-        stackView.spacing = 5.0
+        lowerStackView.axis = NSLayoutConstraint.Axis.horizontal
+        lowerStackView.distribution = .fillEqually
+        lowerStackView.alignment = .center
+        lowerStackView.backgroundColor = .clear
+        lowerStackView.spacing = 5.0
         
-        stackView.addArrangedSubview(leftPartView)
-        stackView.addArrangedSubview(middlePartView)
-        stackView.addArrangedSubview(rightPartView)
+        lowerStackView.addArrangedSubview(leftPartView)
+        lowerStackView.addArrangedSubview(middlePartView)
+        lowerStackView.addArrangedSubview(rightPartView)
         
-        self.view.addSubview(stackView)
+        self.view.addSubview(lowerStackView)
         
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 10).isActive = true
-        stackView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -10).isActive = true
-        stackView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor).isActive = true
-        stackView.heightAnchor.constraint(equalToConstant: 50).isActive = true
-        
+        lowerStackView.translatesAutoresizingMaskIntoConstraints = false
+        lowerStackView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 10).isActive = true
+        lowerStackView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -10).isActive = true
+        lowerStackView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor).isActive = true
+        lowerStackView.heightAnchor.constraint(equalToConstant: 40).isActive = true
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        let setAlarmButton = UIBarButtonItem(image: UIImage(systemName: "bell"), style: .plain, target: self, action: #selector(addAlarm))
+        navigationItem.rightBarButtonItems = [setAlarmButton]
+
+        startChartManager()
     }
     
     // Вынести метод в модель chartManager. Заленился.
     @objc func updateData() {
        for i in 0..<candles.count {
             let doubleOpenTime = Double(candles[i].openTime)
-           
             
             let newCandle = CandlestickData(time: .utc(timestamp: doubleOpenTime / 1000), open: Double(candles[i].openPrice), high: Double(candles[i].highPrice), low: Double(candles[i].lowPrice), close: Double(candles[i].closePrice))
             chartManager.data.append(newCandle)
@@ -139,28 +161,35 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
     
     func didUpdateCandle(_ websocketManager: WebSocketManager, candleModel: CurrentCandleModel) {
         closePrice = Double(candleModel.closePrice)!
-        var openPrice = Double(candleModel.openPrice)!
-        var lowPrice = Double(candleModel.lowPrice)!
         isKlineClose = candleModel.isKlineClose
         currentCandelModel = candleModel
         
         chartManager.tick()
         alarmObserver()
-        label.text = "\(symbol)\n\(closePrice)"
-//        leftPartView.text = "Нива стоит\n\(openPrice)$"
-//        middlePartView.text = "Жигули стоят\n\(lowPrice)$"
-//        rightPartView.text = "Виталя сделал берпи? \(isKlineClose)"
+        rightNavLabel.text = "\(closePrice)\n\(priceChangePercent)%"
     }
     
     func didUpdateMarkPriceStream(_ websocketManager: WebSocketManager, dataModel: MarkPriceStreamModel) {
         symbol = dataModel.symbol
         let dundingrRateDouble = Double(dataModel.fundingRate)! * 100
         fundingRate = String(format: "%.3f", dundingrRateDouble)
+        nextFundingTime = dataModel.timeTodateFormat(nextFindingTime: dataModel.nextFundingTime)
+        rightPartView.text = "funding: \(fundingRate)%\nnext:\(nextFundingTime)"
+    }
+    
+    func didUpdateIndividualSymbolTicker(_ websocketManager: WebSocketManager, dataModel: IndividualSymbolTickerStreamsModel) {
+        priceChangePercent = dataModel.priceChangePercent
         
-//        fundingRate = String(format: "%.3f", dataModel.fundingRate)
-        nextFindingTime = dataModel.nextFindingTime
+        maxPrice = dataModel.highPrice
+        minPrice = dataModel.lowPrice
         
-        rightPartView.text = "funding: \(fundingRate)\nnext funding:\(nextFindingTime)"
+        let volume = Double(dataModel.volumeQuote)! / 1_000_000
+        
+        volume24h = String(format: "%.2fm$", volume)
+        
+        rightNavLabel.text = "\(closePrice)\n\(priceChangePercent)%"
+        leftPartView.text = "24h volume\n\(volume24h)"
+        middlePartView.text = "max: \(maxPrice)\nmin: \(minPrice)"
     }
     
     

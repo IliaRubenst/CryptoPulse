@@ -37,7 +37,7 @@ struct MarkPriceStreamData: Codable {
     }
 }
 
-struct VolumeData: Codable {
+struct IndividualSymbolTickerStreamsData: Codable {
     var v: String
     var q: String
     var c: String
