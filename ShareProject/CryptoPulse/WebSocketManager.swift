@@ -9,10 +9,11 @@ import UIKit
 
 protocol WebSocketManagerDelegate {
     func didUpdateCandle(_ websocketManager: WebSocketManager, candleModel: CurrentCandleModel)
+    func didUpdateMarkPriceStream(_ websocketManager: WebSocketManager, dataModel: MarkPriceStreamModel)
 }
 
 enum State: CaseIterable {
-//    case aggTrade
+    case markPriceStream
     case ticker
     case currentCandleData
 }
@@ -24,6 +25,7 @@ class WebSocketManager: NSObject, URLSessionWebSocketDelegate {
 //    var onVolumeChanged: ((String, String) -> ())?
     var baseVolume = ""
     var quoteVolume = ""
+    var priceChangePercent = ""
 //    var quoteVolume = "" {
 //        didSet {
 //            onVolumeChanged?(baseVolume, quoteVolume)
@@ -37,8 +39,8 @@ class WebSocketManager: NSObject, URLSessionWebSocketDelegate {
         let coinSymbol = symbol.lowercased()
         
         switch actualState {
-//        case .aggTrade:
-//            url = "wss://fstream.binance.com:443/ws/\(coinSymbol)@aggTrade"
+        case .markPriceStream:
+            url = "wss://fstream.binance.com:443/ws/\(coinSymbol)@markPrice"
 //            
         case .ticker:
             url = "wss://fstream.binance.com:443/ws/\(coinSymbol)@ticker"
@@ -103,20 +105,27 @@ class WebSocketManager: NSObject, URLSessionWebSocketDelegate {
         guard let socketData = socketString.data(using: String.Encoding.utf8) else { return }
         let decoder = JSONDecoder()
         switch state {
-//        case .aggTrade:
-            
-//            do {
-//                let decodedData = try decoder.decode(SymbolPriceData.self, from: socketData)
-//                objectSymbol = decodedData.s
-//                objectPrice = decodedData.p
-//            } catch {
-//                print("Error JSON: \(error)")
-//            }
+        case .markPriceStream:
+            do {
+                let decodedData = try decoder.decode(MarkPriceStreamData.self, from: socketData)
+                let markPriceStreamModel = MarkPriceStreamModel(symbol: decodedData.s,
+                                                           markPrice: decodedData.p,
+                                                           indexPrice: decodedData.i,
+                                                           fundingRate: decodedData.r,
+                                                           nextFindingTime: decodedData.T)
+                
+                if delegate != nil {
+                    delegate!.didUpdateMarkPriceStream(self, dataModel: markPriceStreamModel)
+                }
+            } catch {
+                print("Error JSON: \(error)")
+            }
         case .ticker:
             do {
                 let decodedData = try decoder.decode(VolumeData.self, from: socketData)
                 baseVolume = decodedData.v
                 quoteVolume = decodedData.q
+                priceChangePercent = decodedData.P
             } catch {
                 print("Error JSON: \(error)")
             }
@@ -133,7 +142,6 @@ class WebSocketManager: NSObject, URLSessionWebSocketDelegate {
                                                             isKlineClose: decodedData.k.x)
                 if delegate != nil {
                     delegate!.didUpdateCandle(self, candleModel: currentCandleModel)
-//                    print(currentCandleModel)
                 }
             } catch {
                 print("Error JSON: \(error)")

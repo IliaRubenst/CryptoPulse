@@ -21,13 +21,19 @@ class Symbol: Codable {
     }
 }
 
-struct SymbolPriceData: Codable {
+struct MarkPriceStreamData: Codable {
     var s: String
     var p: String
+    var i: String
+    var r: String
+    var T: Double
     
-    init(symbol: String, price: String) {
+    init(symbol: String, markPrice: String, indexPrice: String, fundingRate: String, nextFundingTime: Double) {
         self.s = symbol
-        self.p = price
+        self.p = markPrice
+        self.i = indexPrice
+        self.r = fundingRate
+        self.T = nextFundingTime
     }
 }
 
@@ -38,14 +44,16 @@ struct VolumeData: Codable {
     var o: String
     var h: String
     var l: String
+    var P: String
     
-    init(volumeBase: String, volumeQuote: String, closePrice: String, openPrice: String, highPrice: String, lowPrice: String) {
+    init(volumeBase: String, volumeQuote: String, closePrice: String, openPrice: String, highPrice: String, lowPrice: String, priceChangePercent: String) {
         self.v = volumeBase
         self.q = volumeQuote
         self.c = closePrice
         self.o = openPrice
         self.h = highPrice
         self.l = lowPrice
+        self.P = priceChangePercent
     }
 }
 

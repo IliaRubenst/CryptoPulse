@@ -32,11 +32,16 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
     var data = [CandlestickData]()
     var currentCandelModel: CurrentCandleModel!
     
-    var symbol: String!
+//    var symbol: String!
     var price: String!
     var base = ""
     var quote = ""
     var closePrice: Double = 0
+    
+    // data from MarkPriceStream
+    var symbol: String = ""
+    var fundingRate: String = "0.0"
+    var nextFindingTime: Double = 0.0
     
     var isKlineClose = false
     var alarm: Double = 0
@@ -46,7 +51,7 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
         super.viewDidLoad()
         label.font = .systemFont(ofSize: 13)
         label.numberOfLines = 2
-        label.text = "\(symbol!)\n\(price!)"
+//        label.text = "\(symbol!)\n\(price!)"
         label.textAlignment = .left
         navView.addSubview(label)
         
@@ -61,31 +66,31 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
 //        startWebSocketManagers()
         
         leftPartView.translatesAutoresizingMaskIntoConstraints = false
-        leftPartView.backgroundColor = #colorLiteral(red: 0.560276866, green: 0.9771239161, blue: 0.967977345, alpha: 1)
+        leftPartView.backgroundColor = #colorLiteral(red: 0.9078041315, green: 0.9078041315, blue: 0.9078040719, alpha: 1)
         leftPartView.heightAnchor.constraint(equalToConstant: self.view.frame.width / 3).isActive = true
         leftPartView.widthAnchor.constraint(equalToConstant: self.view.frame.width / 3).isActive = true
         leftPartView.font = .systemFont(ofSize: 13)
         leftPartView.numberOfLines = 2
-        leftPartView.text = "Нива стоит\n\(price!)$"
+//        leftPartView.text = "Нива стоит\n\(price!)$"
         leftPartView.textAlignment = .center
 
         middlePartView.translatesAutoresizingMaskIntoConstraints = false
-        middlePartView.backgroundColor = #colorLiteral(red: 0.994946897, green: 0.8199744821, blue: 0.7828269601, alpha: 1)
+        middlePartView.backgroundColor = #colorLiteral(red: 0.9078041315, green: 0.9078041315, blue: 0.9078040719, alpha: 1)
         middlePartView.heightAnchor.constraint(equalToConstant: self.view.frame.width / 3).isActive = true
         middlePartView.widthAnchor.constraint(equalToConstant: self.view.frame.width / 3).isActive = true
         middlePartView.font = .systemFont(ofSize: 13)
         middlePartView.numberOfLines = 2
-        middlePartView.text = "Жигули стоят\n\(price!)$"
+//        middlePartView.text = "Жигули стоят\n\(price!)$"
         middlePartView.textAlignment = .center
 
         rightPartView.translatesAutoresizingMaskIntoConstraints = false
-        rightPartView.backgroundColor = #colorLiteral(red: 0.7728006244, green: 0.9726731181, blue: 0.6611604691, alpha: 1)
+        rightPartView.backgroundColor = #colorLiteral(red: 0.9078041315, green: 0.9078041315, blue: 0.9078040719, alpha: 1)
         rightPartView.heightAnchor.constraint(equalToConstant: self.view.frame.width / 3).isActive = true
         rightPartView.widthAnchor.constraint(equalToConstant: self.view.frame.width / 3).isActive = true
         rightPartView.font = .systemFont(ofSize: 13)
         rightPartView.numberOfLines = 2
-        rightPartView.text = "Виталя сделал берпи? \(isKlineClose)"
-        rightPartView.textAlignment = .center
+        rightPartView.text = "funding: \(fundingRate)\nnext funding:\(nextFindingTime)"
+        rightPartView.textAlignment = .left
 
         stackView.axis = NSLayoutConstraint.Axis.horizontal
         stackView.distribution = .fillEqually
@@ -141,10 +146,21 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
         
         chartManager.tick()
         alarmObserver()
-        label.text = "\(symbol!)\n\(closePrice)"
-        leftPartView.text = "Нива стоит\n\(openPrice)$"
-        middlePartView.text = "Жигули стоят\n\(lowPrice)$"
-        rightPartView.text = "Виталя сделал берпи? \(isKlineClose)"
+        label.text = "\(symbol)\n\(closePrice)"
+//        leftPartView.text = "Нива стоит\n\(openPrice)$"
+//        middlePartView.text = "Жигули стоят\n\(lowPrice)$"
+//        rightPartView.text = "Виталя сделал берпи? \(isKlineClose)"
+    }
+    
+    func didUpdateMarkPriceStream(_ websocketManager: WebSocketManager, dataModel: MarkPriceStreamModel) {
+        symbol = dataModel.symbol
+        let dundingrRateDouble = Double(dataModel.fundingRate)! * 100
+        fundingRate = String(format: "%.3f", dundingrRateDouble)
+        
+//        fundingRate = String(format: "%.3f", dataModel.fundingRate)
+        nextFindingTime = dataModel.nextFindingTime
+        
+        rightPartView.text = "funding: \(fundingRate)\nnext funding:\(nextFindingTime)"
     }
     
     
@@ -200,12 +216,12 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
             manager.actualState = state
             manager.webSocketConnect(symbol: symbol)
             
-            switch state {
-//            case .aggTrade:
+//            switch state {
+//            case .markPriceStream:
 //                manager.onPriceChanged = { price, symbol in
 //                    self.updateView(symbol: symbol, price: price)
 //                }
-            case .ticker:
+//            case .ticker:
 //                manager.onVolumeChanged = { base, quote in
 //                    if let quote = Double(quote) {
 //                        if let base = Double(base) {
@@ -213,16 +229,16 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
 //                        }
 //                    }
 //                }
-                _ = 1
-            case .currentCandleData:
-                print("")
-            }
+//                _ = 1
+//            case .currentCandleData:
+//                print("")
+//            }
             webSocketManagers.append(manager)
         }
     }
     
     @objc func addAlarm() {
-        let ac = UIAlertController(title: "Set alarm for \(symbol!)", message: nil, preferredStyle: .alert)
+        let ac = UIAlertController(title: "Set alarm for \(symbol)", message: nil, preferredStyle: .alert)
         ac.addTextField { textField in
             textField.placeholder = "00.00"
             textField.keyboardType = UIKeyboardType.decimalPad

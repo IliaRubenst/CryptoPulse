@@ -8,10 +8,7 @@
 import UIKit
 
 class TooltipView: UIView {
-    
     private let titleLabel = UILabel()
-    private let priceLabel = UILabel()
-    
     private let accentColor: UIColor
     
     init(accentColor: UIColor) {

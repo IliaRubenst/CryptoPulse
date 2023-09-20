@@ -168,6 +168,9 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
         })
     }
     
+    func didUpdateMarkPriceStream(_ websocketManager: WebSocketManager, dataModel: MarkPriceStreamModel) {
+    }
+    
     func reloadCurrentCellData(_ index: Int) {
         if !isReload {
             collectionView.reloadItems(at: [IndexPath(row: index, section: 0)])

@@ -250,7 +250,7 @@ extension ChartManager: ChartDelegate {
     func didCrosshairMove(onChart chart: ChartApi, parameters: MouseEventParams) {
         if case .utc(timestamp: _) = parameters.time,
            case let .barData(data) = parameters.price(forSeries: series) {
-            tooltipView.update(title: "open:\(data.open!), high:\(data.high!), low:\(data.low!), close:\(data.close!)")
+            tooltipView.update(title: "o:\(data.open!), h:\(data.high!), l:\(data.low!), c:\(data.close!)")
             tooltipView.isHidden = false
         } else {
             self.tooltipView.isHidden = true

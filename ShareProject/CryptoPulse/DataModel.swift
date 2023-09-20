@@ -8,6 +8,14 @@
 import Foundation
 import LightweightCharts
 
+struct MarkPriceStreamModel {
+    var symbol: String
+    var markPrice: String
+    var indexPrice: String
+    var fundingRate: String
+    var nextFindingTime: Double
+}
+
 struct CurrentCandleModel {
     let eventTime: Int
     let pair: String
