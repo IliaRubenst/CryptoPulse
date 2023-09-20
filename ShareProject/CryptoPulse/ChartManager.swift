@@ -120,7 +120,7 @@ class ChartManager {
         NSLayoutConstraint.activate([
             chart.leadingAnchor.constraint(equalTo: delegate.view.safeAreaLayoutGuide.leadingAnchor),
             chart.trailingAnchor.constraint(equalTo: delegate.view.safeAreaLayoutGuide.trailingAnchor),
-            chart.topAnchor.constraint(equalTo: delegate.recieveVolumeText.bottomAnchor),
+            chart.topAnchor.constraint(equalTo: delegate.lowerStackView.bottomAnchor),
             chart.bottomAnchor.constraint(equalTo: delegate.view.safeAreaLayoutGuide.bottomAnchor)
         ])
         
@@ -132,7 +132,7 @@ class ChartManager {
         NSLayoutConstraint.activate([
             tooltipView.leadingAnchor.constraint(equalTo: delegate.view.safeAreaLayoutGuide.leadingAnchor),
             tooltipView.trailingAnchor.constraint(equalTo: delegate.view.safeAreaLayoutGuide.trailingAnchor),
-            tooltipView.topAnchor.constraint(equalTo: delegate.recieveVolumeText.bottomAnchor),
+            tooltipView.topAnchor.constraint(equalTo: delegate.lowerStackView.bottomAnchor),
         ])
 
         

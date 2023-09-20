@@ -168,7 +168,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
         })
     }
     
-    func didUpdateMarkPriceStream(_ websocketManager: WebSocketManager, dataModel: MarkPriceStreamModel) {
+    func didUpdatemarkPriceStream(_ websocketManager: WebSocketManager, dataModel: MarkPriceStreamModel) {
     }
     
     func reloadCurrentCellData(_ index: Int) {
@@ -198,6 +198,12 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
         for delegate in webSocketManagers {
             delegate.close()
         }
+    }
+    
+    func didUpdateMarkPriceStream(_ websocketManager: WebSocketManager, dataModel: MarkPriceStreamModel) {
+    }
+    
+    func didUpdateIndividualSymbolTicker(_ websocketManager: WebSocketManager, dataModel: IndividualSymbolTickerStreamsModel) {
     }
 }
 
