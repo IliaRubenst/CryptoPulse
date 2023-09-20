@@ -48,8 +48,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "143"
             endingLineNumber = "143"
-            landmarkName = "nextBusinessDay(_:)"
-            landmarkType = "7">
+            landmarkName = "ChartManager"
+            landmarkType = "3">
             <Locations>
                <Location
                   uuid = "CA1FF593-BE52-40EF-91C6-CE8BD07BCA60 - 6a5447c81cd2719f"
