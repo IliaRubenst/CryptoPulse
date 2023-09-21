@@ -130,7 +130,6 @@ public class LightweightCharts: UIView {
             loadDelegate?.lightweightCharts(self, didFailLoadWithError: error)
         }
     }
-    
 }
 
 // MARK: - ChartApi

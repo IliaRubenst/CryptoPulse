@@ -11,6 +11,7 @@ class RightClickMenu: UIView {
 //    private let menuView = UIView()
     private let menuStackView = UIStackView()
     private let color: UIColor
+    var detailViewController: DetailViewController!
     
     init(color: UIColor) {
         self.color = color
@@ -39,20 +40,36 @@ class RightClickMenu: UIView {
         addSubview(menuStackView)
         
         let button1 = UIButton(type: .system)
-        button1.setTitle("Button 1", for: .normal)
+        let button1Image = UIImage(systemName: "bell")
+        button1.setImage(button1Image, for: .normal)
+        button1.backgroundColor = #colorLiteral(red: 0.9078041315, green: 0.9078041315, blue: 0.9078040719, alpha: 1)
+//        button1.setTitle("Set alarm", for: .normal)
+        
+        button1.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        button1.widthAnchor.constraint(equalToConstant: 30).isActive = true
+        
         let button2 = UIButton(type: .system)
-        button2.setTitle("Button 2", for: .normal)
-        let button3 = UIButton(type: .system)
-        button3.setTitle("Button 3", for: .normal)
+        let button2Image = UIImage(systemName: "bell.badge")
+        button2.setImage(button2Image, for: .normal)
+        button2.backgroundColor = #colorLiteral(red: 0.9078041315, green: 0.9078041315, blue: 0.9078040719, alpha: 1)
+        //        button2.setTitle("Set price for alarm", for: .normal)
+        button2.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        button2.widthAnchor.constraint(equalToConstant: 30).isActive = true
         
         menuStackView.addArrangedSubview(button1)
         menuStackView.addArrangedSubview(button2)
-        menuStackView.addArrangedSubview(button3)
         
         button1.addTarget(self, action: #selector(button1Pressed), for: .touchUpInside)
+        button2.addTarget(self, action: #selector(button2Pressed), for: .touchUpInside)
     }
     
     @objc func button1Pressed() {
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "button1Pressed"), object: nil)
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "anyBtnPressed"), object: nil)
+    }
+    
+    @objc func button2Pressed() {
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "button2Pressed"), object: nil)
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "anyBtnPressed"), object: nil)
     }
 }

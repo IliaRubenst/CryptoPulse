@@ -23,7 +23,9 @@ class ChartManager {
     // for rightClickMenu
     private var leadingConstraint: NSLayoutConstraint!
     private var bottomConstraint: NSLayoutConstraint!
-
+    var isWasShown = false
+    var horizontalLine: CrosshairLineOptions?
+    var options: PriceLineOptions!
     
     var data = [CandlestickData]()
     
@@ -32,8 +34,8 @@ class ChartManager {
     
     private let tooltipView = TooltipView(accentColor: UIColor(red: 0, green: 150/255.0, blue: 136/255.0, alpha: 1))
     private let rightClickMenu = RightClickMenu(color: UIColor(red: 0, green: 150/255.0, blue: 136/255.0, alpha: 1))
-
-   
+    
+    
     init(delegate: DetailViewController, pair: String, interval: String) {
         self.delegate = delegate
         self.pair = pair
@@ -68,23 +70,23 @@ class ChartManager {
         do {
             if let decodedData = try JSONSerialization.jsonObject(with: marketData, options: []) as? [[Any]] {
                 for i in 0..<decodedData.count {
-//                    let candle = PreviousCandlesModel(openTime: decodedData[i][0] as! Double,
-//                                                      openPrice: decodedData[i][1] as! String,
-//                                                      highPrice: decodedData[i][2] as! String,
-//                                                      lowPrice: decodedData[i][3] as! String,
-//                                                      closePrice: decodedData[i][4] as! String,
-//                                                      volume: decodedData[i][5] as! String,
-//                                                      closeTime: decodedData[i][6] as! Int,
-//                                                      quoteAssetVolume: decodedData[i][7] as! String,
-//                                                      numberOfTrades: decodedData[i][8] as! Int,
-//                                                      takerBuyVolume: decodedData[i][9] as! String,
-//                                                      takerBuyQuoteAssetVolume: decodedData[i][10] as! String)
-//                    delegate.candles.append(candle)
+                    //                    let candle = PreviousCandlesModel(openTime: decodedData[i][0] as! Double,
+                    //                                                      openPrice: decodedData[i][1] as! String,
+                    //                                                      highPrice: decodedData[i][2] as! String,
+                    //                                                      lowPrice: decodedData[i][3] as! String,
+                    //                                                      closePrice: decodedData[i][4] as! String,
+                    //                                                      volume: decodedData[i][5] as! String,
+                    //                                                      closeTime: decodedData[i][6] as! Int,
+                    //                                                      quoteAssetVolume: decodedData[i][7] as! String,
+                    //                                                      numberOfTrades: decodedData[i][8] as! Int,
+                    //                                                      takerBuyVolume: decodedData[i][9] as! String,
+                    //                                                      takerBuyQuoteAssetVolume: decodedData[i][10] as! String)
+                    //                    delegate.candles.append(candle)
                     let openPrice = decodedData[i][1] as! String
                     let highPrice = decodedData[i][2] as! String
                     let lowPrice = decodedData[i][3] as! String
                     let closePrice = decodedData[i][4] as! String
-
+                    
                     let candle = CandlestickData(time: .utc(timestamp: (decodedData[i][0] as! Double) / 1000),
                                                  open: (Double(openPrice)),
                                                  high: (Double(highPrice)),
@@ -110,8 +112,11 @@ class ChartManager {
     
     
     func setupChart() {
-        let options = ChartOptions(crosshair: CrosshairOptions(mode: .normal))
+        let options = ChartOptions(crosshair: CrosshairOptions(mode: .normal),
+                                   trackingMode: TrackingModeOptions(exitMode: .onTouchEnd))
+        
         let chart = LightweightCharts(options: options)
+        
         delegate.view.addSubview(chart)
         chart.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -137,22 +142,22 @@ class ChartManager {
         
         rightClickMenu.backgroundColor = .clear
         rightClickMenu.translatesAutoresizingMaskIntoConstraints = false
-
+        
         leadingConstraint = rightClickMenu.leadingAnchor.constraint(equalTo: chart.leadingAnchor)
         bottomConstraint = rightClickMenu.bottomAnchor.constraint(equalTo: chart.topAnchor)
         leadingConstraint.isActive = true
         bottomConstraint.isActive = true
-        rightClickMenu.widthAnchor.constraint(equalToConstant: 190).isActive = true
+        rightClickMenu.widthAnchor.constraint(equalToConstant: 63).isActive = true
         rightClickMenu.heightAnchor.constraint(equalToConstant: 30).isActive = true
-
+        
         rightClickMenu.isHidden = true
         
         delegate.view.bringSubviewToFront(tooltipView)
         delegate.view.bringSubviewToFront(rightClickMenu)
         
-    
-        NotificationCenter.default.addObserver(self, selector: #selector(hideMenu), name: NSNotification.Name(rawValue: "button1Pressed"), object: nil)
-
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(hideMenu), name: NSNotification.Name(rawValue: "anyBtnPressed"), object: nil)
+        
     }
     
     func setupSeries() {
@@ -162,7 +167,7 @@ class ChartManager {
         
         series.setData(data: data)
     }
-
+    
     func tick() {
         if isFirstKline {
             guard let open = Double(delegate.currentCandelModel.openPrice),
@@ -226,7 +231,7 @@ class ChartManager {
     }
     
     
-func setupAlarmLine(_ alarmPrice: Double) {
+    func setupAlarmLine(_ alarmPrice: Double) {
         let options = PriceLineOptions(
             price: alarmPrice,
             color: "#f00",
@@ -252,51 +257,41 @@ func setupAlarmLine(_ alarmPrice: Double) {
 extension ChartManager: ChartDelegate {
     
     func didClick(onChart chart: ChartApi, parameters: MouseEventParams) {
-
     }
     
+//    func pnt(parameters: TouchMouseEventData) {
+//        var test = parameters
+//        print(test.localX)
+//    }
+//
     func didCrosshairMove(onChart chart: ChartApi, parameters: MouseEventParams) {
+        print(parameters.sourceEvent?.localY)
         if case .utc(timestamp: _) = parameters.time,
            let point = parameters.point,
            case let .barData(data) = parameters.price(forSeries: series) {
             tooltipView.update(title: "o:\(data.open!), h:\(data.high!), l:\(data.low!), c:\(data.close!)")
             tooltipView.isHidden = false
+            isWasShown = true
             leadingConstraint.constant = CGFloat(point.x) + 5
             bottomConstraint.constant = CGFloat(point.y) + 5
-
+//            var test = options
+//            print(test?.price)
         } else {
             self.tooltipView.isHidden = true
-            rightClickMenu.isHidden = false
+            if tooltipView.isHidden && isWasShown {
+                rightClickMenu.isHidden = false
+            }
+            if parameters.sourceEvent?.localX == nil && !isWasShown {
+                rightClickMenu.isHidden = true
+            }
+            isWasShown = false
         }
     }
-    
     
     @objc func hideMenu(notification: NSNotification) {
         rightClickMenu.isHidden = true
     }
     
     func didVisibleTimeRangeChange(onChart chart: ChartApi, parameters: TimeRange?) {
-        
     }
-    
-
 }
-
-
-    
-
-
-
-//    func reset() {
-//        series.setData(data: data)
-        
-//        lastClose = data.last!.close
-//        lastIndex = data.endIndex - 1
-//
-//        targetIndex = lastIndex + 5 + Int((Double.random(in: 0...1) + 30).rounded())
-////        targetPrice = closePrice
-        
-//        currentIndex = lastIndex + 1
-//        currentBusinessDay = BusinessDay(year: Calendar.current.component(.year, from: Date()), month: Calendar.current.component(.month, from: Date()), day: Calendar.current.component(.day, from: Date()))
-//        ticksInCurrentBar = 0
-//    }

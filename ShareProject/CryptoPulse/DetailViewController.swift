@@ -131,8 +131,11 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
 
         let setAlarmButton = UIBarButtonItem(image: UIImage(systemName: "bell"), style: .plain, target: self, action: #selector(addAlarm))
         navigationItem.rightBarButtonItems = [setAlarmButton]
-
+        
         startChartManager()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(addAlarm), name: NSNotification.Name(rawValue: "button1Pressed"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(addAlarmForSelectedPrice), name: NSNotification.Name(rawValue: "button2Pressed"), object: nil)
     }
     
     // Вынести метод в модель chartManager. Заленился.
@@ -275,6 +278,8 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
         }
     }
     
+    
+    // может перенести два метода в AlarmManager?
     @objc func addAlarm() {
         let ac = UIAlertController(title: "Set alarm for \(symbol)", message: nil, preferredStyle: .alert)
         ac.addTextField { textField in
@@ -296,6 +301,17 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
         })
         ac.addAction(UIAlertAction(title: "Cancel", style: .cancel))
         present(ac, animated: true)
+    }
+    
+    @objc func addAlarmForSelectedPrice() {
+        let price = chartManager.currentBar.high
+            alarm = price!
+            var isAlarmUpper = false
+            if alarm > closePrice {
+                isAlarmUpper = true
+            }
+            AlarmModelsArray.alarms.append(AlarmModel(symbol: symbol, alarmPrice: alarm, isAlarmUpper: isAlarmUpper, isActive: true))
+            chartManager.setupAlarmLine(alarm)
     }
 }
 

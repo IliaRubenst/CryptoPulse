@@ -44,6 +44,7 @@ extension MessageHandler: WKScriptMessageHandler {
             case .click:
                 if let parameters: MouseEventParams = try? decode(messageBodyJSONString) {
                     delegate?.messageHandler(self, didReceiveClickWithParameters: parameters)
+                    
                 }
             case .crosshairMove:
                 if let parameters: MouseEventParams = try? decode(messageBodyJSONString) {
