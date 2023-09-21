@@ -291,6 +291,10 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
                     isAlarmUpper = true
                 }
                 AlarmModelsArray.alarms.append(AlarmModel(symbol: self!.symbol, alarmPrice: self!.alarm, isAlarmUpper: isAlarmUpper, isActive: true))
+                
+                var defaults = DataLoader(keys: "savedAlarms")
+                defaults.saveData()
+
                 self?.chartManager.setupAlarmLine(self!.alarm)
             }
         })

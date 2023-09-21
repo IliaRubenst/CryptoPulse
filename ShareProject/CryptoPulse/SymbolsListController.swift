@@ -46,6 +46,9 @@ class SymbolsListController: UIViewController, UITableViewDataSource, UITableVie
         UserSymbols.savedSymbols.append(item)
         viewCtr.closeConnection()
         viewCtr.getSymbolToWebSocket()
+        
+        //Инстанс дата лоадер лучше создавать здесь
+        dataLoader.keys = "savedSymbols"
         dataLoader.saveData()
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "newSymbolAdded"), object: nil)
         dismiss(animated: true)
