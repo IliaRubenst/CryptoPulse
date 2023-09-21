@@ -8,38 +8,19 @@
 import Foundation
 
 struct TelegramNotifications {
-    let urlTelegramAPI = "https://api.telegram.org/bot"
-    let botToken = "" // сюда вставлять апи ключ
-    var user_ID = 133744737
+    private let urlTelegramAPI = "https://api.telegram.org/bot"
+    private var botToken: String? = Key.key // сюда вставлять апи ключ
+    private let  methodName = "/sendMessage"
+    private var user_ID: String? = Key.userID
     var message = String()
-    var sendMessageMethodPath: String {
-        "/sendMessage?chat_id=\(String(user_ID))&text=\(message)"
-    }
-    
-    func fetchRequest() {
-        let urlString = urlTelegramAPI + botToken + sendMessageMethodPath
-        print(urlString)
-        getRequest(urlString: urlString)
-    }
-    
-    func getRequest(urlString: String) {
-        if let url = URL(string: urlString) {
-            let session = URLSession(configuration: .default)
-            let task = session.dataTask(with: url) { (data, response, error) in
-                if error != nil {
-                    print(error!)
-                    return
-                } else {
-                    print("Successfully sent message")
-                }
-            }
-            task.resume()
-        }
-    }
-    
+
     func postRequest() {
-        guard let url = URL(string: "https://api.telegram.org/bot6620191491:AAHKCwMWZuLgs34U1OS7ZNgbpzRGYVBjBRg/sendMessage") else { return }
-        let parameters = ["chat_id": "133744737", "text": "Теперь\nя могу писать\nпредложения с пробелами\nИ с новыми параграфами"]
+        guard let botToken = botToken,
+              let userID = user_ID else { return }
+        
+        let urlString = urlTelegramAPI + botToken + methodName
+        guard let url = URL(string: urlString) else { return }
+        let parameters = ["chat_id": userID, "text": message]
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
