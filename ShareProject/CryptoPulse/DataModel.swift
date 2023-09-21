@@ -59,7 +59,7 @@ struct PreviousCandlesModel {
     let takerBuyQuoteAssetVolume: String
 }
 
-struct AlarmModel {
+struct AlarmModel: Codable {
     let symbol: String
     let alarmPrice: Double
     let isAlarmUpper: Bool

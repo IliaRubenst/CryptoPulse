@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="ROg-Vg-Zgk">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="mKf-pf-GG5">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
@@ -68,7 +68,7 @@
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0ny-j7-YQF" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="800.76335877862596" y="-164.08450704225353"/>
+            <point key="canvasLocation" x="2311" y="-1211"/>
         </scene>
         <!--Detail View Controller-->
         <scene sceneID="sAR-rT-Y9X">
@@ -83,7 +83,24 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="aMo-bQ-rBa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1548.854961832061" y="-157.04225352112678"/>
+            <point key="canvasLocation" x="3726" y="-1211"/>
+        </scene>
+        <!--Список уведомлений-->
+        <scene sceneID="sYH-PW-4KD">
+            <objects>
+                <viewController id="dQ8-cV-nwN" customClass="AlarmsViewController" customModule="CyptoPulse" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="8TL-mJ-6rM">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="8dZ-hk-i9v"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Уведомления" image="alarm" catalog="system" selectedImage="alarm.fill" id="iHn-dS-iPr"/>
+                    <navigationItem key="navigationItem" title="Список уведомлений" id="kFY-F2-ElU"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="CkU-ch-dLc" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1578" y="-526"/>
         </scene>
         <!--Symbols List Controller-->
         <scene sceneID="SwH-YG-egc">
@@ -148,28 +165,52 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lcB-i1-vee" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="801" y="-828"/>
+            <point key="canvasLocation" x="3021" y="-1211"/>
         </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="6Aw-Mb-UoF">
+        <!--Tab Bar Controller-->
+        <scene sceneID="2xY-fj-wDf">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="ROg-Vg-Zgk" sceneMemberID="viewController">
+                <tabBarController id="mKf-pf-GG5" sceneMemberID="viewController">
+                    <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="pYT-ZG-hJK">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="49"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </tabBar>
+                    <connections>
+                        <segue destination="Ts0-c0-exN" kind="relationship" relationship="viewControllers" id="EuV-TB-sQh"/>
+                        <segue destination="dQ8-cV-nwN" kind="relationship" relationship="viewControllers" id="UMt-zW-UkP"/>
+                    </connections>
+                </tabBarController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="D6n-Zr-5aO" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="801" y="-893"/>
+        </scene>
+        <!--Мои списки-->
+        <scene sceneID="Cf6-iH-3RL">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Ts0-c0-exN" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Мои списки" image="folder" catalog="system" selectedImage="folder.fill" id="nb7-ge-RCF"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="NXO-bJ-yOo">
+                    <navigationItem key="navigationItem" id="bjO-8z-SES"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="kLs-qm-b0s">
                         <rect key="frame" x="0.0" y="59" width="393" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="yFX-FB-xpB" kind="relationship" relationship="rootViewController" id="ZuQ-it-h1U"/>
+                        <segue destination="yFX-FB-xpB" kind="relationship" relationship="rootViewController" id="79f-u1-zLG"/>
                     </connections>
                 </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="ydR-Gn-qyp" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="OBP-aH-Vqu" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-125.95419847328243" y="-164.08450704225353"/>
+            <point key="canvasLocation" x="1578" y="-1211"/>
         </scene>
     </scenes>
     <resources>
+        <image name="alarm" catalog="system" width="123" height="128"/>
+        <image name="alarm.fill" catalog="system" width="123" height="128"/>
+        <image name="folder" catalog="system" width="128" height="96"/>
+        <image name="folder.fill" catalog="system" width="128" height="96"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

@@ -21,15 +21,14 @@
 		4974BE882AB030580070240F /* DataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4974BE872AB030580070240F /* DataModel.swift */; };
 		4979F2062AAC3905000E039C /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4979F2052AAC3905000E039C /* DetailViewController.swift */; };
 		4979F2082AACAFC0000E039C /* WebSocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4979F2072AACAFC0000E039C /* WebSocketManager.swift */; };
-		4987EBD92AB220D8001E70E2 /* TelegramNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4987EBD82AB220D8001E70E2 /* TelegramNotification.swift */; };
 		49AACC332AB70EA000101C46 /* SymbolsListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49AACC322AB70EA000101C46 /* SymbolsListController.swift */; };
 		49AACC572AB78C7500101C46 /* TooltipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49AACC562AB78C7500101C46 /* TooltipView.swift */; };
 		D813653E2AB07E6D005930D2 /* UserSymbols.swift in Sources */ = {isa = PBXBuildFile; fileRef = D813653D2AB07E6D005930D2 /* UserSymbols.swift */; };
 		D81365402AB092B9005930D2 /* DataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D813653F2AB092B9005930D2 /* DataLoader.swift */; };
-		D81365E62AB1ED78005930D2 /* PreviousCandlesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D81365E52AB1ED78005930D2 /* PreviousCandlesManager.swift */; };
 		D81365EC2AB207A1005930D2 /* ChartManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D81365EB2AB207A1005930D2 /* ChartManager.swift */; };
 		D81366362AB4C577005930D2 /* Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = D81366352AB4C577005930D2 /* Notifications.swift */; };
 		D87A63FB2ABC294A00A29749 /* Key.swift in Sources */ = {isa = PBXBuildFile; fileRef = D87A63FA2ABC294900A29749 /* Key.swift */; };
+		D87A63FD2ABC581100A29749 /* AlarmsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D87A63FC2ABC581100A29749 /* AlarmsViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -50,16 +49,15 @@
 		4974BE872AB030580070240F /* DataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataModel.swift; sourceTree = "<group>"; };
 		4979F2052AAC3905000E039C /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		4979F2072AACAFC0000E039C /* WebSocketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketManager.swift; sourceTree = "<group>"; };
-		4987EBD82AB220D8001E70E2 /* TelegramNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TelegramNotification.swift; sourceTree = "<group>"; };
 		49AACC322AB70EA000101C46 /* SymbolsListController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SymbolsListController.swift; sourceTree = "<group>"; };
 		49AACC562AB78C7500101C46 /* TooltipView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TooltipView.swift; sourceTree = "<group>"; };
 		CE911D65B09CFDE5FBDD2BB0 /* Pods_ShareProject.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ShareProject.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D813653D2AB07E6D005930D2 /* UserSymbols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSymbols.swift; sourceTree = "<group>"; };
 		D813653F2AB092B9005930D2 /* DataLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataLoader.swift; sourceTree = "<group>"; };
-		D81365E52AB1ED78005930D2 /* PreviousCandlesManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviousCandlesManager.swift; sourceTree = "<group>"; };
 		D81365EB2AB207A1005930D2 /* ChartManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartManager.swift; sourceTree = "<group>"; };
 		D81366352AB4C577005930D2 /* Notifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notifications.swift; sourceTree = "<group>"; };
 		D87A63FA2ABC294900A29749 /* Key.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Key.swift; sourceTree = "<group>"; };
+		D87A63FC2ABC581100A29749 /* AlarmsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmsViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -111,7 +109,6 @@
 				49AACC322AB70EA000101C46 /* SymbolsListController.swift */,
 				49367CAF2AAB33BE00827BE9 /* MarketManager.swift */,
 				4979F2072AACAFC0000E039C /* WebSocketManager.swift */,
-				D81365E52AB1ED78005930D2 /* PreviousCandlesManager.swift */,
 				D81365EB2AB207A1005930D2 /* ChartManager.swift */,
 				D813653D2AB07E6D005930D2 /* UserSymbols.swift */,
 				49367CAD2AAAFEB800827BE9 /* DataCodable.swift */,
@@ -119,11 +116,11 @@
 				49367CAB2AAAFE7100827BE9 /* CoinCell.swift */,
 				D813653F2AB092B9005930D2 /* DataLoader.swift */,
 				D81366352AB4C577005930D2 /* Notifications.swift */,
-				4987EBD82AB220D8001E70E2 /* TelegramNotification.swift */,
 				49AACC562AB78C7500101C46 /* TooltipView.swift */,
 				494FF85C2ABB4B140041791B /* RightClickMenu.swift */,
 				D87A63FA2ABC294900A29749 /* Key.swift */,
 				496BEFDF2AA9EFDF00B15E0F /* Main.storyboard */,
+				D87A63FC2ABC581100A29749 /* AlarmsViewController.swift */,
 				496BEFE22AA9EFE100B15E0F /* Assets.xcassets */,
 				496BEFE42AA9EFE100B15E0F /* LaunchScreen.storyboard */,
 				496BEFE72AA9EFE100B15E0F /* Info.plist */,
@@ -258,12 +255,12 @@
 				4974BE882AB030580070240F /* DataModel.swift in Sources */,
 				496BEFDE2AA9EFDF00B15E0F /* ViewController.swift in Sources */,
 				49AACC332AB70EA000101C46 /* SymbolsListController.swift in Sources */,
+				D87A63FD2ABC581100A29749 /* AlarmsViewController.swift in Sources */,
 				494FF85D2ABB4B140041791B /* RightClickMenu.swift in Sources */,
 				49367CB02AAB33BE00827BE9 /* MarketManager.swift in Sources */,
 				D81365EC2AB207A1005930D2 /* ChartManager.swift in Sources */,
 				4979F2082AACAFC0000E039C /* WebSocketManager.swift in Sources */,
 				496BEFDA2AA9EFDF00B15E0F /* AppDelegate.swift in Sources */,
-				4987EBD92AB220D8001E70E2 /* TelegramNotification.swift in Sources */,
 				D81366362AB4C577005930D2 /* Notifications.swift in Sources */,
 				49367CAC2AAAFE7100827BE9 /* CoinCell.swift in Sources */,
 				D87A63FB2ABC294A00A29749 /* Key.swift in Sources */,
@@ -272,7 +269,6 @@
 				D81365402AB092B9005930D2 /* DataLoader.swift in Sources */,
 				496BEFDC2AA9EFDF00B15E0F /* SceneDelegate.swift in Sources */,
 				4979F2062AAC3905000E039C /* DetailViewController.swift in Sources */,
-				D81365E62AB1ED78005930D2 /* PreviousCandlesManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -422,7 +418,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
-				"INFOPLIST_FILE[sdk=*]" = /Users/ilia/SharedRepo/ShareProject/CryptoPulse/Info.plist;
+				"INFOPLIST_FILE[sdk=*]" = /Users/vitalybelikov/Documents/sharedRepo/ShareProject/CryptoPulse/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -454,7 +450,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
-				"INFOPLIST_FILE[sdk=*]" = /Users/ilia/SharedRepo/ShareProject/CryptoPulse/Info.plist;
+				"INFOPLIST_FILE[sdk=*]" = /Users/vitalybelikov/Documents/sharedRepo/ShareProject/CryptoPulse/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;

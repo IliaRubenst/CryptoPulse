@@ -21,7 +21,10 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
         super.viewDidLoad()
         
         loadTickers()
+        //Инстанс дата лоадер лучше создавать здесь
+        defaults.keys = "savedSymbols"
         defaults.loadUserSymbols()
+        
         getSymbolToWebSocket()
         
         self.navigationItem.title = ""
@@ -90,6 +93,8 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
             ) { [weak self] _ in
                 let action = "remove"
                 self?.contextMenuAction(indexPaths, action: action)
+                //Инстанс дата лоадер лучше создавать здесь
+                self?.defaults.keys = "savedSymbols"
                 self?.defaults.saveData()
                 collectionView.reloadData()
             }
