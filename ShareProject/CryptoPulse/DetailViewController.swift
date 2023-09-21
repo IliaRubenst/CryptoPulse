@@ -196,9 +196,15 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
     func alarmObserver() {
         let upToDown = "пересекла сверху вниз"
         let downToUp = "пересекла снизу вверх"
+        
+        var telegramAlram = TelegramNotifications()
+        
         for (index, state) in AlarmModelsArray.alarms.enumerated() where state.isActive {
             if state.isAlarmUpper {
                 if closePrice >= state.alarmPrice && !isAlertShowing {
+                    telegramAlram.message = "The price crossed \(state.alarmPrice) \(downToUp)"
+                    telegramAlram.postRequest()
+                    
                     let ac = UIAlertController(title: "Alarm for \(state.symbol)", message: "The price crossed \(state.alarmPrice) \(downToUp) ", preferredStyle: .alert)
                     isAlertShowing = true
                     ac.addAction(UIAlertAction(title: "OK", style: .default) { [weak self] _ in
@@ -211,6 +217,9 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
                 }
             } else {
                 if closePrice <= state.alarmPrice && !isAlertShowing {
+                    telegramAlram.message = "The price crossed \(state.alarmPrice) \(upToDown)"
+                    telegramAlram.postRequest()
+                    
                     let ac = UIAlertController(title: "Alarm for \(state.symbol)", message: "The price crossed \(state.alarmPrice) \(upToDown) ", preferredStyle: .alert)
                     isAlertShowing = true
                     ac.addAction(UIAlertAction(title: "OK", style: .default) { [weak self] _ in
