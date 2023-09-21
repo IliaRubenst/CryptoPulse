@@ -13,27 +13,26 @@ class ChartManager {
     
     var pair: String
     var interval: String
+    var isFirstKline = true
     let binanceURL = "https://fapi.binance.com"
     
     private var chart: LightweightCharts!
     private var series: CandlestickSeries!
     private var alarmLine: PriceLine!
     
-//    var openPrice: Double = 0
-//    var highPrice: Double = 0
-//    var lowPrice: Double = 0
-//    var closePrice: Double = 0
-//    var isKlineClose = false
-    var isFirstKline = true
+    // for rightClickMenu
+    private var leadingConstraint: NSLayoutConstraint!
+    private var bottomConstraint: NSLayoutConstraint!
+
     
     var data = [CandlestickData]()
     
-//    private lazy var lastClose = data.last!.close
-//    private lazy var targetPrice = closePrice
     private var currentBusinessDay = Date().timeIntervalSince1970 //BusinessDay(year: Calendar.current.component(.year, from: Date()), month: Calendar.current.component(.month, from: Date()), day: Calendar.current.component(.day, from: Date()))
     lazy var currentBar = CandlestickData(time: .utc(timestamp: currentBusinessDay), open: nil, high: nil, low: nil, close: nil)
     
     private let tooltipView = TooltipView(accentColor: UIColor(red: 0, green: 150/255.0, blue: 136/255.0, alpha: 1))
+    private let rightClickMenu = RightClickMenu(color: UIColor(red: 0, green: 150/255.0, blue: 136/255.0, alpha: 1))
+
    
     init(delegate: DetailViewController, pair: String, interval: String) {
         self.delegate = delegate
@@ -91,11 +90,9 @@ class ChartManager {
                                                  high: (Double(highPrice)),
                                                  low: (Double(lowPrice)),
                                                  close: (Double(closePrice)))
-//                    delegate.chartManager.data.append(candle)
                     data.append(candle)
                 }
                 print("Loaded \(data.count) candles")
-//                setupChart()
                 
                 DispatchQueue.main.async {
                     self.setupSeries()
@@ -134,22 +131,33 @@ class ChartManager {
             tooltipView.trailingAnchor.constraint(equalTo: delegate.view.safeAreaLayoutGuide.trailingAnchor),
             tooltipView.topAnchor.constraint(equalTo: delegate.lowerStackView.bottomAnchor),
         ])
-
-        
         tooltipView.isHidden = true
         
+        delegate.view.addSubview(rightClickMenu)
+        
+        rightClickMenu.backgroundColor = .clear
+        rightClickMenu.translatesAutoresizingMaskIntoConstraints = false
+
+        leadingConstraint = rightClickMenu.leadingAnchor.constraint(equalTo: chart.leadingAnchor)
+        bottomConstraint = rightClickMenu.bottomAnchor.constraint(equalTo: chart.topAnchor)
+        leadingConstraint.isActive = true
+        bottomConstraint.isActive = true
+        rightClickMenu.widthAnchor.constraint(equalToConstant: 190).isActive = true
+        rightClickMenu.heightAnchor.constraint(equalToConstant: 30).isActive = true
+
+        rightClickMenu.isHidden = true
+        
         delegate.view.bringSubviewToFront(tooltipView)
+        delegate.view.bringSubviewToFront(rightClickMenu)
+        
+    
+        NotificationCenter.default.addObserver(self, selector: #selector(hideMenu), name: NSNotification.Name(rawValue: "button1Pressed"), object: nil)
+
     }
     
     func setupSeries() {
         let series = chart.addCandlestickSeries(options: nil)
         self.series = series
-        
-        // Здесь точка синхрнизации. Ждет, пока не загрузит массив свечек. Решение, наверное, так себе, но с GCD я пока хз как завести. Периодически вызывает краш приложения.
-//        while delegate.candles.count != 500 {
-//            continue
-//        }
-//        delegate.updateData()
         data.removeLast()
         
         series.setData(data: data)
@@ -239,28 +247,44 @@ func setupAlarmLine(_ alarmPrice: Double) {
         chart.delegate = self
         chart.subscribeCrosshairMove()
     }
-    
 }
 
 extension ChartManager: ChartDelegate {
     
     func didClick(onChart chart: ChartApi, parameters: MouseEventParams) {
+
     }
     
     func didCrosshairMove(onChart chart: ChartApi, parameters: MouseEventParams) {
         if case .utc(timestamp: _) = parameters.time,
+           let point = parameters.point,
            case let .barData(data) = parameters.price(forSeries: series) {
             tooltipView.update(title: "o:\(data.open!), h:\(data.high!), l:\(data.low!), c:\(data.close!)")
             tooltipView.isHidden = false
+            leadingConstraint.constant = CGFloat(point.x) + 5
+            bottomConstraint.constant = CGFloat(point.y) + 5
+
         } else {
             self.tooltipView.isHidden = true
+            rightClickMenu.isHidden = false
         }
+    }
+    
+    
+    @objc func hideMenu(notification: NSNotification) {
+        rightClickMenu.isHidden = true
     }
     
     func didVisibleTimeRangeChange(onChart chart: ChartApi, parameters: TimeRange?) {
         
     }
+    
+
 }
+
+
+    
+
 
 
 //    func reset() {
