@@ -40,18 +40,18 @@ class RightClickMenu: UIView {
         addSubview(menuStackView)
         
         let button1 = UIButton(type: .system)
-        let button1Image = UIImage(systemName: "bell")
+        let button1Image = UIImage(systemName: "bell")?.withTintColor(#colorLiteral(red: 0.008301745169, green: 0.5873891115, blue: 0.5336645246, alpha: 1), renderingMode: .alwaysOriginal)
         button1.setImage(button1Image, for: .normal)
-        button1.backgroundColor = #colorLiteral(red: 0.9078041315, green: 0.9078041315, blue: 0.9078040719, alpha: 1)
+//        button1.backgroundColor = #colorLiteral(red: 0.9078041315, green: 0.9078041315, blue: 0.9078040719, alpha: 1)
 //        button1.setTitle("Set alarm", for: .normal)
         
         button1.heightAnchor.constraint(equalToConstant: 30).isActive = true
         button1.widthAnchor.constraint(equalToConstant: 30).isActive = true
         
         let button2 = UIButton(type: .system)
-        let button2Image = UIImage(systemName: "bell.badge")
+        let button2Image = UIImage(systemName: "bell.badge")?.withTintColor(#colorLiteral(red: 0.008301745169, green: 0.5873891115, blue: 0.5336645246, alpha: 1), renderingMode: .alwaysOriginal)
         button2.setImage(button2Image, for: .normal)
-        button2.backgroundColor = #colorLiteral(red: 0.9078041315, green: 0.9078041315, blue: 0.9078040719, alpha: 1)
+//        button2.backgroundColor = #colorLiteral(red: 0.9078041315, green: 0.9078041315, blue: 0.9078040719, alpha: 1)
         //        button2.setTitle("Set price for alarm", for: .normal)
         button2.heightAnchor.constraint(equalToConstant: 30).isActive = true
         button2.widthAnchor.constraint(equalToConstant: 30).isActive = true

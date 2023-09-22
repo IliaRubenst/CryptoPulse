@@ -27,11 +27,20 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
     let middlePartView = UILabel()
     let rightPartView = UILabel()
     
+    let timeFrameStackView = UIStackView()
+    let oneMinuteButton = UIButton()
+    let fiveMinutesButton = UIButton()
+    let fifteenMinutesButton = UIButton()
+    let oneHourButton = UIButton()
+    let fourHours = UIButton()
+    let oneDay = UIButton()
+    
     var webSocketManagers = [WebSocketManager]()
     var chartManager: ChartManager!
     var candles = [PreviousCandlesModel]()
     var data = [CandlestickData]()
     var currentCandelModel: CurrentCandleModel!
+
     
     var price: String = ""
     
@@ -53,86 +62,16 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
     var alarm: Double = 0
     var isAlertShowing: Bool = false
     
-    override func loadView() {
-        super.loadView()
-        
-        leftNavLabel.translatesAutoresizingMaskIntoConstraints = false
-//        leftNavLabel.backgroundColor = #colorLiteral(red: 0.9078041315, green: 0.9078041315, blue: 0.9078040719, alpha: 1)
-        leftNavLabel.heightAnchor.constraint(equalToConstant: self.view.frame.height).isActive = true
-        leftNavLabel.widthAnchor.constraint(equalToConstant: 70).isActive = true
-        leftNavLabel.font = .systemFont(ofSize: 13)
-        leftNavLabel.text = "\(symbol)"
-        leftNavLabel.textAlignment = .center
-        
-        rightNavLabel.translatesAutoresizingMaskIntoConstraints = false
-//        rightNavLabel.backgroundColor = #colorLiteral(red: 0.9078041315, green: 0.9078041315, blue: 0.9078040719, alpha: 1)
-        rightNavLabel.heightAnchor.constraint(equalToConstant: self.view.frame.height).isActive = true
-        rightNavLabel.widthAnchor.constraint(equalToConstant: 170).isActive = true
-        rightNavLabel.font = .systemFont(ofSize: 13)
-        rightNavLabel.numberOfLines = 2
-        rightNavLabel.text = "\(closePrice)\n\(priceChangePercent)"
-        rightNavLabel.textAlignment = .center
-        
-        upperStackView.spacing = 5.0
-        
-        upperStackView.addArrangedSubview(leftNavLabel)
-        upperStackView.addArrangedSubview(rightNavLabel)
-        
-        self.navigationItem.titleView = upperStackView
-        
-        leftPartView.translatesAutoresizingMaskIntoConstraints = false
-//        leftPartView.backgroundColor = #colorLiteral(red: 0.9078041315, green: 0.9078041315, blue: 0.9078040719, alpha: 1)
-        leftPartView.heightAnchor.constraint(equalToConstant: self.view.frame.width / 3).isActive = true
-        leftPartView.widthAnchor.constraint(equalToConstant: self.view.frame.width / 3).isActive = true
-        leftPartView.font = .systemFont(ofSize: 13)
-        leftPartView.numberOfLines = 2
-        leftPartView.text = "24h volume\n\(volume24h)"
-        leftPartView.textAlignment = .center
-
-        middlePartView.translatesAutoresizingMaskIntoConstraints = false
-//        middlePartView.backgroundColor = #colorLiteral(red: 0.9078041315, green: 0.9078041315, blue: 0.9078040719, alpha: 1)
-        middlePartView.heightAnchor.constraint(equalToConstant: self.view.frame.width / 3).isActive = true
-        middlePartView.widthAnchor.constraint(equalToConstant: self.view.frame.width / 3).isActive = true
-        middlePartView.font = .systemFont(ofSize: 13)
-        middlePartView.numberOfLines = 2
-        middlePartView.text = "max: \(maxPrice)\nmin: \(minPrice)"
-        middlePartView.textAlignment = .center
-
-        rightPartView.translatesAutoresizingMaskIntoConstraints = false
-//        rightPartView.backgroundColor = #colorLiteral(red: 0.9078041315, green: 0.9078041315, blue: 0.9078040719, alpha: 1)
-        rightPartView.heightAnchor.constraint(equalToConstant: self.view.frame.width / 3).isActive = true
-        rightPartView.widthAnchor.constraint(equalToConstant: self.view.frame.width / 3).isActive = true
-        rightPartView.font = .systemFont(ofSize: 13)
-        rightPartView.numberOfLines = 2
-        rightPartView.text = "funding: \(fundingRate)%\nnext:\(nextFundingTime)"
-        rightPartView.textAlignment = .center
-
-        lowerStackView.axis = NSLayoutConstraint.Axis.horizontal
-        lowerStackView.distribution = .fillEqually
-        lowerStackView.alignment = .center
-        lowerStackView.backgroundColor = .clear
-        lowerStackView.spacing = 5.0
-        
-        lowerStackView.addArrangedSubview(leftPartView)
-        lowerStackView.addArrangedSubview(middlePartView)
-        lowerStackView.addArrangedSubview(rightPartView)
-        
-        self.view.addSubview(lowerStackView)
-        
-        lowerStackView.translatesAutoresizingMaskIntoConstraints = false
-        lowerStackView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 10).isActive = true
-        lowerStackView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -10).isActive = true
-        lowerStackView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor).isActive = true
-        lowerStackView.heightAnchor.constraint(equalToConstant: 40).isActive = true
-    }
+    var timeFrame = "1m"
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let setAlarmButton = UIBarButtonItem(image: UIImage(systemName: "bell"), style: .plain, target: self, action: #selector(addAlarm))
+        let setAlarmButton = UIBarButtonItem(image: UIImage(systemName: "bell")?.withTintColor(.black, renderingMode: .alwaysOriginal), style: .plain, target: self, action: #selector(addAlarm))
         navigationItem.rightBarButtonItems = [setAlarmButton]
         
         startChartManager()
+        setBackgroundForButton()
         
         NotificationCenter.default.addObserver(self, selector: #selector(addAlarm), name: NSNotification.Name(rawValue: "button1Pressed"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(addAlarmForSelectedPrice), name: NSNotification.Name(rawValue: "button2Pressed"), object: nil)
@@ -152,15 +91,77 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
         for manager in webSocketManagers {
             manager.close()
         }
-//        candles.removeAll()
+        
         chartManager.data.removeAll()
     }
     
-//    func updateView(symbol: String, price: String) {
-//        if let doublePrice = Double(price) {
-//            receiveDataText.text = String(format: "\(symbol)\n%.6f$", doublePrice)
-//        }
-//    }
+
+    @objc func oneMinuteButtonPressed() {
+        for manager in webSocketManagers {
+            manager.close()
+        }
+        timeFrame = "1m"
+        setBackgroundForButton()
+        startChartManager()
+    }
+    
+    @objc func fiveMinuteButtonPressed() {
+        for manager in webSocketManagers {
+            manager.close()
+        }
+        timeFrame = "5m"
+        setBackgroundForButton()
+        startChartManager()
+    }
+    
+    @objc func fifteenMinutesButtonPressed() {
+        for manager in webSocketManagers {
+            manager.close()
+        }
+        timeFrame = "15m"
+        setBackgroundForButton()
+        startChartManager()
+    }
+    
+    @objc func oneHourButtonPressed() {
+        for manager in webSocketManagers {
+            manager.close()
+        }
+        timeFrame = "1h"
+        setBackgroundForButton()
+        startChartManager()
+    }
+    
+    @objc func fourHoursButtonPressed() {
+        for manager in webSocketManagers {
+            manager.close()
+        }
+        timeFrame = "4h"
+        setBackgroundForButton()
+        startChartManager()
+    }
+    
+    @objc func oneDayButtonPressed() {
+        for manager in webSocketManagers {
+            manager.close()
+        }
+        timeFrame = "1d"
+        setBackgroundForButton()
+        startChartManager()
+    }
+    
+    func setBackgroundForButton() {
+        let names = [oneMinuteButton, fiveMinutesButton, fifteenMinutesButton, oneHourButton, fourHours, oneDay]
+        for name in names {
+            if name.titleLabel?.text == timeFrame {
+                name.backgroundColor = #colorLiteral(red: 0.008301745169, green: 0.5873891115, blue: 0.5336645246, alpha: 1)
+            } else {
+                name.backgroundColor = .clear
+            }
+        }
+
+    }
+    
     
     func didUpdateCandle(_ websocketManager: WebSocketManager, candleModel: CurrentCandleModel) {
         closePrice = Double(candleModel.closePrice)!
@@ -237,43 +238,20 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
     }
     
     func startChartManager() {
-        chartManager = ChartManager(delegate: self, pair: symbol, interval: "1m")
-        chartManager.fetchRequest()
+        chartManager = ChartManager(delegate: self, symbol: symbol, timeFrame: "1m")
+        chartManager.fetchRequest(symbol: symbol, timeFrame: timeFrame)
         chartManager.setupChart()
         
         chartManager.setupSubscription()
     }
-    
-//    func startCandlesManager() {
-//        var candlesManager = PreviousCandlesManager(pair: symbol, interval: "1m")
-//        candlesManager.delegate = self
-//        candlesManager.fetchRequest()
-//    }
     
     func startWebSocketManagers() {
         for state in State.allCases {
             let manager = WebSocketManager()
             manager.delegate = self
             manager.actualState = state
-            manager.webSocketConnect(symbol: symbol)
-            
-//            switch state {
-//            case .markPriceStream:
-//                manager.onPriceChanged = { price, symbol in
-//                    self.updateView(symbol: symbol, price: price)
-//                }
-//            case .ticker:
-//                manager.onVolumeChanged = { base, quote in
-//                    if let quote = Double(quote) {
-//                        if let base = Double(base) {
-//                            self.recieveVolumeText.text = String(format: "Base Volume: \(base.rounded())\nUSDT Volume: %.2f$", quote)
-//                        }
-//                    }
-//                }
-//                _ = 1
-//            case .currentCandleData:
-//                print("")
-//            }
+            manager.webSocketConnect(symbol: symbol, timeFrame: timeFrame)
+
             webSocketManagers.append(manager)
         }
     }
@@ -317,5 +295,153 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
             AlarmModelsArray.alarms.append(AlarmModel(symbol: symbol, alarmPrice: alarm, isAlarmUpper: isAlarmUpper, isActive: true))
             chartManager.setupAlarmLine(alarm)
     }
-}
+    
+    override func loadView() {
+        super.loadView()
+        
+        leftNavLabel.translatesAutoresizingMaskIntoConstraints = false
+//        leftNavLabel.backgroundColor = #colorLiteral(red: 0.9078041315, green: 0.9078041315, blue: 0.9078040719, alpha: 1)
+        leftNavLabel.heightAnchor.constraint(equalToConstant: self.view.frame.height).isActive = true
+        leftNavLabel.widthAnchor.constraint(equalToConstant: 70).isActive = true
+        leftNavLabel.font = .systemFont(ofSize: 13)
+        leftNavLabel.text = "\(symbol)"
+        leftNavLabel.textAlignment = .center
+        
+        rightNavLabel.translatesAutoresizingMaskIntoConstraints = false
+//        rightNavLabel.backgroundColor = #colorLiteral(red: 0.9078041315, green: 0.9078041315, blue: 0.9078040719, alpha: 1)
+        rightNavLabel.heightAnchor.constraint(equalToConstant: self.view.frame.height).isActive = true
+        rightNavLabel.widthAnchor.constraint(equalToConstant: 170).isActive = true
+        rightNavLabel.font = .systemFont(ofSize: 13)
+        rightNavLabel.numberOfLines = 2
+        rightNavLabel.text = "\(closePrice)\n\(priceChangePercent)"
+        rightNavLabel.textAlignment = .center
+        
+        upperStackView.spacing = 5.0
+        
+        upperStackView.addArrangedSubview(leftNavLabel)
+        upperStackView.addArrangedSubview(rightNavLabel)
+        
+        self.navigationItem.titleView = upperStackView
+        
+        leftPartView.translatesAutoresizingMaskIntoConstraints = false
+        leftPartView.heightAnchor.constraint(equalToConstant: self.view.frame.width / 3).isActive = true
+        leftPartView.widthAnchor.constraint(equalToConstant: self.view.frame.width / 3).isActive = true
+        leftPartView.font = .systemFont(ofSize: 13)
+        leftPartView.numberOfLines = 2
+        leftPartView.text = "24h volume\n\(volume24h)"
+        leftPartView.textAlignment = .center
 
+        middlePartView.translatesAutoresizingMaskIntoConstraints = false
+        middlePartView.heightAnchor.constraint(equalToConstant: self.view.frame.width / 3).isActive = true
+        middlePartView.widthAnchor.constraint(equalToConstant: self.view.frame.width / 3).isActive = true
+        middlePartView.font = .systemFont(ofSize: 13)
+        middlePartView.numberOfLines = 2
+        middlePartView.text = "max: \(maxPrice)\nmin: \(minPrice)"
+        middlePartView.textAlignment = .center
+
+        rightPartView.translatesAutoresizingMaskIntoConstraints = false
+        rightPartView.heightAnchor.constraint(equalToConstant: self.view.frame.width / 3).isActive = true
+        rightPartView.widthAnchor.constraint(equalToConstant: self.view.frame.width / 3).isActive = true
+        rightPartView.font = .systemFont(ofSize: 13)
+        rightPartView.numberOfLines = 2
+        rightPartView.text = "funding: \(fundingRate)%\nnext:\(nextFundingTime)"
+        rightPartView.textAlignment = .center
+
+        lowerStackView.axis = .horizontal
+        lowerStackView.distribution = .fillEqually
+        lowerStackView.alignment = .center
+        lowerStackView.backgroundColor = .clear
+        lowerStackView.spacing = 5.0
+        
+        lowerStackView.addArrangedSubview(leftPartView)
+        lowerStackView.addArrangedSubview(middlePartView)
+        lowerStackView.addArrangedSubview(rightPartView)
+        
+        self.view.addSubview(lowerStackView)
+        
+        lowerStackView.translatesAutoresizingMaskIntoConstraints = false
+        lowerStackView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 3).isActive = true
+        lowerStackView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -3).isActive = true
+        lowerStackView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor).isActive = true
+        lowerStackView.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        
+        let buttonHeight = CGFloat(20)
+        let buttonWidth = CGFloat(20)
+        
+        oneMinuteButton.setTitle("1m", for: .normal)
+        oneMinuteButton.setTitleColor(.black, for: .normal)
+        oneMinuteButton.titleLabel?.font = .systemFont(ofSize: 13)
+        oneMinuteButton.layer.borderWidth = 1
+        oneMinuteButton.layer.cornerRadius = 5
+        oneMinuteButton.heightAnchor.constraint(equalToConstant: buttonHeight).isActive = true
+        oneMinuteButton.widthAnchor.constraint(equalToConstant: buttonWidth).isActive = true
+
+        fiveMinutesButton.setTitle("5m", for: .normal)
+        fiveMinutesButton.setTitleColor(.black, for: .normal)
+        fiveMinutesButton.titleLabel?.font = .systemFont(ofSize: 13)
+        fiveMinutesButton.layer.borderWidth = 1
+        fiveMinutesButton.layer.cornerRadius = 5
+        fiveMinutesButton.heightAnchor.constraint(equalToConstant: buttonHeight).isActive = true
+        fiveMinutesButton.widthAnchor.constraint(equalToConstant: buttonWidth).isActive = true
+        
+        fifteenMinutesButton.setTitle("15m", for: .normal)
+        fifteenMinutesButton.setTitleColor(.black, for: .normal)
+        fifteenMinutesButton.titleLabel?.font = .systemFont(ofSize: 13)
+        fifteenMinutesButton.layer.borderWidth = 1
+        fifteenMinutesButton.layer.cornerRadius = 5
+        fifteenMinutesButton.heightAnchor.constraint(equalToConstant: buttonHeight).isActive = true
+        fifteenMinutesButton.widthAnchor.constraint(equalToConstant: buttonWidth).isActive = true
+        
+        oneHourButton.setTitle("1h", for: .normal)
+        oneHourButton.setTitleColor(.black, for: .normal)
+        oneHourButton.titleLabel?.font = .systemFont(ofSize: 13)
+        oneHourButton.layer.borderWidth = 1
+        oneHourButton.layer.cornerRadius = 5
+        oneHourButton.heightAnchor.constraint(equalToConstant: buttonHeight).isActive = true
+        oneHourButton.widthAnchor.constraint(equalToConstant: buttonWidth).isActive = true
+        
+        fourHours.setTitle("4h", for: .normal)
+        fourHours.setTitleColor(.black, for: .normal)
+        fourHours.titleLabel?.font = .systemFont(ofSize: 13)
+        fourHours.layer.borderWidth = 1
+        fourHours.layer.cornerRadius = 5
+        fourHours.heightAnchor.constraint(equalToConstant: buttonHeight).isActive = true
+        fourHours.widthAnchor.constraint(equalToConstant: buttonWidth).isActive = true
+        
+        oneDay.setTitle("1d", for: .normal)
+        oneDay.setTitleColor(.black, for: .normal)
+        oneDay.titleLabel?.font = .systemFont(ofSize: 13)
+        oneDay.layer.borderWidth = 1
+        oneDay.layer.cornerRadius = 5
+        oneDay.heightAnchor.constraint(equalToConstant: buttonHeight).isActive = true
+        oneDay.widthAnchor.constraint(equalToConstant: buttonWidth).isActive = true
+
+        timeFrameStackView.axis = .horizontal
+        timeFrameStackView.distribution = .fillEqually
+        timeFrameStackView.alignment = .center
+        timeFrameStackView.backgroundColor = .clear
+        timeFrameStackView.spacing = 2.0
+        
+        timeFrameStackView.addArrangedSubview(oneMinuteButton)
+        timeFrameStackView.addArrangedSubview(fiveMinutesButton)
+        timeFrameStackView.addArrangedSubview(fifteenMinutesButton)
+        timeFrameStackView.addArrangedSubview(oneHourButton)
+        timeFrameStackView.addArrangedSubview(fourHours)
+        timeFrameStackView.addArrangedSubview(oneDay)
+
+        self.view.addSubview(timeFrameStackView)
+        
+        timeFrameStackView.translatesAutoresizingMaskIntoConstraints = false
+        timeFrameStackView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 5).isActive = true
+        timeFrameStackView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -5).isActive = true
+        timeFrameStackView.topAnchor.constraint(equalTo: lowerStackView.bottomAnchor).isActive = true
+        timeFrameStackView.heightAnchor.constraint(equalToConstant: buttonHeight).isActive = true
+        
+        oneMinuteButton.addTarget(self, action: #selector(oneMinuteButtonPressed), for: .touchUpInside)
+        fiveMinutesButton.addTarget(self, action: #selector(fiveMinuteButtonPressed), for: .touchUpInside)
+        fifteenMinutesButton.addTarget(self, action: #selector(fifteenMinutesButtonPressed), for: .touchUpInside)
+        oneHourButton.addTarget(self, action: #selector(oneHourButtonPressed), for: .touchUpInside)
+        fourHours.addTarget(self, action: #selector(fourHoursButtonPressed), for: .touchUpInside)
+        oneDay.addTarget(self, action: #selector(oneDayButtonPressed), for: .touchUpInside)
+    }
+}

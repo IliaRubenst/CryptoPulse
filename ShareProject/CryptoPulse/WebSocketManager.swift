@@ -24,7 +24,9 @@ class WebSocketManager: NSObject, URLSessionWebSocketDelegate {
     var delegate: WebSocketManagerDelegate?
     var actualState = State.currentCandleData
     
-    func webSocketConnect(symbol: String) {
+//    var timeFrame: String = "1m"
+    
+    func webSocketConnect(symbol: String, timeFrame: String) {
         var url: String
         let coinSymbol = symbol.lowercased()
         
@@ -36,7 +38,7 @@ class WebSocketManager: NSObject, URLSessionWebSocketDelegate {
             url = "wss://fstream.binance.com:443/ws/\(coinSymbol)@ticker"
             
         case .currentCandleData:
-            url = "wss://fstream.binance.com:443/ws/\(coinSymbol)_perpetual@continuousKline_1m"
+            url = "wss://fstream.binance.com:443/ws/\(coinSymbol)_perpetual@continuousKline_\(timeFrame)"
         }
         
         let session = URLSession(configuration: .default, delegate: self, delegateQueue: .main)

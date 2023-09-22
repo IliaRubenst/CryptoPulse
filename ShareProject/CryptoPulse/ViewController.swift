@@ -183,7 +183,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
     func setConnetcForSymbols(_ symbol: String) {
         let delegate = WebSocketManager()
         delegate.delegate = self
-        delegate.webSocketConnect(symbol: symbol)
+        delegate.webSocketConnect(symbol: symbol, timeFrame: "1m")
         webSocketManagers.append(delegate)
     }
 

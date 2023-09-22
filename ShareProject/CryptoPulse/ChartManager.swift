@@ -11,8 +11,8 @@ import LightweightCharts
 class ChartManager {
     var delegate: DetailViewController!
     
-    var pair: String
-    var interval: String
+    var symbol: String
+    var timeFrame: String
     var isFirstKline = true
     let binanceURL = "https://fapi.binance.com"
     
@@ -36,14 +36,14 @@ class ChartManager {
     private let rightClickMenu = RightClickMenu(color: UIColor(red: 0, green: 150/255.0, blue: 136/255.0, alpha: 1))
     
     
-    init(delegate: DetailViewController, pair: String, interval: String) {
+    init(delegate: DetailViewController, symbol: String, timeFrame: String) {
         self.delegate = delegate
-        self.pair = pair
-        self.interval = interval
+        self.symbol = symbol
+        self.timeFrame = timeFrame
     }
     
-    func fetchRequest() {
-        let path = "/fapi/v1/continuousKlines?pair=\(pair)&contractType=PERPETUAL&interval=\(interval)"
+    func fetchRequest(symbol: String, timeFrame: String) {
+        let path = "/fapi/v1/continuousKlines?pair=\(symbol)&contractType=PERPETUAL&interval=\(timeFrame)"
         let urlString = binanceURL + path
         print(urlString)
         performRequest(urlString: urlString)
@@ -115,14 +115,16 @@ class ChartManager {
         let options = ChartOptions(crosshair: CrosshairOptions(mode: .normal),
                                    trackingMode: TrackingModeOptions(exitMode: .onTouchEnd))
         
+        
         let chart = LightweightCharts(options: options)
+//        let chr = LightweightCharts(options: ChartOptions(width: <#T##Double?#>, height: <#T##Double?#>, watermark: <#T##WatermarkOptions?#>, layout: <#T##LayoutOptions?#>, leftPriceScale: <#T##VisiblePriceScaleOptions?#>, rightPriceScale: VisiblePriceScaleOptions., overlayPriceScales: <#T##OverlayPriceScaleOptions?#>, timeScale: <#T##TimeScaleOptions?#>, crosshair: <#T##CrosshairOptions?#>, grid: <#T##GridOptions?#>, localization: <#T##LocalizationOptions?#>, handleScroll: <#T##HandleScrollOptions?#>, handleScale: TogglableOptions<HandleScaleOptions>?, kineticScroll: <#T##KineticScrollOptions?#>, trackingMode: <#T##TrackingModeOptions?#>)
         
         delegate.view.addSubview(chart)
         chart.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             chart.leadingAnchor.constraint(equalTo: delegate.view.safeAreaLayoutGuide.leadingAnchor),
             chart.trailingAnchor.constraint(equalTo: delegate.view.safeAreaLayoutGuide.trailingAnchor),
-            chart.topAnchor.constraint(equalTo: delegate.lowerStackView.bottomAnchor),
+            chart.topAnchor.constraint(equalTo: delegate.timeFrameStackView.bottomAnchor),
             chart.bottomAnchor.constraint(equalTo: delegate.view.safeAreaLayoutGuide.bottomAnchor)
         ])
         
@@ -134,7 +136,7 @@ class ChartManager {
         NSLayoutConstraint.activate([
             tooltipView.leadingAnchor.constraint(equalTo: delegate.view.safeAreaLayoutGuide.leadingAnchor),
             tooltipView.trailingAnchor.constraint(equalTo: delegate.view.safeAreaLayoutGuide.trailingAnchor),
-            tooltipView.topAnchor.constraint(equalTo: delegate.lowerStackView.bottomAnchor),
+            tooltipView.topAnchor.constraint(equalTo: delegate.timeFrameStackView.bottomAnchor),
         ])
         tooltipView.isHidden = true
         
@@ -240,6 +242,7 @@ class ChartManager {
         )
         
         alarmLine = series.createPriceLine(options: options)
+        
         AlarmModelsArray.alarmaLine.append(alarmLine)
     }
     
@@ -259,13 +262,9 @@ extension ChartManager: ChartDelegate {
     func didClick(onChart chart: ChartApi, parameters: MouseEventParams) {
     }
     
-//    func pnt(parameters: TouchMouseEventData) {
-//        var test = parameters
-//        print(test.localX)
-//    }
-//
     func didCrosshairMove(onChart chart: ChartApi, parameters: MouseEventParams) {
-        print(parameters.sourceEvent?.localY)
+//        print(parameters.sourceEvent?.localY)
+//        print(parameters.sourceEvent?.localY)
         if case .utc(timestamp: _) = parameters.time,
            let point = parameters.point,
            case let .barData(data) = parameters.price(forSeries: series) {
