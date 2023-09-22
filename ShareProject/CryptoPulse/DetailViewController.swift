@@ -126,16 +126,21 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
         lowerStackView.heightAnchor.constraint(equalToConstant: 40).isActive = true
     }
     
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         let setAlarmButton = UIBarButtonItem(image: UIImage(systemName: "bell"), style: .plain, target: self, action: #selector(addAlarm))
-        navigationItem.rightBarButtonItems = [setAlarmButton]
-        
-        startChartManager()
+        navigationItem.rightBarButtonItems = [setAlarmButton]        
         
         NotificationCenter.default.addObserver(self, selector: #selector(addAlarm), name: NSNotification.Name(rawValue: "button1Pressed"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(addAlarmForSelectedPrice), name: NSNotification.Name(rawValue: "button2Pressed"), object: nil)
+        
+        var defaults = DataLoader(keys: "savedAlarms")
+        defaults.loadUserSymbols()
+        
+        
     }
     
     // Вынести метод в модель chartManager. Заленился.
@@ -148,7 +153,13 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
         }
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        startChartManager()
+    }
+    
     override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
         for manager in webSocketManagers {
             manager.close()
         }
@@ -161,6 +172,13 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
 //            receiveDataText.text = String(format: "\(symbol)\n%.6f$", doublePrice)
 //        }
 //    }
+    
+    func setupAlarmLines() {
+        print(AlarmModelsArray.alarms.count)
+        for alarm in AlarmModelsArray.alarms {
+            chartManager.setupAlarmLine(alarm.alarmPrice)
+        }
+    }
     
     func didUpdateCandle(_ websocketManager: WebSocketManager, candleModel: CurrentCandleModel) {
         closePrice = Double(candleModel.closePrice)!
@@ -197,15 +215,15 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
     
     
     func alarmObserver() {
-        let upToDown = "пересекла сверху вниз"
-        let downToUp = "пересекла снизу вверх"
+        let upToDown = "сверху вниз"
+        let downToUp = "снизу вверх"
         
         var telegramAlram = TelegramNotifications()
         
         for (index, state) in AlarmModelsArray.alarms.enumerated() where state.isActive {
             if state.isAlarmUpper {
                 if closePrice >= state.alarmPrice && !isAlertShowing {
-                    telegramAlram.message = "The price crossed \(state.alarmPrice) \(downToUp)"
+                    telegramAlram.message = "Цена \(state.symbol) пересекла \(state.alarmPrice) \(downToUp)"
                     telegramAlram.postRequest()
                     
                     let ac = UIAlertController(title: "Alarm for \(state.symbol)", message: "The price crossed \(state.alarmPrice) \(downToUp) ", preferredStyle: .alert)
@@ -215,12 +233,16 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
                     })
                     present(ac, animated: true)
                     
-                    chartManager.removeAlarmLine(index)
-                    AlarmModelsArray.alarms.remove(at: index)
+//                    chartManager.removeAlarmLine(index)
+//                    AlarmModelsArray.alarms.remove(at: index)
+                    AlarmModelsArray.alarms[index].isActive = false
+                    
+                    var defaults = DataLoader(keys: "savedAlarms")
+                    defaults.saveData()
                 }
             } else {
                 if closePrice <= state.alarmPrice && !isAlertShowing {
-                    telegramAlram.message = "The price crossed \(state.alarmPrice) \(upToDown)"
+                    telegramAlram.message = "Цена \(state.symbol) пересекла \(state.alarmPrice) \(upToDown)"
                     telegramAlram.postRequest()
                     
                     let ac = UIAlertController(title: "Alarm for \(state.symbol)", message: "The price crossed \(state.alarmPrice) \(upToDown) ", preferredStyle: .alert)
@@ -229,8 +251,12 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
                         self?.isAlertShowing = false
                     })
                     present(ac, animated: true)
-                    chartManager.removeAlarmLine(index)
-                    AlarmModelsArray.alarms.remove(at: index)
+//                    chartManager.removeAlarmLine(index)
+//                    AlarmModelsArray.alarms.remove(at: index)
+                    AlarmModelsArray.alarms[index].isActive = false
+                    
+                    var defaults = DataLoader(keys: "savedAlarms")
+                    defaults.saveData()
                 }
             }
         }

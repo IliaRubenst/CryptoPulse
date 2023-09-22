@@ -166,6 +166,7 @@ class ChartManager {
         data.removeLast()
         
         series.setData(data: data)
+        delegate.setupAlarmLines()
     }
     
     func tick() {
@@ -240,12 +241,12 @@ class ChartManager {
         )
         
         alarmLine = series.createPriceLine(options: options)
-        AlarmModelsArray.alarmaLine.append(alarmLine)
+//        AlarmModelsArray.alarmaLine.append(alarmLine)
     }
     
     func removeAlarmLine(_ index: Int) {
         series.removePriceLine(line: AlarmModelsArray.alarmaLine[index])
-        AlarmModelsArray.alarmaLine.remove(at: index)
+//        AlarmModelsArray.alarmaLine.remove(at: index)
     }
     
     func setupSubscription() {

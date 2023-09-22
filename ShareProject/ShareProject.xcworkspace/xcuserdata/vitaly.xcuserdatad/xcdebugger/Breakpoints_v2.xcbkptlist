@@ -39,54 +39,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "CA1FF593-BE52-40EF-91C6-CE8BD07BCA60"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "CryptoPulse/ChartManager.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "143"
-            endingLineNumber = "143"
-            landmarkName = "setupChart()"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "CA1FF593-BE52-40EF-91C6-CE8BD07BCA60 - 6a5447c81cd2719f"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "CyptoPulse.ChartManager.tick() -&gt; ()"
-                  moduleName = "CyptoPulse"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/vitalybelikov/Documents/sharedRepo/ShareProject/CryptoPulse/ChartManager.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "65"
-                  endingLineNumber = "65"
-                  offsetFromSymbolStart = "96">
-               </Location>
-               <Location
-                  uuid = "CA1FF593-BE52-40EF-91C6-CE8BD07BCA60 - 6a5447c81cd2719f"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "CyptoPulse.ChartManager.tick() -&gt; ()"
-                  moduleName = "CyptoPulse"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/vitalybelikov/Documents/sharedRepo/ShareProject/CryptoPulse/ChartManager.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "65"
-                  endingLineNumber = "65"
-                  offsetFromSymbolStart = "136">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "A68FF3E7-15F7-4EDF-B7CA-F7C42481F16D"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -103,24 +55,8 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "1C68B856-3324-4A24-8747-F54CC54DE66B"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "CryptoPulse/ChartManager.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "254"
-            endingLineNumber = "254"
-            landmarkName = "didClick(onChart:parameters:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "374A0570-BC16-4A7C-8F02-AA3164FEAAD9"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Pods/LightweightCharts/Sources/LightweightCharts/Implementations/Subscription/MessageHandler.swift"
@@ -135,17 +71,128 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "C0189489-86FB-48D1-8F0F-282159EA3F68"
+            uuid = "A04C66BC-63E6-4E2A-98F0-FB20C6681421"
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "CryptoPulse/DataLoader.swift"
+            filePath = "CryptoPulse/DetailViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "15"
-            endingLineNumber = "15"
-            landmarkName = "loadUserSymbols()"
+            startingLineNumber = "279"
+            endingLineNumber = "279"
+            landmarkName = "startWebSocketManagers()"
             landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "A04C66BC-63E6-4E2A-98F0-FB20C6681421 - c049db451216289b"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "CyptoPulse.DetailViewController.startWebSocketManagers() -&gt; ()"
+                  moduleName = "CyptoPulse"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/vitalybelikov/Documents/sharedRepo/ShareProject/CryptoPulse/DetailViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "278"
+                  endingLineNumber = "278"
+                  offsetFromSymbolStart = "404">
+               </Location>
+               <Location
+                  uuid = "A04C66BC-63E6-4E2A-98F0-FB20C6681421 - c049db4512162aca"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "CyptoPulse.DetailViewController.startWebSocketManagers() -&gt; ()"
+                  moduleName = "CyptoPulse"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/vitalybelikov/Documents/sharedRepo/ShareProject/CryptoPulse/DetailViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "261"
+                  endingLineNumber = "261"
+                  offsetFromSymbolStart = "64">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "540FF6F9-FA35-4433-B3D9-7339B6C060ED"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CryptoPulse/DetailViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "278"
+            endingLineNumber = "278"
+            landmarkName = "DetailViewController"
+            landmarkType = "3">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "8DAF2670-172A-464E-A490-D8B1E9A887F4"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CryptoPulse/DetailViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "176"
+            endingLineNumber = "176"
+            landmarkName = "setupAlarmLines()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "8DAF2670-172A-464E-A490-D8B1E9A887F4 - 56ccbd21712556e4"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "CyptoPulse.DetailViewController.setupAlarmLines() -&gt; ()"
+                  moduleName = "CyptoPulse"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/vitalybelikov/Documents/sharedRepo/ShareProject/CryptoPulse/DetailViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "174"
+                  endingLineNumber = "174"
+                  offsetFromSymbolStart = "96">
+               </Location>
+               <Location
+                  uuid = "8DAF2670-172A-464E-A490-D8B1E9A887F4 - 56ccbd21712556e4"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "CyptoPulse.DetailViewController.setupAlarmLines() -&gt; ()"
+                  moduleName = "CyptoPulse"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/vitalybelikov/Documents/sharedRepo/ShareProject/CryptoPulse/DetailViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "174"
+                  endingLineNumber = "174"
+                  offsetFromSymbolStart = "120">
+               </Location>
+               <Location
+                  uuid = "8DAF2670-172A-464E-A490-D8B1E9A887F4 - 56ccbd2171255749"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "CyptoPulse.DetailViewController.setupAlarmLines() -&gt; ()"
+                  moduleName = "CyptoPulse"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/vitalybelikov/Documents/sharedRepo/ShareProject/CryptoPulse/DetailViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "177"
+                  endingLineNumber = "177"
+                  offsetFromSymbolStart = "120">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

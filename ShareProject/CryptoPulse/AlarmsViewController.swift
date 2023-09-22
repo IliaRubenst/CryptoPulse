@@ -14,6 +14,9 @@ class AlarmsViewController: UIViewController, UITableViewDelegate, UITableViewDa
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        let eraseListButton = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(removeAlarmsFromList))
+        navigationItem.rightBarButtonItem = eraseListButton
+        
         var defaults = DataLoader(keys: "savedAlarms")
         defaults.loadUserSymbols()
 
@@ -35,6 +38,18 @@ class AlarmsViewController: UIViewController, UITableViewDelegate, UITableViewDa
         tableView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         
         view.addSubview(tableView)
+    }
+    
+    @objc func removeAlarmsFromList() {
+        AlarmModelsArray.alarms.removeAll()
+        tableView.reloadData()
+//        AlarmModelsArray.alarmaLine.removeAll()
+        
+        var defaults = DataLoader(keys: "savedAlarms")
+        defaults.saveData()
+        
+//        defaults.keys = "savedLines"
+//        defaults.saveData()
     }
     
     //MARK: - UITableViewDataSource
@@ -63,7 +78,7 @@ class AlarmsViewController: UIViewController, UITableViewDelegate, UITableViewDa
         var content = UIListContentConfiguration.cell()
         
         let item = AlarmModelsArray.alarms[indexPath.item]
-        content.text = "\(item.symbol) - \(item.alarmPrice)"
+        content.text = "\(item.symbol) - \(item.alarmPrice). isActive: \(item.isActive)"
         cell.contentConfiguration = content
         
         /*cell.accessoryType = .detailButton
@@ -90,6 +105,17 @@ class AlarmsViewController: UIViewController, UITableViewDelegate, UITableViewDa
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print(indexPath.row)
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            AlarmModelsArray.alarms.remove(at: indexPath.item)
+            
+            var defaults = DataLoader(keys: "savedAlarms")
+            defaults.saveData()
+            
+            tableView.deleteRows(at: [indexPath], with: .fade)
+        }
     }
     /*func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
         print("Accessory path =", indexPath)
