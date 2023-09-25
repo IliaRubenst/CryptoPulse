@@ -20,7 +20,9 @@ extension String {
 class DetailViewController: UIViewController, WebSocketManagerDelegate {
     let upperStackView = UIStackView()
     let leftNavLabel = UILabel()
-    let rightNavLabel = UILabel()
+    let rightNavLabelStack = UIStackView()
+    let rightUpperNavLabel = UILabel()
+    let rightLowerNavLabel = UILabel()
     
     let lowerStackView = UIStackView()
     let leftPartView = UILabel()
@@ -78,7 +80,7 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
         NotificationCenter.default.addObserver(self, selector: #selector(addAlarm), name: NSNotification.Name(rawValue: "button1Pressed"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(addAlarmForSelectedPrice), name: NSNotification.Name(rawValue: "button2Pressed"), object: nil)
         
-        var defaults = DataLoader(keys: "savedAlarms")
+        let defaults = DataLoader(keys: "savedAlarms")
         defaults.loadUserSymbols()
         
         
@@ -174,8 +176,7 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
         }
 
     }
-    
-    
+
     func setupAlarmLines() {
         print(AlarmModelsArray.alarms.count)
         for alarm in AlarmModelsArray.alarms {
@@ -190,7 +191,12 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
         
         chartManager.tick()
         alarmObserver()
-        rightNavLabel.text = "\(closePrice)\n\(priceChangePercent)%"
+        if Double(priceChangePercent)! >= 0 {
+            rightLowerNavLabel.textColor = #colorLiteral(red: 0.008301745169, green: 0.5873891115, blue: 0.5336645246, alpha: 1)
+        } else {
+            rightLowerNavLabel.textColor = #colorLiteral(red: 1, green: 0, blue: 0, alpha: 1)
+        }
+        rightLowerNavLabel.text = "\(priceChangePercent)%"
     }
     
     func didUpdateMarkPriceStream(_ websocketManager: WebSocketManager, dataModel: MarkPriceStreamModel) {
@@ -211,7 +217,7 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
         
         volume24h = String(format: "%.2fm$", volume)
         
-        rightNavLabel.text = "\(closePrice)\n\(priceChangePercent)%"
+        rightUpperNavLabel.text = "\(closePrice)\n\(priceChangePercent)%"
         leftPartView.text = "24h volume\n\(volume24h)"
         middlePartView.text = "max: \(maxPrice)\nmin: \(minPrice)"
     }
@@ -240,7 +246,7 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
 //                    AlarmModelsArray.alarms.remove(at: index)
                     AlarmModelsArray.alarms[index].isActive = false
                     
-                    var defaults = DataLoader(keys: "savedAlarms")
+                    let defaults = DataLoader(keys: "savedAlarms")
                     defaults.saveData()
                 }
             } else {
@@ -258,7 +264,7 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
 //                    AlarmModelsArray.alarms.remove(at: index)
                     AlarmModelsArray.alarms[index].isActive = false
                     
-                    var defaults = DataLoader(keys: "savedAlarms")
+                    let defaults = DataLoader(keys: "savedAlarms")
                     defaults.saveData()
                 }
             }
@@ -303,7 +309,7 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
                 }
                 AlarmModelsArray.alarms.append(AlarmModel(symbol: self!.symbol, alarmPrice: self!.alarm, isAlarmUpper: isAlarmUpper, isActive: true))
                 
-                var defaults = DataLoader(keys: "savedAlarms")
+                let defaults = DataLoader(keys: "savedAlarms")
                 defaults.saveData()
 
                 self?.chartManager.setupAlarmLine(self!.alarm)
@@ -328,26 +334,40 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
         super.loadView()
         
         leftNavLabel.translatesAutoresizingMaskIntoConstraints = false
-//        leftNavLabel.backgroundColor = #colorLiteral(red: 0.9078041315, green: 0.9078041315, blue: 0.9078040719, alpha: 1)
         leftNavLabel.heightAnchor.constraint(equalToConstant: self.view.frame.height).isActive = true
         leftNavLabel.widthAnchor.constraint(equalToConstant: 70).isActive = true
         leftNavLabel.font = .systemFont(ofSize: 13)
         leftNavLabel.text = "\(symbol)"
         leftNavLabel.textAlignment = .center
         
-        rightNavLabel.translatesAutoresizingMaskIntoConstraints = false
-//        rightNavLabel.backgroundColor = #colorLiteral(red: 0.9078041315, green: 0.9078041315, blue: 0.9078040719, alpha: 1)
-        rightNavLabel.heightAnchor.constraint(equalToConstant: self.view.frame.height).isActive = true
-        rightNavLabel.widthAnchor.constraint(equalToConstant: 170).isActive = true
-        rightNavLabel.font = .systemFont(ofSize: 13)
-        rightNavLabel.numberOfLines = 2
-        rightNavLabel.text = "\(closePrice)\n\(priceChangePercent)"
-        rightNavLabel.textAlignment = .center
+        rightUpperNavLabel.translatesAutoresizingMaskIntoConstraints = false
+        rightUpperNavLabel.heightAnchor.constraint(equalToConstant: self.view.frame.height).isActive = true
+        rightUpperNavLabel.widthAnchor.constraint(equalToConstant: 170).isActive = true
+        rightUpperNavLabel.font = .systemFont(ofSize: 13)
+        rightUpperNavLabel.text = "\(closePrice)"
+        rightUpperNavLabel.textAlignment = .center
+        
+        rightLowerNavLabel.translatesAutoresizingMaskIntoConstraints = false
+        rightLowerNavLabel.heightAnchor.constraint(equalToConstant: self.view.frame.height).isActive = true
+        rightLowerNavLabel.widthAnchor.constraint(equalToConstant: 170).isActive = true
+        rightLowerNavLabel.font = .systemFont(ofSize: 13)
+        rightLowerNavLabel.text = "\(priceChangePercent)"
+        rightLowerNavLabel.textAlignment = .center
+        
+        rightNavLabelStack.addArrangedSubview(rightUpperNavLabel)
+        rightNavLabelStack.addArrangedSubview(rightLowerNavLabel)
+        
+        rightNavLabelStack.axis = .vertical
+        rightNavLabelStack.distribution = .equalCentering
+        rightNavLabelStack.alignment = .center
+        rightNavLabelStack.backgroundColor = .clear
+        rightNavLabelStack.spacing = 1.0
         
         upperStackView.spacing = 5.0
-        
         upperStackView.addArrangedSubview(leftNavLabel)
-        upperStackView.addArrangedSubview(rightNavLabel)
+        upperStackView.addArrangedSubview(rightNavLabelStack)
+        
+        
         
         self.navigationItem.titleView = upperStackView
         

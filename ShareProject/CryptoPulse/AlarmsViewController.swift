@@ -17,7 +17,7 @@ class AlarmsViewController: UIViewController, UITableViewDelegate, UITableViewDa
         let eraseListButton = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(removeAlarmsFromList))
         navigationItem.rightBarButtonItem = eraseListButton
         
-        var defaults = DataLoader(keys: "savedAlarms")
+        let defaults = DataLoader(keys: "savedAlarms")
         defaults.loadUserSymbols()
 
         createTable()
@@ -45,7 +45,7 @@ class AlarmsViewController: UIViewController, UITableViewDelegate, UITableViewDa
         tableView.reloadData()
 //        AlarmModelsArray.alarmaLine.removeAll()
         
-        var defaults = DataLoader(keys: "savedAlarms")
+        let defaults = DataLoader(keys: "savedAlarms")
         defaults.saveData()
         
 //        defaults.keys = "savedLines"
@@ -111,7 +111,7 @@ class AlarmsViewController: UIViewController, UITableViewDelegate, UITableViewDa
         if editingStyle == .delete {
             AlarmModelsArray.alarms.remove(at: indexPath.item)
             
-            var defaults = DataLoader(keys: "savedAlarms")
+            let defaults = DataLoader(keys: "savedAlarms")
             defaults.saveData()
             
             tableView.deleteRows(at: [indexPath], with: .fade)

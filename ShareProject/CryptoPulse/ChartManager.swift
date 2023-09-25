@@ -204,6 +204,7 @@ class ChartManager {
             currentBar.high = max(currentBar.high ?? price, price)
             currentBar.low = min(currentBar.low ?? price, price)
         }
+        // здесь косяк при быстром переключении ТФ
         series.update(bar: currentBar)
     }
     
