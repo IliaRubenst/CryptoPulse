@@ -64,41 +64,25 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
     var alarm: Double = 0
     var isAlertShowing: Bool = false
     
-    var timeFrame = "1m"
-    
-    
+    var timeFrame = "15m"
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let defaults = DataLoader(keys: "savedAlarms")
+        defaults.loadUserSymbols()
 
         let setAlarmButton = UIBarButtonItem(image: UIImage(systemName: "bell")?.withTintColor(.black, renderingMode: .alwaysOriginal), style: .plain, target: self, action: #selector(addAlarm))
         navigationItem.rightBarButtonItems = [setAlarmButton]
         
-        startChartManager()
-        setBackgroundForButton()
-        
         NotificationCenter.default.addObserver(self, selector: #selector(addAlarm), name: NSNotification.Name(rawValue: "button1Pressed"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(addAlarmForSelectedPrice), name: NSNotification.Name(rawValue: "button2Pressed"), object: nil)
-        
-        let defaults = DataLoader(keys: "savedAlarms")
-        defaults.loadUserSymbols()
-        
-        
-    }
-    
-    // Вынести метод в модель chartManager. Заленился.
-    @objc func updateData() {
-       for i in 0..<candles.count {
-            let doubleOpenTime = Double(candles[i].openTime)
-            
-            let newCandle = CandlestickData(time: .utc(timestamp: doubleOpenTime / 1000), open: Double(candles[i].openPrice), high: Double(candles[i].highPrice), low: Double(candles[i].lowPrice), close: Double(candles[i].closePrice))
-            chartManager.data.append(newCandle)
-        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         startChartManager()
+        setBackgroundForButton()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -108,64 +92,11 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
         }
         
         chartManager.data.removeAll()
+//        chartManager = nil // Не уверен, что это необходимо, но есть сомнения насчет того, сколько инстансов чартменеджера мы создаем, поэтому перед инициализацией нового, я решил на всякий случай явно грохать старого.
+        
     }
     
-
-    @objc func oneMinuteButtonPressed() {
-        for manager in webSocketManagers {
-            manager.close()
-        }
-        timeFrame = "1m"
-        setBackgroundForButton()
-        startChartManager()
-    }
-    
-    @objc func fiveMinuteButtonPressed() {
-        for manager in webSocketManagers {
-            manager.close()
-        }
-        timeFrame = "5m"
-        setBackgroundForButton()
-        startChartManager()
-    }
-    
-    @objc func fifteenMinutesButtonPressed() {
-        for manager in webSocketManagers {
-            manager.close()
-        }
-        timeFrame = "15m"
-        setBackgroundForButton()
-        startChartManager()
-    }
-    
-    @objc func oneHourButtonPressed() {
-        for manager in webSocketManagers {
-            manager.close()
-        }
-        timeFrame = "1h"
-        setBackgroundForButton()
-        startChartManager()
-    }
-    
-    @objc func fourHoursButtonPressed() {
-        for manager in webSocketManagers {
-            manager.close()
-        }
-        timeFrame = "4h"
-        setBackgroundForButton()
-        startChartManager()
-    }
-    
-    @objc func oneDayButtonPressed() {
-        for manager in webSocketManagers {
-            manager.close()
-        }
-        timeFrame = "1d"
-        setBackgroundForButton()
-        startChartManager()
-    }
-    
-    func setBackgroundForButton() {
+   func setBackgroundForButton() {
         let names = [oneMinuteButton, fiveMinutesButton, fifteenMinutesButton, oneHourButton, fourHours, oneDay]
         for name in names {
             if name.titleLabel?.text == timeFrame {
@@ -272,7 +203,9 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
     }
     
     func startChartManager() {
-        chartManager = ChartManager(delegate: self, symbol: symbol, timeFrame: "1m")
+        chartManager = nil // Не уверен, что это необходимо, но есть сомнения насчет того, сколько инстансов чартменеджера мы создаем, поэтому перед инициализацией нового, я решил на всякий случай явно грохать старого.
+        
+        chartManager = ChartManager(delegate: self, symbol: symbol, timeFrame: timeFrame)
         chartManager.fetchRequest(symbol: symbol, timeFrame: timeFrame)
         chartManager.setupChart()
         
@@ -485,11 +418,24 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
         timeFrameStackView.topAnchor.constraint(equalTo: lowerStackView.bottomAnchor).isActive = true
         timeFrameStackView.heightAnchor.constraint(equalToConstant: buttonHeight).isActive = true
         
-        oneMinuteButton.addTarget(self, action: #selector(oneMinuteButtonPressed), for: .touchUpInside)
-        fiveMinutesButton.addTarget(self, action: #selector(fiveMinuteButtonPressed), for: .touchUpInside)
-        fifteenMinutesButton.addTarget(self, action: #selector(fifteenMinutesButtonPressed), for: .touchUpInside)
-        oneHourButton.addTarget(self, action: #selector(oneHourButtonPressed), for: .touchUpInside)
-        fourHours.addTarget(self, action: #selector(fourHoursButtonPressed), for: .touchUpInside)
-        oneDay.addTarget(self, action: #selector(oneDayButtonPressed), for: .touchUpInside)
+        oneMinuteButton.addTarget(self, action: #selector(timeFrameButtonPressed(sender:)), for: .touchUpInside)
+        fiveMinutesButton.addTarget(self, action: #selector(timeFrameButtonPressed(sender:)), for: .touchUpInside)
+        fifteenMinutesButton.addTarget(self, action: #selector(timeFrameButtonPressed(sender:)), for: .touchUpInside)
+        oneHourButton.addTarget(self, action: #selector(timeFrameButtonPressed(sender:)), for: .touchUpInside)
+        fourHours.addTarget(self, action: #selector(timeFrameButtonPressed(sender:)), for: .touchUpInside)
+        oneDay.addTarget(self, action: #selector(timeFrameButtonPressed(sender:)), for: .touchUpInside)
     }
+    
+    @objc func timeFrameButtonPressed(sender: UIButton) {
+        for manager in webSocketManagers {
+            manager.close()
+        }
+        
+        guard let label = sender.titleLabel?.text else { return }
+        timeFrame = label
+        setBackgroundForButton()
+        startChartManager()
+    }
+    
+    
 }

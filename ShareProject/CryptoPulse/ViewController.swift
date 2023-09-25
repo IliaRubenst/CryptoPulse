@@ -10,7 +10,7 @@ import UIKit
 class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout, WebSocketManagerDelegate {
     let amountCells = 2
     var marketManager = MarketManager()
-    var defaults = DataLoader()
+    
     var webSocket = WebSocketManager()
     var isSelected = false
     var isReload = false
@@ -21,8 +21,8 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
         super.viewDidLoad()
         
         loadTickers()
-        //Инстанс дата лоадер лучше создавать здесь
-        defaults.keys = "savedSymbols"
+        
+        let defaults = DataLoader(keys: "savedSymbols")
         defaults.loadUserSymbols()
         
         getSymbolToWebSocket()
@@ -93,9 +93,10 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
             ) { [weak self] _ in
                 let action = "remove"
                 self?.contextMenuAction(indexPaths, action: action)
-                //Инстанс дата лоадер лучше создавать здесь
-                self?.defaults.keys = "savedSymbols"
-                self?.defaults.saveData()
+                
+                let defaults = DataLoader(keys: "savedSymbols")
+                defaults.saveData()
+                
                 collectionView.reloadData()
             }
             
