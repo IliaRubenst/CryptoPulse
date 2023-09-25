@@ -75,3 +75,15 @@ struct K: Codable {
     let x: Bool
 }
 
+struct Account: Codable, Hashable {
+    let id: Int
+    let symbol: String
+    let alarmPrice: String
+    let isAlarmUpper: String
+    let isActive: String
+}
+
+struct AccountModel {
+    static var accounts = [Account]()
+}
+

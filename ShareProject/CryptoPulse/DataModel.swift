@@ -71,3 +71,4 @@ struct AlarmModelsArray {
     static var alarmaLine = [PriceLine]()
 }
 
+
