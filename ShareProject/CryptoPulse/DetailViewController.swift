@@ -300,21 +300,21 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
         super.loadView()
         
         leftNavLabel.translatesAutoresizingMaskIntoConstraints = false
-        leftNavLabel.heightAnchor.constraint(equalToConstant: self.view.frame.height).isActive = true
+//        leftNavLabel.heightAnchor.constraint(equalToConstant: self.view.frame.height).isActive = true
         leftNavLabel.widthAnchor.constraint(equalToConstant: 70).isActive = true
         leftNavLabel.font = .systemFont(ofSize: 13)
         leftNavLabel.text = "\(symbol)"
         leftNavLabel.textAlignment = .center
         
         rightUpperNavLabel.translatesAutoresizingMaskIntoConstraints = false
-        rightUpperNavLabel.heightAnchor.constraint(equalToConstant: self.view.frame.height).isActive = true
+//        rightUpperNavLabel.heightAnchor.constraint(equalToConstant: self.view.frame.height).isActive = true
         rightUpperNavLabel.widthAnchor.constraint(equalToConstant: 170).isActive = true
         rightUpperNavLabel.font = .systemFont(ofSize: 13)
         rightUpperNavLabel.text = "\(closePrice)"
         rightUpperNavLabel.textAlignment = .center
         
         rightLowerNavLabel.translatesAutoresizingMaskIntoConstraints = false
-        rightLowerNavLabel.heightAnchor.constraint(equalToConstant: self.view.frame.height).isActive = true
+//        rightLowerNavLabel.heightAnchor.constraint(equalToConstant: self.view.frame.height).isActive = true
         rightLowerNavLabel.widthAnchor.constraint(equalToConstant: 170).isActive = true
         rightLowerNavLabel.font = .systemFont(ofSize: 13)
         rightLowerNavLabel.text = "\(priceChangePercent)"
@@ -338,24 +338,24 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
         self.navigationItem.titleView = upperStackView
         
         leftPartView.translatesAutoresizingMaskIntoConstraints = false
-        leftPartView.heightAnchor.constraint(equalToConstant: self.view.frame.width / 3).isActive = true
-        leftPartView.widthAnchor.constraint(equalToConstant: self.view.frame.width / 3).isActive = true
+//        leftPartView.heightAnchor.constraint(equalToConstant: self.view.frame.width / 3).isActive = true
+//        leftPartView.widthAnchor.constraint(equalToConstant: self.view.frame.width / 3).isActive = true
         leftPartView.font = .systemFont(ofSize: 13)
         leftPartView.numberOfLines = 2
         leftPartView.text = "24h volume\n\(volume24h)"
         leftPartView.textAlignment = .center
 
         middlePartView.translatesAutoresizingMaskIntoConstraints = false
-        middlePartView.heightAnchor.constraint(equalToConstant: self.view.frame.width / 3).isActive = true
-        middlePartView.widthAnchor.constraint(equalToConstant: self.view.frame.width / 3).isActive = true
+//        middlePartView.heightAnchor.constraint(equalToConstant: self.view.frame.width / 3).isActive = true
+//        middlePartView.widthAnchor.constraint(equalToConstant: self.view.frame.width / 3).isActive = true
         middlePartView.font = .systemFont(ofSize: 13)
         middlePartView.numberOfLines = 2
         middlePartView.text = "max: \(maxPrice)\nmin: \(minPrice)"
         middlePartView.textAlignment = .center
 
         rightPartView.translatesAutoresizingMaskIntoConstraints = false
-        rightPartView.heightAnchor.constraint(equalToConstant: self.view.frame.width / 3).isActive = true
-        rightPartView.widthAnchor.constraint(equalToConstant: self.view.frame.width / 3).isActive = true
+//        rightPartView.heightAnchor.constraint(equalToConstant: self.view.frame.width / 3).isActive = true
+//        rightPartView.widthAnchor.constraint(equalToConstant: self.view.frame.width / 3).isActive = true
         rightPartView.font = .systemFont(ofSize: 13)
         rightPartView.numberOfLines = 2
         rightPartView.text = "funding: \(fundingRate)%\nnext:\(nextFundingTime)"
@@ -388,7 +388,7 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
         oneMinuteButton.layer.borderWidth = 1
         oneMinuteButton.layer.cornerRadius = 5
         oneMinuteButton.heightAnchor.constraint(equalToConstant: buttonHeight).isActive = true
-        oneMinuteButton.widthAnchor.constraint(equalToConstant: buttonWidth).isActive = true
+//        oneMinuteButton.widthAnchor.constraint(equalToConstant: buttonWidth).isActive = true
 
         fiveMinutesButton.setTitle("5m", for: .normal)
         fiveMinutesButton.setTitleColor(.black, for: .normal)
@@ -396,7 +396,7 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
         fiveMinutesButton.layer.borderWidth = 1
         fiveMinutesButton.layer.cornerRadius = 5
         fiveMinutesButton.heightAnchor.constraint(equalToConstant: buttonHeight).isActive = true
-        fiveMinutesButton.widthAnchor.constraint(equalToConstant: buttonWidth).isActive = true
+//        fiveMinutesButton.widthAnchor.constraint(equalToConstant: buttonWidth).isActive = true
         
         fifteenMinutesButton.setTitle("15m", for: .normal)
         fifteenMinutesButton.setTitleColor(.black, for: .normal)
@@ -404,7 +404,7 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
         fifteenMinutesButton.layer.borderWidth = 1
         fifteenMinutesButton.layer.cornerRadius = 5
         fifteenMinutesButton.heightAnchor.constraint(equalToConstant: buttonHeight).isActive = true
-        fifteenMinutesButton.widthAnchor.constraint(equalToConstant: buttonWidth).isActive = true
+//        fifteenMinutesButton.widthAnchor.constraint(equalToConstant: buttonWidth).isActive = true
         
         oneHourButton.setTitle("1h", for: .normal)
         oneHourButton.setTitleColor(.black, for: .normal)
@@ -412,7 +412,7 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
         oneHourButton.layer.borderWidth = 1
         oneHourButton.layer.cornerRadius = 5
         oneHourButton.heightAnchor.constraint(equalToConstant: buttonHeight).isActive = true
-        oneHourButton.widthAnchor.constraint(equalToConstant: buttonWidth).isActive = true
+//        oneHourButton.widthAnchor.constraint(equalToConstant: buttonWidth).isActive = true
         
         fourHours.setTitle("4h", for: .normal)
         fourHours.setTitleColor(.black, for: .normal)
@@ -420,7 +420,7 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
         fourHours.layer.borderWidth = 1
         fourHours.layer.cornerRadius = 5
         fourHours.heightAnchor.constraint(equalToConstant: buttonHeight).isActive = true
-        fourHours.widthAnchor.constraint(equalToConstant: buttonWidth).isActive = true
+//        fourHours.widthAnchor.constraint(equalToConstant: buttonWidth).isActive = true
         
         oneDay.setTitle("1d", for: .normal)
         oneDay.setTitleColor(.black, for: .normal)
@@ -428,7 +428,7 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
         oneDay.layer.borderWidth = 1
         oneDay.layer.cornerRadius = 5
         oneDay.heightAnchor.constraint(equalToConstant: buttonHeight).isActive = true
-        oneDay.widthAnchor.constraint(equalToConstant: buttonWidth).isActive = true
+//        oneDay.widthAnchor.constraint(equalToConstant: buttonWidth).isActive = true
 
         timeFrameStackView.axis = .horizontal
         timeFrameStackView.distribution = .fillEqually
