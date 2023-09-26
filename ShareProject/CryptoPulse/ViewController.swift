@@ -16,7 +16,6 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
     var isReload = false
     
     var webSocketManagers = [WebSocketManager]()
-    var accounts = [Account]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,64 +45,6 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
     @objc func loadList(notification: NSNotification) {
         self.collectionView.reloadData()
     }
-    
-    // метод пока не готов
-    func updateDBData() {
-        // указать конкретный объект
-        if let url = URL(string: "http://127.0.0.1:8000/api/account/1/") {
-            
-            let accountData = accounts[0]
-            guard let encoded = try? JSONEncoder().encode(accountData) else {
-                print("Failed to encode alarm")
-                return
-            }
-            
-            var request = URLRequest(url: url)
-            request.httpMethod = "PUT"
-            request.addValue("application/JSON", forHTTPHeaderField: "Accept")
-            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-            request.addValue("Basic aWxpYTpMSmtiOTkyMDA4MjIh", forHTTPHeaderField: "Authorization")
-            request.httpBody = encoded
-            
-            URLSession.shared.dataTask(with: request) { data, response, error in
-                  if let data = data {
-                      if let response = try? JSONDecoder().decode(Account.self, from: data) {
-                          return
-                      }
-                    
-                  }
-              }.resume()
-            
-            let task = URLSession.shared.dataTask(with: request) { data, response, error in
-                if error != nil {
-                    print(error!)
-                    return
-                }
-            }
-            task.resume()
-        }
-    }
-    
-    
-    @objc func removeDBData() {
-        // указать конкретный объект
-        if let url = URL(string: "http://127.0.0.1:8000/api/account/1/") {
-            var request = URLRequest(url: url)
-            print(url)
-            request.httpMethod = "DELETE"
-            request.addValue("application/json", forHTTPHeaderField: "Accept")
-            request.addValue("Basic aWxpYTpMSmtiOTkyMDA4MjIh", forHTTPHeaderField: "Authorization")
-            
-            let task = URLSession.shared.dataTask(with: request) { data, response, error in
-                if error != nil {
-                    print(error!)
-                    return
-                }
-            }
-            task.resume()
-        }
-    }
-    
     
     @objc func showTableView() {
         let detailVC = storyboard?.instantiateViewController(identifier: "SymbolList") as! SymbolsListController

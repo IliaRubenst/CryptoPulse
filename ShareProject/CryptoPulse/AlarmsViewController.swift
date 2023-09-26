@@ -10,6 +10,7 @@ import UIKit
 class AlarmsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     var tableView = UITableView()
     var cellIdentifier = "alarmCell"
+    var accounts = [Account]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -117,8 +118,13 @@ class AlarmsViewController: UIViewController, UITableViewDelegate, UITableViewDa
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
+            if AlarmModelsArray.alarms.count != 0 {
+                let id = AlarmModelsArray.alarms[indexPath.item].id
+                removeDBData(remove: id)
+                print("Make delete request id:\(id)")
+            }
             AlarmModelsArray.alarms.remove(at: indexPath.item)
-            
+
             let defaults = DataLoader(keys: "savedAlarms")
             defaults.saveData()
             
@@ -154,22 +160,107 @@ class AlarmsViewController: UIViewController, UITableViewDelegate, UITableViewDa
         do {
             let decodedData = try decoder.decode([Account].self, from: DBData)
             for data in decodedData {
-                AccountModel.accounts.append(Account(id: data.id,
-                                                     symbol: data.symbol,
-                                                     alarmPrice: data.alarmPrice,
-                                                     isAlarmUpper: data.isAlarmUpper,
-                                                     isActive: data.isActive)
+                AlarmModelsArray.alarms.append(AlarmModel(id: data.id ,
+                                                          symbol: data.symbol,
+                                                       alarmPrice: Double(data.alarmPrice),
+                                                       isAlarmUpper: data.isAlarmUpper,
+                                                       isActive: data.isActive)
+
                 )}
+//            let defaults = DataLoader(keys: "savedAlarms")
+//            defaults.saveData()
+//            tableView.reloadData()
         } catch {
             print(error)
         }
     }
     
     @objc func printResponse() {
-        for account in AccountModel.accounts {
+        for account in AlarmModelsArray.alarms {
             print(account)
         }
     }
+    
+    // метод пока не готов
+//    func updateDBData() {
+//        // указать конкретный объект
+//        if let url = URL(string: "http://127.0.0.1:8000/api/account/1/") {
+//
+//            let accountData = accounts[0]
+//            guard let encoded = try? JSONEncoder().encode(accountData) else {
+//                print("Failed to encode alarm")
+//                return
+//            }
+//
+//            var request = URLRequest(url: url)
+//            request.httpMethod = "PUT"
+//            request.addValue("application/JSON", forHTTPHeaderField: "Accept")
+//            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+//            request.addValue("Basic aWxpYTpMSmtiOTkyMDA4MjIh", forHTTPHeaderField: "Authorization")
+//            request.httpBody = encoded
+//
+//            URLSession.shared.dataTask(with: request) { data, response, error in
+//                  if let data = data {
+//                      if let response = try? JSONDecoder().decode(Account.self, from: data) {
+//                          return
+//                      }
+//
+//                  }
+//              }.resume()
+//
+//            let task = URLSession.shared.dataTask(with: request) { data, response, error in
+//                if error != nil {
+//                    print(error!)
+//                    return
+//                }
+//            }
+//            task.resume()
+//        }
+//    }
+    
+    
+    func removeDBData(remove id: Int) {
+        if let url = URL(string: "http://127.0.0.1:8000/api/account/\(id)/") {
+            var request = URLRequest(url: url)
+            print(url)
+            request.httpMethod = "DELETE"
+            request.addValue("application/json", forHTTPHeaderField: "Accept")
+            request.addValue("Basic aWxpYTpMSmtiOTkyMDA4MjIh", forHTTPHeaderField: "Authorization")
+            
+            let task = URLSession.shared.dataTask(with: request) { data, response, error in
+                if error != nil {
+                    print(error!)
+                    return
+                }
+            }
+            task.resume()
+        }
+    }
+    
+//    func addAlarmtoModelDB() {
+//        if let url = URL(string: "http://127.0.0.1:8000/api/account/") {
+//            
+//            var request = URLRequest(url: url)
+//            request.httpMethod = "POST"
+//            request.addValue("application/json", forHTTPHeaderField: "Accept")
+//            request.addValue("Basic aWxpYTpMSmtiOTkyMDA4MjIh", forHTTPHeaderField: "Authorization")
+//            
+//            let task = URLSession.shared.dataTask(with: request) { data, response, error in
+//                if error != nil {
+//                    print(error!)
+//                    return
+//                }
+//                
+//                if let data = data {
+//                    if let response = try? JSONDecoder().decode(AlarmModel.self, from: data) {
+//                        return
+//                    }
+//                }
+//            }
+//            task.resume()
+//        }
+//    }
+    
     
     /*func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
         print("Accessory path =", indexPath)

@@ -60,6 +60,8 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
     var maxPrice: String = "0.0"
     var minPrice: String = "0.0"
     
+    var id = 0
+    
     var isKlineClose = false
     var alarm: Double = 0
     var isAlertShowing: Bool = false
@@ -240,8 +242,10 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
                 if self!.alarm > self!.closePrice {
                     isAlarmUpper = true
                 }
-                AlarmModelsArray.alarms.append(AlarmModel(symbol: self!.symbol, alarmPrice: self!.alarm, isAlarmUpper: isAlarmUpper, isActive: true))
-                
+                self?.id = Int.random(in: 0...999999999)
+                let currentModel = AlarmModel(id: self!.id, symbol: self!.symbol, alarmPrice: self!.alarm, isAlarmUpper: isAlarmUpper, isActive: true)
+                AlarmModelsArray.alarms.append(currentModel)
+                self!.addAlarmtoModelDB(alarmModel: currentModel)
                 let defaults = DataLoader(keys: "savedAlarms")
                 defaults.saveData()
 
@@ -259,8 +263,37 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
             if alarm > closePrice {
                 isAlarmUpper = true
             }
-            AlarmModelsArray.alarms.append(AlarmModel(symbol: symbol, alarmPrice: alarm, isAlarmUpper: isAlarmUpper, isActive: true))
+        id = Int.random(in: 0...999999999)
+        let currentModel = AlarmModel(id: id, symbol: symbol, alarmPrice: alarm, isAlarmUpper: isAlarmUpper, isActive: true)
+        AlarmModelsArray.alarms.append(currentModel)
+        addAlarmtoModelDB(alarmModel: currentModel)
             chartManager.setupAlarmLine(alarm)
+    }
+    
+    func addAlarmtoModelDB(alarmModel: AlarmModel) {
+        if let url = URL(string: "http://127.0.0.1:8000/api/account/") {
+            
+            let alarmModelData = alarmModel
+            guard let encoded = try? JSONEncoder().encode(alarmModelData) else {
+                print("Failed to encode new alarm")
+                return
+            }
+            var request = URLRequest(url: url)
+            request.httpMethod = "POST"
+            request.addValue("application/json", forHTTPHeaderField: "Accept")
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            request.addValue("Basic aWxpYTpMSmtiOTkyMDA4MjIh", forHTTPHeaderField: "Authorization")
+            request.httpBody = encoded
+            
+            URLSession.shared.dataTask(with: request) { data, response, error in
+                if let data = data {
+                    if let response = try? JSONDecoder().decode(AlarmModel.self, from: data) {
+                        return
+                    }
+                    
+                }
+            }.resume()
+        }
     }
     
     override func loadView() {
