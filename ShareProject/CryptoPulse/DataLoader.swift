@@ -11,7 +11,11 @@ import LightweightCharts
 struct DataLoader {
     
     var userDefaults = UserDefaults.standard
-    var keys = String()
+    var keys: String
+    
+    init(keys: String) {
+        self.keys = keys
+    }
     
     func loadUserSymbols() {
         if keys == "savedSymbols" {

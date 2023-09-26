@@ -11,7 +11,7 @@ class SymbolsListController: UIViewController, UITableViewDataSource, UITableVie
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var searchBar: UISearchBar!
     var filteredSymbols = [Symbol]()
-    var dataLoader = DataLoader()
+    
     var webSocket = WebSocketManager()
     var viewCtr: ViewController!
     
@@ -47,9 +47,8 @@ class SymbolsListController: UIViewController, UITableViewDataSource, UITableVie
         viewCtr.closeConnection()
         viewCtr.getSymbolToWebSocket()
         
-        //Инстанс дата лоадер лучше создавать здесь
-        dataLoader.keys = "savedSymbols"
-        dataLoader.saveData()
+        let defaults = DataLoader(keys: "savedSymbols")
+        defaults.saveData()
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "newSymbolAdded"), object: nil)
         dismiss(animated: true)
     }
