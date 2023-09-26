@@ -78,9 +78,9 @@ struct K: Codable {
 struct Account: Codable, Hashable {
     let id: Int
     let symbol: String
-    let alarmPrice: String
-    let isAlarmUpper: String
-    let isActive: String
+    let alarmPrice: Float
+    let isAlarmUpper: Bool
+    let isActive: Bool
 }
 
 struct AccountModel {

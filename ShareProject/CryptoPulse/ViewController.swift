@@ -32,12 +32,12 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
         
         
         let showTableViewButton = UIBarButtonItem(image: UIImage(systemName: "list.bullet.rectangle.portrait")?.withTintColor(.black, renderingMode: .alwaysOriginal), style: .plain, target: self, action: #selector(showTableView))
-        let printBtn = UIBarButtonItem(image: UIImage(systemName: "printer")?.withTintColor(.black, renderingMode: .alwaysOriginal), style: .plain, target: self, action: #selector(printResponse))
-        navigationItem.rightBarButtonItems = [showTableViewButton, printBtn]
+//        let printBtn = UIBarButtonItem(image: UIImage(systemName: "printer")?.withTintColor(.black, renderingMode: .alwaysOriginal), style: .plain, target: self, action: #selector(printResponse))
+        navigationItem.rightBarButtonItems = [showTableViewButton]
         
-        let getBDData = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(performRequestDB))
-        let removeDBData = UIBarButtonItem(barButtonSystemItem: .redo, target: self, action: #selector(removeDBData))
-        navigationItem.leftBarButtonItems = [getBDData, removeDBData]
+//        let getBDData = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(performRequestDB))
+//        let removeDBData = UIBarButtonItem(barButtonSystemItem: .redo, target: self, action: #selector(removeDBData))
+//        navigationItem.leftBarButtonItems = [removeDBData]
         
         
         NotificationCenter.default.addObserver(self, selector: #selector(loadList), name: NSNotification.Name(rawValue: "newSymbolAdded"), object: nil)
@@ -84,44 +84,6 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
         }
     }
     
-    @objc func performRequestDB() {
-        if let url = URL(string: "http://127.0.0.1:8000/api/account/") {
-            var request = URLRequest(url: url)
-            request.httpMethod = "GET"
-            request.addValue("application/json", forHTTPHeaderField: "Accept")
-            request.addValue("Basic aWxpYTpMSmtiOTkyMDA4MjIh", forHTTPHeaderField: "Authorization")
-            
-            let task = URLSession.shared.dataTask(with: request) { [self] data, response, error in
-                if error != nil {
-                    print(error!)
-                    return
-                }
-                
-                if let safeData = data {
-                    parseJSONDB(DBData: safeData)
-                }
-            }
-            task.resume()
-        }
-    }
-    
-    func parseJSONDB(DBData: Data) {
-        let decoder = JSONDecoder()
-        
-        do {
-            let decodedData = try decoder.decode([Account].self, from: DBData)
-            for data in decodedData {
-                AccountModel.accounts.append(Account(id: data.id,
-                                                     name: data.name,
-                                                     category: data.category,
-                                                     description: data.description,
-                                                     wealth_type: data.wealth_type,
-                                                     balance: data.balance)
-                )}
-        } catch {
-            print(error)
-        }
-    }
     
     @objc func removeDBData() {
         // указать конкретный объект
@@ -141,13 +103,6 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
             task.resume()
         }
     }
-    
-    @objc func printResponse() {
-        for account in AccountModel.accounts {
-            print(account)
-        }
-    }
-    
     
     
     @objc func showTableView() {
