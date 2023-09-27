@@ -27,7 +27,7 @@ struct MarketManager {
                 if let safeData = data {
                     parseJSON(marketData: safeData)
                 }
-            }
+            } 
 
             task.resume()
         }

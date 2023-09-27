@@ -26,20 +26,26 @@
                         </collectionViewFlowLayout>
                         <cells>
                             <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="Coin" id="FxM-Ds-Hig" customClass="CoinCell" customModule="CyptoPulse" customModuleProvider="target">
-                                <rect key="frame" x="3" y="3" width="125" height="70"/>
+                                <rect key="frame" x="3" y="3" width="125.66666666666666" height="71"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="gia-KR-zew">
-                                    <rect key="frame" x="0.0" y="0.0" width="125" height="70"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="125.66666666666666" height="71"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Ticker" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CZH-NP-hGf">
-                                            <rect key="frame" x="39" y="10" width="47" height="21"/>
+                                            <rect key="frame" x="5" y="5" width="47" height="21"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Volume" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TcW-lC-dTI">
+                                            <rect key="frame" x="63.666666666666657" y="44" width="57" height="22"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Current Price" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8ab-43-nd5">
-                                            <rect key="frame" x="12" y="39" width="101.33333333333333" height="21"/>
+                                            <rect key="frame" x="20.000000000000007" y="25" width="100.66666666666669" height="21"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
@@ -47,15 +53,24 @@
                                     </subviews>
                                     <color key="backgroundColor" red="0.9112530351" green="0.9112530351" blue="0.9112530351" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                     <constraints>
-                                        <constraint firstAttribute="bottom" secondItem="8ab-43-nd5" secondAttribute="bottom" constant="10" id="al8-Jc-OkY"/>
-                                        <constraint firstItem="CZH-NP-hGf" firstAttribute="top" secondItem="gia-KR-zew" secondAttribute="top" constant="10" id="cnn-zS-3Wx"/>
-                                        <constraint firstItem="8ab-43-nd5" firstAttribute="centerX" secondItem="gia-KR-zew" secondAttribute="centerX" id="lUc-XR-0me"/>
-                                        <constraint firstItem="CZH-NP-hGf" firstAttribute="centerX" secondItem="gia-KR-zew" secondAttribute="centerX" id="uU2-Ms-d6s"/>
+                                        <constraint firstItem="CZH-NP-hGf" firstAttribute="top" secondItem="gia-KR-zew" secondAttribute="top" constant="5" id="367-4j-7Qg"/>
+                                        <constraint firstItem="8ab-43-nd5" firstAttribute="centerY" secondItem="gia-KR-zew" secondAttribute="centerY" id="3YH-7v-a1h"/>
+                                        <constraint firstItem="TcW-lC-dTI" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="gia-KR-zew" secondAttribute="leading" constant="20" symbolic="YES" id="7h5-RE-6IH"/>
+                                        <constraint firstItem="8ab-43-nd5" firstAttribute="top" secondItem="gia-KR-zew" secondAttribute="top" constant="25" id="Acw-0f-fR1"/>
+                                        <constraint firstItem="CZH-NP-hGf" firstAttribute="leading" secondItem="gia-KR-zew" secondAttribute="leading" constant="5" id="GQV-VC-8OA"/>
+                                        <constraint firstItem="8ab-43-nd5" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="gia-KR-zew" secondAttribute="leading" constant="20" symbolic="YES" id="IMQ-s6-T3i"/>
+                                        <constraint firstAttribute="trailing" secondItem="8ab-43-nd5" secondAttribute="trailing" constant="5" id="TKj-Iy-SN2"/>
+                                        <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="CZH-NP-hGf" secondAttribute="trailing" constant="20" symbolic="YES" id="aft-OC-lBb"/>
+                                        <constraint firstAttribute="bottom" secondItem="TcW-lC-dTI" secondAttribute="bottom" constant="5" id="aue-cm-4Hh"/>
+                                        <constraint firstAttribute="trailing" secondItem="8ab-43-nd5" secondAttribute="trailing" constant="5" id="nHj-Aa-rV0"/>
+                                        <constraint firstAttribute="trailing" secondItem="TcW-lC-dTI" secondAttribute="trailing" constant="5" id="tlx-5x-70Q"/>
+                                        <constraint firstItem="TcW-lC-dTI" firstAttribute="top" secondItem="8ab-43-nd5" secondAttribute="bottom" constant="-2" id="wda-Jn-OBp"/>
                                     </constraints>
                                 </collectionViewCellContentView>
                                 <connections>
                                     <outlet property="currentPriceLabel" destination="8ab-43-nd5" id="3Tg-hU-qqM"/>
                                     <outlet property="tickerLabel" destination="CZH-NP-hGf" id="IDW-aA-uOb"/>
+                                    <outlet property="volumeLabel" destination="TcW-lC-dTI" id="hUe-ML-M5C"/>
                                 </connections>
                             </collectionViewCell>
                         </cells>
@@ -68,7 +83,7 @@
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0ny-j7-YQF" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2311" y="-1211"/>
+            <point key="canvasLocation" x="2310.6870229007632" y="-1211.267605633803"/>
         </scene>
         <!--Detail View Controller-->
         <scene sceneID="sAR-rT-Y9X">

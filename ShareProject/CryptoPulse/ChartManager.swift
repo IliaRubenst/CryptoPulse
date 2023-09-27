@@ -20,6 +20,7 @@ class ChartManager {
     private var series: CandlestickSeries!
     private var alarmLine: PriceLine!
     
+    
     // for rightClickMenu
     private var leadingConstraint: NSLayoutConstraint!
     private var bottomConstraint: NSLayoutConstraint!
@@ -115,9 +116,7 @@ class ChartManager {
         let options = ChartOptions(crosshair: CrosshairOptions(mode: .normal),
                                    trackingMode: TrackingModeOptions(exitMode: .onTouchEnd))
         
-        
         let chart = LightweightCharts(options: options)
-//        let chr = LightweightCharts(options: ChartOptions(width: <#T##Double?#>, height: <#T##Double?#>, watermark: <#T##WatermarkOptions?#>, layout: <#T##LayoutOptions?#>, leftPriceScale: <#T##VisiblePriceScaleOptions?#>, rightPriceScale: VisiblePriceScaleOptions., overlayPriceScales: <#T##OverlayPriceScaleOptions?#>, timeScale: <#T##TimeScaleOptions?#>, crosshair: <#T##CrosshairOptions?#>, grid: <#T##GridOptions?#>, localization: <#T##LocalizationOptions?#>, handleScroll: <#T##HandleScrollOptions?#>, handleScale: TogglableOptions<HandleScaleOptions>?, kineticScroll: <#T##KineticScrollOptions?#>, trackingMode: <#T##TrackingModeOptions?#>)
         
         delegate.view.addSubview(chart)
         chart.translatesAutoresizingMaskIntoConstraints = false
@@ -129,6 +128,10 @@ class ChartManager {
         ])
         
         self.chart = chart
+        
+        //test
+        let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(dragTheView))
+        rightClickMenu.addGestureRecognizer(panGestureRecognizer)
         
         delegate.view.addSubview(tooltipView)
         
@@ -159,7 +162,23 @@ class ChartManager {
         
         
         NotificationCenter.default.addObserver(self, selector: #selector(hideMenu), name: NSNotification.Name(rawValue: "anyBtnPressed"), object: nil)
-        
+    }
+    
+    @objc func dragTheView(recognizer: UIPanGestureRecognizer) {
+        if recognizer.state == .began {
+            
+        } else if recognizer.state == .changed {
+            let translation = recognizer.translation(in: self.chart)
+            
+            let newX = rightClickMenu.center.x + translation.x
+            let newY = rightClickMenu.center.y + translation.y
+            
+            rightClickMenu.center = CGPoint(x: newX, y: newY)
+            recognizer.setTranslation(CGPoint.zero, in: self.chart)
+
+        } else if recognizer.state == .ended {
+            
+        }
     }
     
     func setupSeries() {

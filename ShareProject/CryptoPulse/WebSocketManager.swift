@@ -11,12 +11,14 @@ protocol WebSocketManagerDelegate {
     func didUpdateCandle(_ websocketManager: WebSocketManager, candleModel: CurrentCandleModel)
     func didUpdateMarkPriceStream(_ websocketManager: WebSocketManager, dataModel: MarkPriceStreamModel)
     func didUpdateIndividualSymbolTicker(_ websocketManager: WebSocketManager, dataModel: IndividualSymbolTickerStreamsModel)
+    func didUpdateminiTicker(_ websocketManager: WebSocketManager, dataModel: [Symbol])
 }
 
 enum State: CaseIterable {
     case markPriceStream
     case individualSymbolTickerStreams
     case currentCandleData
+    case miniTicker
 }
 
 class WebSocketManager: NSObject, URLSessionWebSocketDelegate {
@@ -24,7 +26,7 @@ class WebSocketManager: NSObject, URLSessionWebSocketDelegate {
     var delegate: WebSocketManagerDelegate?
     var actualState = State.currentCandleData
     
-//    var timeFrame: String = "1m"
+    //    var timeFrame: String = "1m"
     
     func webSocketConnect(symbol: String, timeFrame: String) {
         var url: String
@@ -33,12 +35,15 @@ class WebSocketManager: NSObject, URLSessionWebSocketDelegate {
         switch actualState {
         case .markPriceStream:
             url = "wss://fstream.binance.com:443/ws/\(coinSymbol)@markPrice"
-        
+            
         case .individualSymbolTickerStreams:
             url = "wss://fstream.binance.com:443/ws/\(coinSymbol)@ticker"
             
         case .currentCandleData:
             url = "wss://fstream.binance.com:443/ws/\(coinSymbol)_perpetual@continuousKline_\(timeFrame)"
+            
+        case .miniTicker:
+            url = "wss://fstream.binance.com:443/ws/!miniTicker@arr"
         }
         
         let session = URLSession(configuration: .default, delegate: self, delegateQueue: .main)
@@ -86,7 +91,7 @@ class WebSocketManager: NSObject, URLSessionWebSocketDelegate {
         print("Did connect to socket")
         ping()
         recieve()
-        send()
+//        send()
     }
     
     func urlSession(_ session: URLSession, webSocketTask: URLSessionWebSocketTask, didCloseWith closeCode: URLSessionWebSocketTask.CloseCode, reason: Data?) {
@@ -100,12 +105,11 @@ class WebSocketManager: NSObject, URLSessionWebSocketDelegate {
         case .markPriceStream:
             do {
                 let decodedData = try decoder.decode(MarkPriceStreamData.self, from: socketData)
-                
                 let markPriceStreamModel = MarkPriceStreamModel(symbol: decodedData.s,
-                                                           markPrice: decodedData.p,
-                                                           indexPrice: decodedData.i,
-                                                           fundingRate: decodedData.r,
-                                                           nextFundingTime: decodedData.T)
+                                                                markPrice: decodedData.p,
+                                                                indexPrice: decodedData.i,
+                                                                fundingRate: decodedData.r,
+                                                                nextFundingTime: decodedData.T)
                 
                 if delegate != nil {
                     delegate!.didUpdateMarkPriceStream(self, dataModel: markPriceStreamModel)
@@ -145,11 +149,44 @@ class WebSocketManager: NSObject, URLSessionWebSocketDelegate {
             } catch {
                 print("Error JSON: \(error)")
             }
+        case .miniTicker:
+            do {
+                let decodedData = try decoder.decode([FullSymbolData].self, from: socketData)
+                
+                let array = FullSymbolsArray.fullSymbols
+                for data in decodedData.sorted(by: { $0.s < $1.s }) {
+                    if !FullSymbolsArray.fullSymbols.contains(where: { $0.s == data.s }) {
+                        FullSymbolsArray.fullSymbols.append(FullSymbolData(symbol: data.s,
+                                                    markPrice: data.c,
+                                                    volume: data.q))
+                    }
+                }
+                let defaults = DataLoader(keys: "savedFullSymbolsData")
+                defaults.loadUserSymbols()
+                
+                let newSymbolModel = SymbolsArray.symbols
+                
+                for model in array {
+                    if let index = newSymbolModel.firstIndex(where: { $0.symbol == model.s }) {
+                        newSymbolModel[index].volume = model.q
+                    }
+                }
+                
+//                let miniTickerSYmbolModel = FullSymbolModel(symbol: decodedData.s,
+//                                                            markPrice: decodedData.c,
+//                                                            volume: decodedData.q)
+                
+                if delegate != nil {
+                    delegate!.didUpdateminiTicker(self, dataModel: newSymbolModel)
+                }
+            } catch {
+                print("Error JSON: \(error)")
+            }
         }
     }
     
-    func send() {
-        /*if !isClose {
+    /*func send() {
+        if !isClose {
             DispatchQueue.global().asyncAfter(deadline: .now() + 5) {
                 self.send()
                 self.webSocket?.send(.string("Send new message: \(Int.random(in: 0...1000))"), completionHandler: { error in
@@ -158,8 +195,9 @@ class WebSocketManager: NSObject, URLSessionWebSocketDelegate {
                     }
                 })
             }
-        }*/
-    }
+        }
+    }*/
+    
 }
 
 

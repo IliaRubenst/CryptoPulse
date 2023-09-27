@@ -14,8 +14,12 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
     var webSocket = WebSocketManager()
     var isSelected = false
     var isReload = false
+    var currentVolume = "0.0"
+    
+    var data: FullSymbolsArray!
     
     var webSocketManagers = [WebSocketManager]()
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,17 +30,12 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
         defaults.loadUserSymbols()
         
         getSymbolToWebSocket()
+        performRequestDB()
         
         self.navigationItem.title = ""
         
-        
         let showTableViewButton = UIBarButtonItem(image: UIImage(systemName: "list.bullet.rectangle.portrait")?.withTintColor(.black, renderingMode: .alwaysOriginal), style: .plain, target: self, action: #selector(showTableView))
-//        let printBtn = UIBarButtonItem(image: UIImage(systemName: "printer")?.withTintColor(.black, renderingMode: .alwaysOriginal), style: .plain, target: self, action: #selector(printResponse))
         navigationItem.rightBarButtonItems = [showTableViewButton]
-        
-//        let getBDData = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(performRequestDB))
-//        let removeDBData = UIBarButtonItem(barButtonSystemItem: .redo, target: self, action: #selector(removeDBData))
-//        navigationItem.leftBarButtonItems = [removeDBData]
         
         
         NotificationCenter.default.addObserver(self, selector: #selector(loadList), name: NSNotification.Name(rawValue: "newSymbolAdded"), object: nil)
@@ -73,6 +72,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
         }
         cell.tickerLabel.text = UserSymbols.savedSymbols[indexPath.item].symbol
         cell.currentPriceLabel.text = UserSymbols.savedSymbols[indexPath.item].markPrice
+        cell.volumeLabel.text = UserSymbols.savedSymbols[indexPath.item].volume
         
         cell.layer.borderWidth = 1
         cell.layer.cornerRadius = 5
@@ -185,13 +185,31 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
         for symbol in UserSymbols.savedSymbols {
             setConnetcForSymbols(symbol.symbol)
         }
+        let delegate = WebSocketManager()
+        delegate.delegate = self
+        delegate.actualState = State.miniTicker
+        delegate.webSocketConnect(symbol: "btcusdt", timeFrame: "1m")
+        webSocketManagers.append(delegate)
     }
 
     func setConnetcForSymbols(_ symbol: String) {
-        let delegate = WebSocketManager()
-        delegate.delegate = self
-        delegate.webSocketConnect(symbol: symbol, timeFrame: "1m")
-        webSocketManagers.append(delegate)
+
+            let delegate = WebSocketManager()
+            delegate.delegate = self
+
+            delegate.webSocketConnect(symbol: symbol, timeFrame: "1m")
+            webSocketManagers.append(delegate)
+
+    }
+    
+    func didUpdateminiTicker(_ websocketManager: WebSocketManager, dataModel: [Symbol]) {
+        for symbol in SymbolsArray.symbols {
+            if let index = UserSymbols.savedSymbols.firstIndex(where: { $0.symbol == symbol.symbol }) {
+                let volume = Double(symbol.volume ?? "0")! / 1_000_000
+                let volume24h = String(format: "%.2fm$", volume)
+                UserSymbols.savedSymbols[index].volume = volume24h
+            }
+        }
     }
 
     func closeConnection() {
@@ -200,10 +218,54 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
         }
     }
     
+    func performRequestDB() {
+        if let url = URL(string: "http://127.0.0.1:8000/api/account/") {
+            var request = URLRequest(url: url)
+            request.httpMethod = "GET"
+            request.addValue("application/json", forHTTPHeaderField: "Accept")
+            request.addValue("Basic aWxpYTpMSmtiOTkyMDA4MjIh", forHTTPHeaderField: "Authorization")
+            
+            let task = URLSession.shared.dataTask(with: request) { [self] data, response, error in
+                if error != nil {
+                    print(error!)
+                    return
+                }
+                
+                if let safeData = data {
+                    parseJSONDB(DBData: safeData)
+                }
+            }
+            task.resume()
+            print("Make \(request.httpMethod!) request to:\(url)")
+        }
+    }
+    
+    func parseJSONDB(DBData: Data) {
+        let decoder = JSONDecoder()
+        
+        do {
+            let decodedData = try decoder.decode([Account].self, from: DBData)
+            for data in decodedData {
+                AlarmModelsArray.alarms.append(AlarmModel(id: data.id ,
+                                                          symbol: data.symbol,
+                                                       alarmPrice: Double(data.alarmPrice),
+                                                       isAlarmUpper: data.isAlarmUpper,
+                                                       isActive: data.isActive)
+
+                )}
+            let defaults = DataLoader(keys: "savedAlarms")
+            defaults.saveData()
+        } catch {
+            print(error)
+        }
+    }
+    
     func didUpdateMarkPriceStream(_ websocketManager: WebSocketManager, dataModel: MarkPriceStreamModel) {
     }
     
     func didUpdateIndividualSymbolTicker(_ websocketManager: WebSocketManager, dataModel: IndividualSymbolTickerStreamsModel) {
     }
+    
+
 }
 

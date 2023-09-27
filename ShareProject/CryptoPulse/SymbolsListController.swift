@@ -7,17 +7,26 @@
 
 import UIKit
 
-class SymbolsListController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate {
+class SymbolsListController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, WebSocketManagerDelegate {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var searchBar: UISearchBar!
     var filteredSymbols = [Symbol]()
     
     var webSocket = WebSocketManager()
     var viewCtr: ViewController!
+    let defaults = DataLoader(keys: "savedFullSymbolsData")
     
     override func viewDidLoad() {
         super.viewDidLoad()
+//        self.filteredSymbols = SymbolsArray.symbols
         self.filteredSymbols = SymbolsArray.symbols
+        
+        
+        defaults.loadUserSymbols()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        defaults.saveData()
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
@@ -52,4 +61,22 @@ class SymbolsListController: UIViewController, UITableViewDataSource, UITableVie
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "newSymbolAdded"), object: nil)
         dismiss(animated: true)
     }
+    
+    func didUpdateminiTicker(_ websocketManager: WebSocketManager, dataModel: [Symbol]) {
+        
+    }
+    
+    func didUpdateCandle(_ websocketManager: WebSocketManager, candleModel: CurrentCandleModel) {
+        
+    }
+    
+    func didUpdateMarkPriceStream(_ websocketManager: WebSocketManager, dataModel: MarkPriceStreamModel) {
+        
+    }
+    
+    func didUpdateIndividualSymbolTicker(_ websocketManager: WebSocketManager, dataModel: IndividualSymbolTickerStreamsModel) {
+        
+    }
+    
+
 }

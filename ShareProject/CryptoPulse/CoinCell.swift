@@ -10,6 +10,7 @@ import UIKit
 class CoinCell: UICollectionViewCell {
     @IBOutlet weak var tickerLabel: UILabel!
     @IBOutlet weak var currentPriceLabel: UILabel!
+    @IBOutlet weak var volumeLabel: UILabel!
     
     func removeCell(_ index: Int) {
         UserSymbols.savedSymbols.remove(at: index)

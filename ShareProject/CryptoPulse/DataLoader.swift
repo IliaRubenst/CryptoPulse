@@ -36,17 +36,26 @@ struct DataLoader {
                     print("Failed to load symbols")
                 }
             }
-        } /*else if keys == "savedLines" {
+        } else if keys == "savedFullSymbolsData" {
             if let savedSymbols = userDefaults.object(forKey: keys) as? Data {
                 let jsonDecoder = JSONDecoder()
                 do {
-                    AlarmModelsArray.alarmaLine = try jsonDecoder.decode([PriceLine].self, from: savedSymbols)
+                    SymbolsArray.symbols = try jsonDecoder.decode([Symbol].self, from: savedSymbols)
                 } catch {
                     print("Failed to load symbols")
                 }
             }
-        }*/
-        
+            /*else if keys == "savedLines" {
+             if let savedSymbols = userDefaults.object(forKey: keys) as? Data {
+             let jsonDecoder = JSONDecoder()
+             do {
+             AlarmModelsArray.alarmaLine = try jsonDecoder.decode([PriceLine].self, from: savedSymbols)
+             } catch {
+             print("Failed to load symbols")
+             }
+             }
+             }*/
+        }
     }
     
     func saveData() {
@@ -63,7 +72,15 @@ struct DataLoader {
             } else {
                 print("Failed to save symbols")
             }
-        } /*else if keys == "savedLines" {
+        } else if keys == "savedFullSymbolsData" {
+            if let dataToSave = try? jsonEncoder.encode(SymbolsArray.symbols) {
+                userDefaults.set(dataToSave, forKey: keys)
+            } else {
+                print("Failed to save symbols")
+            }
+        }
+        
+        /*else if keys == "savedLines" {
             if let dataToSave = try? jsonEncoder.encode(AlarmModelsArray.alarmaLine) {
                 userDefaults.set(dataToSave, forKey: keys)
             } else {

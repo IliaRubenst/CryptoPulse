@@ -14,12 +14,43 @@ struct Coin: Codable {
 class Symbol: Codable {
     var symbol: String
     var markPrice: String
+    var volume: String?
     
-    init(symbol: String, markPrice: String) {
+    init(symbol: String, markPrice: String, volume: String? = nil) {
         self.symbol = symbol
         self.markPrice = markPrice
+        self.volume = volume
     }
 }
+
+class FullSymbolData: Codable {
+    var s: String
+    var c: String
+    var q: String
+    
+    init(symbol: String, markPrice: String, volume: String) {
+        self.s = symbol
+        self.c = markPrice
+        self.q = volume
+    }
+}
+
+struct FullSymbolModel {
+    var symbol: String
+    var markPrice: String
+    var volume: String
+    
+    init(symbol: String, markPrice: String, volume: String) {
+        self.symbol = symbol
+        self.markPrice = markPrice
+        self.volume = volume
+    }
+}
+
+struct FullSymbolsArray {
+    static var fullSymbols = [FullSymbolData]()
+}
+
 
 struct MarkPriceStreamData: Codable {
     var s: String

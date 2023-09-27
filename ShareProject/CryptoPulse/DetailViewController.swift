@@ -147,7 +147,6 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
         minPrice = dataModel.lowPrice
         
         let volume = Double(dataModel.volumeQuote)! / 1_000_000
-        
         volume24h = String(format: "%.2fm$", volume)
         
         rightUpperNavLabel.text = "\(closePrice)\n\(priceChangePercent)%"
@@ -258,16 +257,16 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
     
     @objc func addAlarmForSelectedPrice() {
         let price = chartManager.currentBar.high
-            alarm = price!
-            var isAlarmUpper = false
-            if alarm > closePrice {
-                isAlarmUpper = true
-            }
+        alarm = price!
+        var isAlarmUpper = false
+        if alarm > closePrice {
+            isAlarmUpper = true
+        }
         id = Int.random(in: 0...999999999)
         let currentModel = AlarmModel(id: id, symbol: symbol, alarmPrice: alarm, isAlarmUpper: isAlarmUpper, isActive: true)
         AlarmModelsArray.alarms.append(currentModel)
         addAlarmtoModelDB(alarmModel: currentModel)
-            chartManager.setupAlarmLine(alarm)
+        chartManager.setupAlarmLine(alarm)
     }
     
     func addAlarmtoModelDB(alarmModel: AlarmModel) {
@@ -380,7 +379,7 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
         lowerStackView.heightAnchor.constraint(equalToConstant: 40).isActive = true
         
         let buttonHeight = CGFloat(20)
-        let buttonWidth = CGFloat(20)
+//        let buttonWidth = CGFloat(20)
         
         oneMinuteButton.setTitle("1m", for: .normal)
         oneMinuteButton.setTitleColor(.black, for: .normal)
@@ -470,5 +469,6 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
         startChartManager()
     }
     
-    
+    func didUpdateminiTicker(_ websocketManager: WebSocketManager, dataModel: [Symbol]) {
+    }
 }

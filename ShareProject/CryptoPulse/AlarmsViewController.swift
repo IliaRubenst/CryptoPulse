@@ -19,12 +19,8 @@ class AlarmsViewController: UIViewController, UITableViewDelegate, UITableViewDa
         navigationItem.rightBarButtonItem = eraseListButton
         
         //кнопки потом удалим, нужны для тестов
-//        let getBDData = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(performRequestDB))
         let printBtn = UIBarButtonItem(image: UIImage(systemName: "printer")?.withTintColor(.black, renderingMode: .alwaysOriginal), style: .plain, target: self, action: #selector(printResponse))
         navigationItem.leftBarButtonItems = [printBtn]
-        
-        // делаем get запрос на сервер для получения данных по алармам
-        performRequestDB()
         
         let defaults = DataLoader(keys: "savedAlarms")
         defaults.loadUserSymbols()
@@ -132,48 +128,6 @@ class AlarmsViewController: UIViewController, UITableViewDelegate, UITableViewDa
         }
     }
     
-    @objc func performRequestDB() {
-        if let url = URL(string: "http://127.0.0.1:8000/api/account/") {
-            var request = URLRequest(url: url)
-            request.httpMethod = "GET"
-            request.addValue("application/json", forHTTPHeaderField: "Accept")
-            request.addValue("Basic aWxpYTpMSmtiOTkyMDA4MjIh", forHTTPHeaderField: "Authorization")
-            
-            let task = URLSession.shared.dataTask(with: request) { [self] data, response, error in
-                if error != nil {
-                    print(error!)
-                    return
-                }
-                
-                if let safeData = data {
-                    parseJSONDB(DBData: safeData)
-                }
-            }
-            task.resume()
-            print("Make \(request.httpMethod!) request to:\(url)")
-        }
-    }
-    
-    func parseJSONDB(DBData: Data) {
-        let decoder = JSONDecoder()
-        
-        do {
-            let decodedData = try decoder.decode([Account].self, from: DBData)
-            for data in decodedData {
-                AlarmModelsArray.alarms.append(AlarmModel(id: data.id ,
-                                                          symbol: data.symbol,
-                                                       alarmPrice: Double(data.alarmPrice),
-                                                       isAlarmUpper: data.isAlarmUpper,
-                                                       isActive: data.isActive)
-
-                )}
-//            let defaults = DataLoader(keys: "savedAlarms")
-//            defaults.saveData()
-//            tableView.reloadData()
-        } catch {
-            print(error)
-        }
-    }
     
     @objc func printResponse() {
         for account in AlarmModelsArray.alarms {
