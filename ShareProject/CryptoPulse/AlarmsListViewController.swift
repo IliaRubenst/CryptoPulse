@@ -7,42 +7,85 @@
 
 import UIKit
 
-class AlarmsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class AlarmsListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate {
     var tableView = UITableView()
-    var cellIdentifier = "alarmCell"
+    var searchBar = UISearchBar()
+    var filtredAlarms: [AlarmModel] = []
     var accounts = [Account]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let eraseListButton = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(removeAlarmsFromList))
-        navigationItem.rightBarButtonItem = eraseListButton
-        
-        //кнопки потом удалим, нужны для тестов
-        let printBtn = UIBarButtonItem(image: UIImage(systemName: "printer")?.withTintColor(.black, renderingMode: .alwaysOriginal), style: .plain, target: self, action: #selector(printResponse))
-        navigationItem.leftBarButtonItems = [printBtn]
-        
         let defaults = DataLoader(keys: "savedAlarms")
         defaults.loadUserSymbols()
-
-        createTable()
+        
+        configureNavButtons()
+        configureSearchBar()
+        configureTableView()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
+        filtredAlarms = AlarmModelsArray.alarms
         tableView.reloadData()
     }
     
-    func createTable() {
-        tableView = UITableView(frame: view.bounds, style: .plain)
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
+    func configureNavButtons() {
+        let eraseList = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(removeAlarmsFromList))
+        let addAlarm = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addAlarm))
+        
+        navigationItem.leftBarButtonItem = eraseList
+        navigationItem.rightBarButtonItem = addAlarm
+    }
+    
+    func configureSearchBar() {
+        searchBar.delegate = self
+        
+        self.view.addSubview(searchBar)
+        
+        searchBar.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            searchBar.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
+            searchBar.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor),
+            searchBar.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor)])
+    }
+    
+    func configureTableView() {
+//        tableView = UITableView(frame: view.bounds, style: .plain)
+        tableView.register(AlarmTableViewCell.self, forCellReuseIdentifier: AlarmTableViewCell.identifier)
         
         tableView.delegate = self
         tableView.dataSource = self
         
-        tableView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        self.view.addSubview(tableView)
         
-        view.addSubview(tableView)
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            tableView.topAnchor.constraint(equalTo: self.searchBar.bottomAnchor),
+            tableView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor),
+            tableView.widthAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.widthAnchor, multiplier: 0.95),
+            tableView.centerXAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.centerXAnchor)
+            /*tableView.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor)*/])
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if !searchText.isEmpty {
+            filtredAlarms = AlarmModelsArray.alarms.filter { $0.symbol.contains(searchText.uppercased()) }
+            tableView.reloadData()
+        } else {
+            filtredAlarms = AlarmModelsArray.alarms
+            tableView.reloadData()
+        }
+    }
+    
+    @objc func addAlarm() {
+        let vc = AddAlarmViewController()
+        
+        present(vc, animated: true)
     }
     
     @objc func removeAlarmsFromList() {
@@ -63,7 +106,7 @@ class AlarmsViewController: UIViewController, UITableViewDelegate, UITableViewDa
     }*/
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return AlarmModelsArray.alarms.count
+        return filtredAlarms.count
         /*switch section {
         case 0:
             return 3
@@ -79,14 +122,23 @@ class AlarmsViewController: UIViewController, UITableViewDelegate, UITableViewDa
     
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath)
-        var content = UIListContentConfiguration.cell()
+//        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath)
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: AlarmTableViewCell.identifier, for: indexPath) as? AlarmTableViewCell else { fatalError("Fatal error in AlarmVC CellForRow Method") }
         
-        let item = AlarmModelsArray.alarms[indexPath.item]
+        let item = filtredAlarms[indexPath.item]
+        
+        cell.tickerLabel.text = " \(item.symbol)"
+        cell.dateLabel.text = " Date"
+        cell.priceLabel.text = "\(item.alarmPrice)"
+        cell.statusLabel.text = "\(item.isActive)"
+        
+        /*var content = UIListContentConfiguration.cell()
+        
+        
         content.text = "\(item.symbol) - \(item.alarmPrice). isActive: \(item.isActive)"
         cell.contentConfiguration = content
         
-        /*cell.accessoryType = .detailButton
+        cell.accessoryType = .detailButton
         
         switch indexPath.section {
         case 0:
@@ -109,7 +161,10 @@ class AlarmsViewController: UIViewController, UITableViewDelegate, UITableViewDa
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print(indexPath.row)
+        if let detailVC = storyboard?.instantiateViewController(identifier: "DetailData") as? DetailViewController {
+            detailVC.symbol = filtredAlarms[indexPath.item].symbol
+            navigationController?.pushViewController(detailVC, animated: true)
+        }
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
@@ -120,9 +175,12 @@ class AlarmsViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 print("Make delete request id:\(id)")
             }
             AlarmModelsArray.alarms.remove(at: indexPath.item)
+            filtredAlarms.remove(at: indexPath.item)
 
             let defaults = DataLoader(keys: "savedAlarms")
             defaults.saveData()
+            
+            
             
             tableView.deleteRows(at: [indexPath], with: .fade)
         }

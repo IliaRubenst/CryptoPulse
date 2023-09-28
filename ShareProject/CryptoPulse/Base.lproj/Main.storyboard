@@ -104,7 +104,7 @@
         <!--Список уведомлений-->
         <scene sceneID="sYH-PW-4KD">
             <objects>
-                <viewController id="dQ8-cV-nwN" customClass="AlarmsViewController" customModule="CyptoPulse" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="dQ8-cV-nwN" customClass="AlarmsListViewController" customModule="CyptoPulse" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8TL-mJ-6rM">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

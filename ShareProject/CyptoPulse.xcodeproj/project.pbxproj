@@ -29,7 +29,9 @@
 		D81365EC2AB207A1005930D2 /* ChartManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D81365EB2AB207A1005930D2 /* ChartManager.swift */; };
 		D81366362AB4C577005930D2 /* Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = D81366352AB4C577005930D2 /* Notifications.swift */; };
 		D87A63FB2ABC294A00A29749 /* Key.swift in Sources */ = {isa = PBXBuildFile; fileRef = D87A63FA2ABC294900A29749 /* Key.swift */; };
-		D87A63FD2ABC581100A29749 /* AlarmsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D87A63FC2ABC581100A29749 /* AlarmsViewController.swift */; };
+		D87A63FD2ABC581100A29749 /* AlarmsListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D87A63FC2ABC581100A29749 /* AlarmsListViewController.swift */; };
+		D87A64B82AC5711C00A29749 /* AddAlarmViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D87A64B72AC5711C00A29749 /* AddAlarmViewController.swift */; };
+		D87A64BA2AC5733100A29749 /* AlarmTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D87A64B92AC5733100A29749 /* AlarmTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -59,7 +61,9 @@
 		D81365EB2AB207A1005930D2 /* ChartManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartManager.swift; sourceTree = "<group>"; };
 		D81366352AB4C577005930D2 /* Notifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notifications.swift; sourceTree = "<group>"; };
 		D87A63FA2ABC294900A29749 /* Key.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Key.swift; sourceTree = "<group>"; };
-		D87A63FC2ABC581100A29749 /* AlarmsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmsViewController.swift; sourceTree = "<group>"; };
+		D87A63FC2ABC581100A29749 /* AlarmsListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmsListViewController.swift; sourceTree = "<group>"; };
+		D87A64B72AC5711C00A29749 /* AddAlarmViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddAlarmViewController.swift; sourceTree = "<group>"; };
+		D87A64B92AC5733100A29749 /* AlarmTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlarmTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,7 +113,6 @@
 				496BEFDD2AA9EFDF00B15E0F /* ViewController.swift */,
 				4979F2052AAC3905000E039C /* DetailViewController.swift */,
 				49AACC322AB70EA000101C46 /* SymbolsListController.swift */,
-				D87A63FC2ABC581100A29749 /* AlarmsViewController.swift */,
 				49367CAF2AAB33BE00827BE9 /* MarketManager.swift */,
 				4979F2072AACAFC0000E039C /* WebSocketManager.swift */,
 				D81365EB2AB207A1005930D2 /* ChartManager.swift */,
@@ -123,6 +126,9 @@
 				49367CAB2AAAFE7100827BE9 /* CoinCell.swift */,
 				49520E562AC4BCE2009B05BD /* SymbolsListCell.swift */,
 				D87A63FA2ABC294900A29749 /* Key.swift */,
+				D87A63FC2ABC581100A29749 /* AlarmsListViewController.swift */,
+				D87A64B72AC5711C00A29749 /* AddAlarmViewController.swift */,
+				D87A64B92AC5733100A29749 /* AlarmTableViewCell.swift */,
 				496BEFDF2AA9EFDF00B15E0F /* Main.storyboard */,
 				496BEFE22AA9EFE100B15E0F /* Assets.xcassets */,
 				496BEFE42AA9EFE100B15E0F /* LaunchScreen.storyboard */,
@@ -258,7 +264,8 @@
 				4974BE882AB030580070240F /* DataModel.swift in Sources */,
 				496BEFDE2AA9EFDF00B15E0F /* ViewController.swift in Sources */,
 				49AACC332AB70EA000101C46 /* SymbolsListController.swift in Sources */,
-				D87A63FD2ABC581100A29749 /* AlarmsViewController.swift in Sources */,
+				D87A63FD2ABC581100A29749 /* AlarmsListViewController.swift in Sources */,
+				D87A64BA2AC5733100A29749 /* AlarmTableViewCell.swift in Sources */,
 				49520E572AC4BCE2009B05BD /* SymbolsListCell.swift in Sources */,
 				494FF85D2ABB4B140041791B /* RightClickMenu.swift in Sources */,
 				49367CB02AAB33BE00827BE9 /* MarketManager.swift in Sources */,
@@ -266,6 +273,7 @@
 				4979F2082AACAFC0000E039C /* WebSocketManager.swift in Sources */,
 				496BEFDA2AA9EFDF00B15E0F /* AppDelegate.swift in Sources */,
 				D81366362AB4C577005930D2 /* Notifications.swift in Sources */,
+				D87A64B82AC5711C00A29749 /* AddAlarmViewController.swift in Sources */,
 				49367CAC2AAAFE7100827BE9 /* CoinCell.swift in Sources */,
 				D87A63FB2ABC294A00A29749 /* Key.swift in Sources */,
 				49367CAE2AAAFEB800827BE9 /* DataCodable.swift in Sources */,
@@ -422,7 +430,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
-				"INFOPLIST_FILE[sdk=*]" = /Users/ilia/SharedRepo/ShareProject/CryptoPulse/Info.plist;
+				"INFOPLIST_FILE[sdk=*]" = /Users/vitalybelikov/Documents/sharedRepo/ShareProject/CryptoPulse/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -454,7 +462,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
-				"INFOPLIST_FILE[sdk=*]" = /Users/ilia/SharedRepo/ShareProject/CryptoPulse/Info.plist;
+				"INFOPLIST_FILE[sdk=*]" = /Users/vitalybelikov/Documents/sharedRepo/ShareProject/CryptoPulse/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
