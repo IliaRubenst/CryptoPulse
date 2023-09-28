@@ -66,6 +66,7 @@ class AlarmTableViewCell: UITableViewCell {
         stackView.contentMode = .scaleToFill
         stackView.axis = .vertical
         stackView.distribution = .fillEqually
+        stackView.alignment = .center
         stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
     }()
@@ -105,6 +106,11 @@ class AlarmTableViewCell: UITableViewCell {
         
         rightVerticalStackView.addArrangedSubview(priceLabel)
         rightVerticalStackView.addArrangedSubview(statusLabel)
+        
+        NSLayoutConstraint.activate([tickerLabel.leadingAnchor.constraint(equalTo: labelColor.trailingAnchor, constant: 10),
+                                     dateLabel.leadingAnchor.constraint(equalTo: labelColor.trailingAnchor, constant: 10),
+                                     priceLabel.trailingAnchor.constraint(equalTo: rightVerticalStackView.trailingAnchor, constant: -10),
+                                     statusLabel.trailingAnchor.constraint(equalTo: rightVerticalStackView.trailingAnchor, constant: -10)])
     }
     
 }

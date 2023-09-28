@@ -242,7 +242,14 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
                     isAlarmUpper = true
                 }
                 self?.id = Int.random(in: 0...999999999)
-                let currentModel = AlarmModel(id: self!.id, symbol: self!.symbol, alarmPrice: self!.alarm, isAlarmUpper: isAlarmUpper, isActive: true)
+                
+                let currentDate = self?.convertCurrentDateToString()
+                guard let unwrappedDate = currentDate else {
+                    fatalError("Current date is nil")
+                }
+                
+                let currentModel = AlarmModel(id: self!.id, symbol: self!.symbol, alarmPrice: self!.alarm, isAlarmUpper: isAlarmUpper, isActive: true, date: unwrappedDate)
+                
                 AlarmModelsArray.alarms.append(currentModel)
                 self!.addAlarmtoModelDB(alarmModel: currentModel)
                 let defaults = DataLoader(keys: "savedAlarms")
@@ -262,8 +269,11 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
         if alarm > closePrice {
             isAlarmUpper = true
         }
-        id = Int.random(in: 0...999999999)
-        let currentModel = AlarmModel(id: id, symbol: symbol, alarmPrice: alarm, isAlarmUpper: isAlarmUpper, isActive: true)
+        id = Int.random(in: 0...999999999)        
+        let currentDate = convertCurrentDateToString()
+        
+        let currentModel = AlarmModel(id: id, symbol: symbol, alarmPrice: alarm, isAlarmUpper: isAlarmUpper, isActive: true, date: currentDate)
+        
         AlarmModelsArray.alarms.append(currentModel)
         addAlarmtoModelDB(alarmModel: currentModel)
         chartManager.setupAlarmLine(alarm)
@@ -470,5 +480,12 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
     }
     
     func didUpdateminiTicker(_ websocketManager: WebSocketManager, dataModel: [Symbol]) {
+    }
+    
+    func convertCurrentDateToString() -> String {
+        let df = DateFormatter()
+        df.dateFormat = "dd-MM-yyy hh:mm"
+        let now = df.string(from: Date())
+        return now
     }
 }

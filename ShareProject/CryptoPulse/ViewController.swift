@@ -245,11 +245,15 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
         do {
             let decodedData = try decoder.decode([Account].self, from: DBData)
             for data in decodedData {
-                AlarmModelsArray.alarms.append(AlarmModel(id: data.id ,
+                let detailVC = DetailViewController()
+                let currentDate = detailVC.convertCurrentDateToString()
+                
+                AlarmModelsArray.alarms.append(AlarmModel(id: data.id,
                                                           symbol: data.symbol,
-                                                       alarmPrice: Double(data.alarmPrice),
-                                                       isAlarmUpper: data.isAlarmUpper,
-                                                       isActive: data.isActive)
+                                                          alarmPrice: Double(data.alarmPrice),
+                                                          isAlarmUpper: data.isAlarmUpper,
+                                                          isActive: data.isActive,
+                                                          date: currentDate)
 
                 )}
             let defaults = DataLoader(keys: "savedAlarms")

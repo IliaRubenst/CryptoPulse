@@ -19,16 +19,24 @@ class AlarmsListViewController: UIViewController, UITableViewDelegate, UITableVi
         let defaults = DataLoader(keys: "savedAlarms")
         defaults.loadUserSymbols()
         
-        configureNavButtons()
-        configureSearchBar()
-        configureTableView()
+        setupUI()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        filtredAlarms = AlarmModelsArray.alarms
+        updateData()
         tableView.reloadData()
+    }
+    
+    func setupUI() {
+        configureNavButtons()
+        configureSearchBar()
+        configureTableView()
+    }
+    
+    func updateData() {
+        filtredAlarms = AlarmModelsArray.alarms
     }
     
     func configureNavButtons() {
@@ -53,7 +61,6 @@ class AlarmsListViewController: UIViewController, UITableViewDelegate, UITableVi
     }
     
     func configureTableView() {
-//        tableView = UITableView(frame: view.bounds, style: .plain)
         tableView.register(AlarmTableViewCell.self, forCellReuseIdentifier: AlarmTableViewCell.identifier)
         
         tableView.delegate = self
@@ -67,9 +74,7 @@ class AlarmsListViewController: UIViewController, UITableViewDelegate, UITableVi
             tableView.topAnchor.constraint(equalTo: self.searchBar.bottomAnchor),
             tableView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor),
             tableView.widthAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.widthAnchor, multiplier: 0.95),
-            tableView.centerXAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.centerXAnchor)
-            /*tableView.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor)*/])
+            tableView.centerXAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.centerXAnchor)])
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
@@ -90,6 +95,7 @@ class AlarmsListViewController: UIViewController, UITableViewDelegate, UITableVi
     
     @objc func removeAlarmsFromList() {
         AlarmModelsArray.alarms.removeAll()
+        filtredAlarms.removeAll()
         tableView.reloadData()
 //        AlarmModelsArray.alarmaLine.removeAll()
         
@@ -101,58 +107,23 @@ class AlarmsListViewController: UIViewController, UITableViewDelegate, UITableVi
     }
     
     //MARK: - UITableViewDataSource
-    /*func numberOfSections(in tableView: UITableView) -> Int {
-        return 3
-    }*/
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return filtredAlarms.count
-        /*switch section {
-        case 0:
-            return 3
-        case 1:
-            return 5
-        case 2:
-            return 8
-        default:
-            break
-        }
-        return 0*/
     }
     
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath)
         guard let cell = tableView.dequeueReusableCell(withIdentifier: AlarmTableViewCell.identifier, for: indexPath) as? AlarmTableViewCell else { fatalError("Fatal error in AlarmVC CellForRow Method") }
         
         let item = filtredAlarms[indexPath.item]
         
-        cell.tickerLabel.text = " \(item.symbol)"
-        cell.dateLabel.text = " Date"
-        cell.priceLabel.text = "\(item.alarmPrice)"
-        cell.statusLabel.text = "\(item.isActive)"
+        cell.tickerLabel.text = "\(item.symbol)"
+        cell.dateLabel.text = "\(item.date)"
+        cell.priceLabel.text = "Цена: \(item.alarmPrice)"
+        cell.statusLabel.text = item.isActive ? "Активен" : "Не активен"
         
-        /*var content = UIListContentConfiguration.cell()
-        
-        
-        content.text = "\(item.symbol) - \(item.alarmPrice). isActive: \(item.isActive)"
-        cell.contentConfiguration = content
-        
-        cell.accessoryType = .detailButton
-        
-        switch indexPath.section {
-        case 0:
-            cell.backgroundColor = UIColor.white
-        case 1:
-            cell.backgroundColor = UIColor.blue
-        case 2:
-            cell.backgroundColor = UIColor.red
-        default:
-            break
-        }*/
-        
-        
-        return cell
+       return cell
     }
     
     //MARK: - UITableViewDelegate
@@ -167,25 +138,69 @@ class AlarmsListViewController: UIViewController, UITableViewDelegate, UITableVi
         }
     }
     
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            if AlarmModelsArray.alarms.count != 0 {
-                let id = AlarmModelsArray.alarms[indexPath.item].id
-                removeDBData(remove: id)
-                print("Make delete request id:\(id)")
-            }
-            AlarmModelsArray.alarms.remove(at: indexPath.item)
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let toggleAction = self.toggleStatusAction(rowIndexPathAt: indexPath)
+        let deleteAction = self.deleteRowAction(rowIndexPathAt: indexPath)
+        
+        let swipeActions = UISwipeActionsConfiguration(actions: [deleteAction, toggleAction])
+        
+        return swipeActions
+    }
+    
+    func deleteRowAction(rowIndexPathAt indexPath: IndexPath) -> UIContextualAction {
+        let action = UIContextualAction(style: .destructive, title: nil) { [weak self] _, _, _ in
+            guard let self = self else { return }
+            
+            let itemToRemoveID = filtredAlarms[indexPath.item].id
             filtredAlarms.remove(at: indexPath.item)
+            deleteItemFromStaticAlarms(id: itemToRemoveID)
 
             let defaults = DataLoader(keys: "savedAlarms")
             defaults.saveData()
             
             
-            
             tableView.deleteRows(at: [indexPath], with: .fade)
+            tableView.reloadData()
+            
+        }
+        action.backgroundColor = .systemRed
+        action.image = UIImage(systemName: "trash")
+        
+        
+        return action
+    }
+    
+    func deleteItemFromStaticAlarms(id: Int) {
+        for (index, item) in AlarmModelsArray.alarms.enumerated() {
+            if item.id == id {
+                AlarmModelsArray.alarms.remove(at: index)
+            }
         }
     }
     
+    func toggleStatusAction(rowIndexPathAt indexPath: IndexPath) -> UIContextualAction {
+        let action = UIContextualAction(style: .normal, title: "Переключить") { [weak self] _, _, _ in
+            
+            AlarmModelsArray.alarms[indexPath.item].isActive.toggle()
+            self?.filtredAlarms[indexPath.item].isActive.toggle()
+            
+            let defaults = DataLoader(keys: "savedAlarms")
+            defaults.saveData()
+            
+            self?.tableView.reloadData()
+        }
+        
+        switch filtredAlarms[indexPath.item].isActive {
+        case true:
+            action.image = UIImage(systemName: "pause")
+            action.backgroundColor = .systemGray
+        case false:
+            action.image = UIImage(systemName: "play")
+            action.backgroundColor = .systemGreen
+        }
+        
+        return action
+    }
     
     @objc func printResponse() {
         for account in AlarmModelsArray.alarms {

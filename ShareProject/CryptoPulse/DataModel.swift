@@ -65,6 +65,7 @@ struct AlarmModel: Codable, Hashable {
     let alarmPrice: Double
     let isAlarmUpper: Bool
     var isActive: Bool
+    let date: String
 }
 
 struct AlarmModelsArray {
