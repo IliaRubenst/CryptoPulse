@@ -7,23 +7,44 @@
 
 import UIKit
 
-class SymbolsListController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate {
+class SymbolsListController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, UISearchResultsUpdating {
     @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var searchBar: UISearchBar!
-    
-    var filteredSymbols = [Symbol]()
+    private let searchController = UISearchController(searchResultsController: nil)
+    private var symbols = SymbolsArray.symbols
+    private var filteredSymbols = [Symbol]()
     var webSocket = WebSocketManager()
     var viewCtr: ViewController!
     let defaults = DataLoader(keys: "savedFullSymbolsData")
     
+    private var searchBarIsEmpty: Bool {
+        guard let text = searchController.searchBar.text else { return false }
+        return text.isEmpty
+    }
+    
+    private var isFiltering: Bool {
+        let searchBarScopeIsFiltering = searchController.searchBar.selectedScopeButtonIndex != 0
+        return searchController.isActive && (!searchBarIsEmpty || searchBarScopeIsFiltering)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.filteredSymbols = SymbolsArray.symbols
+        self.tableView.register(SymbolsListCell.self, forCellReuseIdentifier: SymbolsListCell.identifier)
+//        searchController.searchBar.sizeToFit()
+//        self.tableView.contentInset = UIEdgeInsets(top: 50, left: 0, bottom: 0, right: 0)
+//        self.navigationItem.title = "List"
+//        navigationItem.searchController = searchController
         
-        tableView.register(SymbolsListCell.self, forCellReuseIdentifier: SymbolsListCell.identifier)
+        self.tableView.tableHeaderView = searchController.searchBar
+        searchController.searchResultsUpdater = self
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.searchBar.enablesReturnKeyAutomatically = false
+        searchController.searchBar.returnKeyType = UIReturnKeyType.done
+        searchController.searchBar.placeholder = "Symbol"
         
-        searchBar.scopeButtonTitles = ["All", "USDT", "BUSD"]
-        searchBar.delegate = self
+        definesPresentationContext = true
+        
+        searchController.searchBar.scopeButtonTitles = ["All", "USDT", "BUSD"]
+        searchController.searchBar.delegate = self
         
         defaults.loadUserSymbols()
     }
@@ -32,28 +53,53 @@ class SymbolsListController: UIViewController, UITableViewDataSource, UITableVie
         defaults.saveData()
     }
     
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        if searchText != "" {
-            filteredSymbols = SymbolsArray.symbols.filter({ $0.symbol.contains(searchText.uppercased()) })
-            self.tableView.reloadData()
-        } else {
-            self.filteredSymbols = SymbolsArray.symbols
-            self.tableView.reloadData()
-        }
+    func updateSearchResults(for searchController: UISearchController) {
+        let searchBar = searchController.searchBar
+        let scope = searchBar.scopeButtonTitles![searchBar.selectedScopeButtonIndex]
+        filterContentForSearch(searchController.searchBar.text!, scope: scope)
+    }
+    
+    private func filterContentForSearch(_ searchText: String, scope: String = "All") {
+        filteredSymbols = symbols.filter({ (symbol: Symbol) -> Bool in
+            
+            let categoryMatch = (scope == "All") || (symbol.symbol.lowercased().contains(scope.lowercased()))
+            
+            if searchBarIsEmpty {
+                return categoryMatch
+            }
+            
+            return categoryMatch && symbol.symbol.lowercased().contains(searchText.lowercased())
+        })
+        tableView.reloadData()
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
+        filterContentForSearch(searchBar.text!, scope: searchBar.scopeButtonTitles![selectedScope])
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return filteredSymbols.count
+        if isFiltering {
+            return filteredSymbols.count
+        }
+        return SymbolsArray.symbols.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: SymbolsListCell.identifier, for: indexPath) as? SymbolsListCell else {
             fatalError("Unable to dequeue SymbolsListCell.")
         }
-        let symbolLabel = filteredSymbols[indexPath.item].symbol
-        let priceLabel = ("Price: \(filteredSymbols[indexPath.item].markPrice)")
+        var symbol: Symbol
         
-        let volume = Double(filteredSymbols[indexPath.item].volume ?? "0")! / 1_000_000
+        if isFiltering {
+            symbol = filteredSymbols[indexPath.item]
+        } else {
+            symbol = SymbolsArray.symbols[indexPath.item]
+        }
+        
+        let symbolLabel = symbol.symbol
+        let priceLabel = ("Price: \(symbol.markPrice)")
+        
+        let volume = Double(symbol.volume ?? "0")! / 1_000_000
         let volume24h = String(format: "%.2fm$", volume)
         let volumeLabel = ("Volume 24h: \(volume24h)")
         
@@ -63,8 +109,14 @@ class SymbolsListController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let item = filteredSymbols[indexPath.item]
-        UserSymbols.savedSymbols.append(item)
+        let symbol: Symbol
+        
+        if isFiltering {
+            symbol = filteredSymbols[indexPath.item]
+        } else {
+            symbol = SymbolsArray.symbols[indexPath.item]
+        }
+        UserSymbols.savedSymbols.append(symbol)
         viewCtr.closeConnection()
         viewCtr.getSymbolToWebSocket()
         

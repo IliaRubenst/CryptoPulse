@@ -99,7 +99,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="aMo-bQ-rBa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3732" y="-1211"/>
+            <point key="canvasLocation" x="5583.9694656488546" y="-1211.267605633803"/>
         </scene>
         <!--Список уведомлений-->
         <scene sceneID="sYH-PW-4KD">
@@ -126,7 +126,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="xMR-YS-h9W">
-                                <rect key="frame" x="0.0" y="115" width="393" height="737"/>
+                                <rect key="frame" x="0.0" y="59" width="393" height="793"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="cell" textLabel="IWs-Y0-zI2" style="IBUITableViewCellStyleDefault" id="qky-Xx-0HO">
@@ -152,35 +152,24 @@
                                     <outlet property="delegate" destination="GY7-eo-FkO" id="6Is-o1-zTw"/>
                                 </connections>
                             </tableView>
-                            <searchBar contentMode="redraw" placeholder="Symbol" translatesAutoresizingMaskIntoConstraints="NO" id="x6N-MM-aZp">
-                                <rect key="frame" x="0.0" y="59" width="393" height="56"/>
-                                <textInputTraits key="textInputTraits"/>
-                                <connections>
-                                    <outlet property="delegate" destination="GY7-eo-FkO" id="9Kz-xd-jcr"/>
-                                </connections>
-                            </searchBar>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="ni6-Kb-gcD"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstAttribute="bottom" secondItem="xMR-YS-h9W" secondAttribute="bottom" id="28g-2c-uJu"/>
-                            <constraint firstItem="x6N-MM-aZp" firstAttribute="leading" secondItem="ni6-Kb-gcD" secondAttribute="leading" id="9HX-BN-hjG"/>
-                            <constraint firstItem="x6N-MM-aZp" firstAttribute="top" secondItem="ni6-Kb-gcD" secondAttribute="top" id="CW0-yg-2qJ"/>
-                            <constraint firstItem="xMR-YS-h9W" firstAttribute="trailing" secondItem="ni6-Kb-gcD" secondAttribute="trailing" id="Gs6-WW-b3B"/>
-                            <constraint firstItem="xMR-YS-h9W" firstAttribute="top" secondItem="x6N-MM-aZp" secondAttribute="bottom" id="cgZ-jh-Aku"/>
-                            <constraint firstItem="x6N-MM-aZp" firstAttribute="trailing" secondItem="ni6-Kb-gcD" secondAttribute="trailing" id="gkT-k8-gce"/>
-                            <constraint firstItem="xMR-YS-h9W" firstAttribute="leading" secondItem="ni6-Kb-gcD" secondAttribute="leading" id="mPd-0u-f5Q"/>
-                            <constraint firstItem="xMR-YS-h9W" firstAttribute="top" secondItem="x6N-MM-aZp" secondAttribute="bottom" id="xSC-hW-Dtk"/>
+                            <constraint firstItem="xMR-YS-h9W" firstAttribute="leading" secondItem="ni6-Kb-gcD" secondAttribute="leading" id="EdE-X2-IB5"/>
+                            <constraint firstAttribute="bottom" secondItem="xMR-YS-h9W" secondAttribute="bottom" id="QLU-vD-VgB"/>
+                            <constraint firstItem="xMR-YS-h9W" firstAttribute="top" secondItem="ni6-Kb-gcD" secondAttribute="top" id="S2p-VJ-gBz"/>
+                            <constraint firstItem="xMR-YS-h9W" firstAttribute="trailing" secondItem="ni6-Kb-gcD" secondAttribute="trailing" id="nSh-SL-5Sn"/>
                         </constraints>
                     </view>
+                    <navigationItem key="navigationItem" id="BhW-Xj-5Ld"/>
                     <connections>
-                        <outlet property="searchBar" destination="x6N-MM-aZp" id="e4g-PA-lQ7"/>
                         <outlet property="tableView" destination="xMR-YS-h9W" id="mro-tK-fvp"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lcB-i1-vee" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3021" y="-1211"/>
+            <point key="canvasLocation" x="3053" y="-1211"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="2xY-fj-wDf">
