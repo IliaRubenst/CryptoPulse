@@ -19,8 +19,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
     var data: FullSymbolsArray!
     
     var webSocketManagers = [WebSocketManager]()
-    
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         

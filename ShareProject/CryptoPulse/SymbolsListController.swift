@@ -7,20 +7,23 @@
 
 import UIKit
 
-class SymbolsListController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, WebSocketManagerDelegate {
+class SymbolsListController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var searchBar: UISearchBar!
-    var filteredSymbols = [Symbol]()
     
+    var filteredSymbols = [Symbol]()
     var webSocket = WebSocketManager()
     var viewCtr: ViewController!
     let defaults = DataLoader(keys: "savedFullSymbolsData")
     
     override func viewDidLoad() {
         super.viewDidLoad()
-//        self.filteredSymbols = SymbolsArray.symbols
         self.filteredSymbols = SymbolsArray.symbols
         
+        tableView.register(SymbolsListCell.self, forCellReuseIdentifier: SymbolsListCell.identifier)
+        
+        searchBar.scopeButtonTitles = ["All", "USDT", "BUSD"]
+        searchBar.delegate = self
         
         defaults.loadUserSymbols()
     }
@@ -44,8 +47,17 @@ class SymbolsListController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        cell.textLabel?.text = filteredSymbols[indexPath.item].symbol
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: SymbolsListCell.identifier, for: indexPath) as? SymbolsListCell else {
+            fatalError("Unable to dequeue SymbolsListCell.")
+        }
+        let symbolLabel = filteredSymbols[indexPath.item].symbol
+        let priceLabel = ("Price: \(filteredSymbols[indexPath.item].markPrice)")
+        
+        let volume = Double(filteredSymbols[indexPath.item].volume ?? "0")! / 1_000_000
+        let volume24h = String(format: "%.2fm$", volume)
+        let volumeLabel = ("Volume 24h: \(volume24h)")
+        
+        cell.configure(symbolLabel: symbolLabel, priceLabel: priceLabel, volumeLabel: volumeLabel)
         
         return cell
     }
@@ -61,22 +73,4 @@ class SymbolsListController: UIViewController, UITableViewDataSource, UITableVie
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "newSymbolAdded"), object: nil)
         dismiss(animated: true)
     }
-    
-    func didUpdateminiTicker(_ websocketManager: WebSocketManager, dataModel: [Symbol]) {
-        
-    }
-    
-    func didUpdateCandle(_ websocketManager: WebSocketManager, candleModel: CurrentCandleModel) {
-        
-    }
-    
-    func didUpdateMarkPriceStream(_ websocketManager: WebSocketManager, dataModel: MarkPriceStreamModel) {
-        
-    }
-    
-    func didUpdateIndividualSymbolTicker(_ websocketManager: WebSocketManager, dataModel: IndividualSymbolTickerStreamsModel) {
-        
-    }
-    
-
 }

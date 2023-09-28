@@ -21,6 +21,13 @@ class Symbol: Codable {
         self.markPrice = markPrice
         self.volume = volume
     }
+    
+//    func volumeFormat(volume: String) -> String {
+//        let volume = Double(volume) ?? 0 / 1_000_000
+//        let volume24h = String(format: "%.2fm$", volume)
+//        
+//        return volume24h
+//    }
 }
 
 class FullSymbolData: Codable {
