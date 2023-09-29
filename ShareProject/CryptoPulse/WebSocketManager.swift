@@ -18,7 +18,7 @@ enum State: CaseIterable {
     case markPriceStream
     case individualSymbolTickerStreams
     case currentCandleData
-    case miniTicker
+    case tickerarr
 }
 
 class WebSocketManager: NSObject, URLSessionWebSocketDelegate {
@@ -42,8 +42,8 @@ class WebSocketManager: NSObject, URLSessionWebSocketDelegate {
         case .currentCandleData:
             url = "wss://fstream.binance.com:443/ws/\(coinSymbol)_perpetual@continuousKline_\(timeFrame)"
             
-        case .miniTicker:
-            url = "wss://fstream.binance.com:443/ws/!miniTicker@arr"
+        case .tickerarr:
+            url = "wss://fstream.binance.com:443/ws/!ticker@arr"
         }
         
         let session = URLSession(configuration: .default, delegate: self, delegateQueue: .main)
@@ -120,7 +120,8 @@ class WebSocketManager: NSObject, URLSessionWebSocketDelegate {
         case .individualSymbolTickerStreams:
             do {
                 let decodedData = try decoder.decode(IndividualSymbolTickerStreamsData.self, from: socketData)
-                let IndividualSymbolTickerStreamsModel = IndividualSymbolTickerStreamsModel(volumeBase: decodedData.v,
+                let IndividualSymbolTickerStreamsModel = IndividualSymbolTickerStreamsModel(symbol: decodedData.s,
+                                                                                            volumeBase: decodedData.v,
                                                                                             volumeQuote: decodedData.q,
                                                                                             closePrice: decodedData.c,
                                                                                             openPrice: decodedData.o,
@@ -149,7 +150,7 @@ class WebSocketManager: NSObject, URLSessionWebSocketDelegate {
             } catch {
                 print("Error JSON: \(error)")
             }
-        case .miniTicker:
+        case .tickerarr:
             do {
                 let decodedData = try decoder.decode([FullSymbolData].self, from: socketData)
                 
@@ -157,8 +158,9 @@ class WebSocketManager: NSObject, URLSessionWebSocketDelegate {
                 for data in decodedData.sorted(by: { $0.s < $1.s }) {
                     if !FullSymbolsArray.fullSymbols.contains(where: { $0.s == data.s }) {
                         FullSymbolsArray.fullSymbols.append(FullSymbolData(symbol: data.s,
-                                                    markPrice: data.c,
-                                                    volume: data.q))
+                                                                           priceChangePercent: data.P,
+                                                                           markPrice: data.c,
+                                                                           volume: data.q))
                     }
                 }
                 let defaults = DataLoader(keys: "savedFullSymbolsData")
@@ -169,6 +171,7 @@ class WebSocketManager: NSObject, URLSessionWebSocketDelegate {
                 for model in array {
                     if let index = newSymbolModel.firstIndex(where: { $0.symbol == model.s }) {
                         newSymbolModel[index].volume = model.q
+                        newSymbolModel[index].priceChangePercent = model.P
                     }
                 }
                 

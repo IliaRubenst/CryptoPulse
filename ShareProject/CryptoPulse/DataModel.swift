@@ -36,6 +36,7 @@ struct CurrentCandleModel {
 }
 
 struct IndividualSymbolTickerStreamsModel {
+    let symbol: String
     let volumeBase: String
     let volumeQuote: String
     let closePrice: String

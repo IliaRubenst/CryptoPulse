@@ -29,6 +29,9 @@ class SymbolsListController: UIViewController, UITableViewDataSource, UITableVie
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tableView.register(SymbolsListCell.self, forCellReuseIdentifier: SymbolsListCell.identifier)
+        
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(backTapped))
+    
 //        searchController.searchBar.sizeToFit()
 //        self.tableView.contentInset = UIEdgeInsets(top: 50, left: 0, bottom: 0, right: 0)
 //        self.navigationItem.title = "List"
@@ -46,7 +49,11 @@ class SymbolsListController: UIViewController, UITableViewDataSource, UITableVie
         searchController.searchBar.scopeButtonTitles = ["All", "USDT", "BUSD"]
         searchController.searchBar.delegate = self
         
-        defaults.loadUserSymbols()
+//        defaults.loadUserSymbols()
+    }
+    
+    @objc func backTapped() {
+    self.navigationController?.popViewController(animated: true)
     }
     
     override func viewWillDisappear(_ animated: Bool) {

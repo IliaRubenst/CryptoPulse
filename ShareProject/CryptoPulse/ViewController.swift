@@ -47,6 +47,8 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
     @objc func showTableView() {
         let detailVC = storyboard?.instantiateViewController(identifier: "SymbolList") as! SymbolsListController
         detailVC.viewCtr = self
+        
+//        navigationController?.pushViewController(detailVC, animated: true)
         present(detailVC, animated: true)
     }
     
@@ -72,6 +74,9 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
         cell.tickerLabel.text = UserSymbols.savedSymbols[indexPath.item].symbol
         cell.currentPriceLabel.text = UserSymbols.savedSymbols[indexPath.item].markPrice
         cell.volumeLabel.text = UserSymbols.savedSymbols[indexPath.item].volume
+        cell.percentChangeLabel.text = ("\(UserSymbols.savedSymbols[indexPath.item].priceChangePercent ?? "0") %")
+        
+        changeBorderColor(indexPath, cell: cell)
         
         cell.layer.borderWidth = 1
         cell.layer.cornerRadius = 5
@@ -79,9 +84,10 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
         return cell
     }
     
+
+    
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
 //        guard let cell = collectionView.cellForItem(at: indexPath) as? CoinCell else { return }
-//        cell.reloadInputViews()
 
         openDetailView(indexPath: indexPath)
     }
@@ -151,11 +157,10 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
     }
     
     func didUpdateCandle(_ websocketManager: WebSocketManager, candleModel: CurrentCandleModel) {
-        var checkedArray = UserSymbols.savedSymbols
+        //        var checkedArray = UserSymbols.savedSymbols
         let gotSymbol = candleModel.pair
         let currentPrice = candleModel.closePrice
-        
-        checkedArray = UserSymbols.savedSymbols.map ({ checkedArray in
+        var checkedArray = UserSymbols.savedSymbols.map ({ checkedArray in
             if checkedArray.symbol == gotSymbol {
                 let index = UserSymbols.savedSymbols.firstIndex { $0.symbol == gotSymbol }
                 checkedArray.markPrice = currentPrice
@@ -165,9 +170,6 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
             }
             return checkedArray
         })
-    }
-    
-    func didUpdatemarkPriceStream(_ websocketManager: WebSocketManager, dataModel: MarkPriceStreamModel) {
     }
     
     func reloadCurrentCellData(_ index: Int) {
@@ -184,21 +186,14 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
         for symbol in UserSymbols.savedSymbols {
             setConnetcForSymbols(symbol.symbol)
         }
-        let delegate = WebSocketManager()
-        delegate.delegate = self
-        delegate.actualState = State.miniTicker
-        delegate.webSocketConnect(symbol: "btcusdt", timeFrame: "1m")
-        webSocketManagers.append(delegate)
     }
 
     func setConnetcForSymbols(_ symbol: String) {
-
-            let delegate = WebSocketManager()
-            delegate.delegate = self
-
-            delegate.webSocketConnect(symbol: symbol, timeFrame: "1m")
-            webSocketManagers.append(delegate)
-
+        let delegate = WebSocketManager()
+        delegate.delegate = self
+        delegate.actualState = State.tickerarr
+        delegate.webSocketConnect(symbol: symbol, timeFrame: "1m")
+        webSocketManagers.append(delegate)
     }
     
     func didUpdateminiTicker(_ websocketManager: WebSocketManager, dataModel: [Symbol]) {
@@ -206,8 +201,13 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
             if let index = UserSymbols.savedSymbols.firstIndex(where: { $0.symbol == symbol.symbol }) {
                 let volume = Double(symbol.volume ?? "0")! / 1_000_000
                 let volume24h = String(format: "%.2fm$", volume)
+                
                 UserSymbols.savedSymbols[index].volume = volume24h
+                UserSymbols.savedSymbols[index].priceChangePercent = symbol.priceChangePercent
             }
+        }
+        if !isSelected {
+            collectionView.reloadData()
         }
     }
 
@@ -259,10 +259,23 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
         }
     }
     
+    func changeBorderColor(_ indexPath: IndexPath, cell: CoinCell) {
+        if Double(UserSymbols.savedSymbols[indexPath.item].priceChangePercent ?? "0") ?? 0 < 0 {
+            cell.percentChangeLabel.textColor = #colorLiteral(red: 1, green: 0, blue: 0, alpha: 1)
+            cell.layer.borderColor = #colorLiteral(red: 1, green: 0, blue: 0, alpha: 1)
+        } else {
+            cell.percentChangeLabel.textColor = #colorLiteral(red: 0.008301745169, green: 0.5873891115, blue: 0.5336645246, alpha: 1)
+            cell.layer.borderColor = #colorLiteral(red: 0.008301745169, green: 0.5873891115, blue: 0.5336645246, alpha: 1)
+        }
+    }
+    
     func didUpdateMarkPriceStream(_ websocketManager: WebSocketManager, dataModel: MarkPriceStreamModel) {
     }
     
     func didUpdateIndividualSymbolTicker(_ websocketManager: WebSocketManager, dataModel: IndividualSymbolTickerStreamsModel) {
+    }
+    
+    func didUpdatemarkPriceStream(_ websocketManager: WebSocketManager, dataModel: MarkPriceStreamModel) {
     }
     
 
