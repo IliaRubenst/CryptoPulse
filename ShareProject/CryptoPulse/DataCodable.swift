@@ -7,9 +7,9 @@
 
 import UIKit
 
-struct Coin: Codable {
-    var symbols: Symbol
-}
+//struct Coin: Codable {
+//    var symbols: Symbol
+//}
 
 class Symbol: Codable {
     var symbol: String

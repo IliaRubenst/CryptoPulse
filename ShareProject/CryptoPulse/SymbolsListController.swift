@@ -23,24 +23,22 @@ class SymbolsListController: UIViewController, UITableViewDataSource, UITableVie
     
     private var isFiltering: Bool {
         let searchBarScopeIsFiltering = searchController.searchBar.selectedScopeButtonIndex != 0
-        return searchController.isActive && (!searchBarIsEmpty || searchBarScopeIsFiltering)
+//        return searchController.isActive && (!searchBarIsEmpty || searchBarScopeIsFiltering)
+        return !searchBarIsEmpty || searchBarScopeIsFiltering
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tableView.register(SymbolsListCell.self, forCellReuseIdentifier: SymbolsListCell.identifier)
         
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(backTapped))
-    
-//        searchController.searchBar.sizeToFit()
-//        self.tableView.contentInset = UIEdgeInsets(top: 50, left: 0, bottom: 0, right: 0)
-//        self.navigationItem.title = "List"
-//        navigationItem.searchController = searchController
+//        self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(backTapped))
         
         self.tableView.tableHeaderView = searchController.searchBar
         searchController.searchResultsUpdater = self
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.searchBar.enablesReturnKeyAutomatically = false
+        searchController.searchBar.showsScopeBar = true
+        
         searchController.searchBar.returnKeyType = UIReturnKeyType.done
         searchController.searchBar.placeholder = "Symbol"
         
@@ -48,12 +46,21 @@ class SymbolsListController: UIViewController, UITableViewDataSource, UITableVie
         
         searchController.searchBar.scopeButtonTitles = ["All", "USDT", "BUSD"]
         searchController.searchBar.delegate = self
+        searchController.searchBar.sizeToFit()
+        
         
 //        defaults.loadUserSymbols()
     }
     
-    @objc func backTapped() {
-    self.navigationController?.popViewController(animated: true)
+//    @objc func backTapped() {
+//        self.navigationController?.popViewController(animated: true)
+//    }
+    
+
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchController.searchBar.showsScopeBar = true
+        dismiss(animated: true)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -82,6 +89,11 @@ class SymbolsListController: UIViewController, UITableViewDataSource, UITableVie
     
     func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
         filterContentForSearch(searchBar.text!, scope: searchBar.scopeButtonTitles![selectedScope])
+        searchController.searchBar.showsScopeBar = true
+    }
+    
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        searchController.searchBar.showsScopeBar = true
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -130,6 +142,7 @@ class SymbolsListController: UIViewController, UITableViewDataSource, UITableVie
         let defaults = DataLoader(keys: "savedSymbols")
         defaults.saveData()
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "newSymbolAdded"), object: nil)
+        searchController.isActive = false
         dismiss(animated: true)
     }
 }
