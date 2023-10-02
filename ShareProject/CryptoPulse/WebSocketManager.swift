@@ -166,12 +166,12 @@ class WebSocketManager: NSObject, URLSessionWebSocketDelegate {
                 let defaults = DataLoader(keys: "savedFullSymbolsData")
                 defaults.loadUserSymbols()
                 
-                let newSymbolModel = SymbolsArray.symbols
+//                let newSymbolModel = SymbolsArray.symbols
                 
                 for model in array {
-                    if let index = newSymbolModel.firstIndex(where: { $0.symbol == model.s }) {
-                        newSymbolModel[index].volume = model.q
-                        newSymbolModel[index].priceChangePercent = model.P
+                    if let index = SymbolsArray.symbols.firstIndex(where: { $0.symbol == model.s }) {
+                        SymbolsArray.symbols[index].volume = model.q
+                        SymbolsArray.symbols[index].priceChangePercent = model.P
                     }
                 }
                 
@@ -180,7 +180,7 @@ class WebSocketManager: NSObject, URLSessionWebSocketDelegate {
 //                                                            volume: decodedData.q)
                 
                 if delegate != nil {
-                    delegate!.didUpdateminiTicker(self, dataModel: newSymbolModel)
+                    delegate!.didUpdateminiTicker(self, dataModel: SymbolsArray.symbols)
                 }
             } catch {
                 print("Error JSON: \(error)")
