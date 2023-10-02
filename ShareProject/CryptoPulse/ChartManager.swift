@@ -30,7 +30,7 @@ class ChartManager {
     
     var data = [CandlestickData]()
     
-    private var currentBusinessDay = Date().timeIntervalSince1970 //BusinessDay(year: Calendar.current.component(.year, from: Date()), month: Calendar.current.component(.month, from: Date()), day: Calendar.current.component(.day, from: Date()))
+    private var currentBusinessDay = Date().timeIntervalSince1970
     lazy var currentBar = CandlestickData(time: .utc(timestamp: currentBusinessDay), open: nil, high: nil, low: nil, close: nil)
     
     private let tooltipView = TooltipView(accentColor: UIColor(red: 0, green: 150/255.0, blue: 136/255.0, alpha: 1))
@@ -95,7 +95,6 @@ class ChartManager {
                                                  close: (Double(closePrice)))
                     data.append(candle)
                 }
-                print("Loaded \(data.count) candles")
                 
                 DispatchQueue.main.async {
                     self.setupSeries()
@@ -118,13 +117,14 @@ class ChartManager {
         
         let chart = LightweightCharts(options: options)
         
-        delegate.view.addSubview(chart)
+        delegate.lightWeightChartView.addSubview(chart)
+        
         chart.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            chart.leadingAnchor.constraint(equalTo: delegate.view.safeAreaLayoutGuide.leadingAnchor),
-            chart.trailingAnchor.constraint(equalTo: delegate.view.safeAreaLayoutGuide.trailingAnchor),
-            chart.topAnchor.constraint(equalTo: delegate.timeFrameStackView.bottomAnchor),
-            chart.bottomAnchor.constraint(equalTo: delegate.view.safeAreaLayoutGuide.bottomAnchor)
+            chart.leadingAnchor.constraint(equalTo: delegate.lightWeightChartView.leadingAnchor),
+            chart.trailingAnchor.constraint(equalTo: delegate.lightWeightChartView.trailingAnchor),
+            chart.topAnchor.constraint(equalTo: delegate.lightWeightChartView.topAnchor),
+            chart.bottomAnchor.constraint(equalTo: delegate.lightWeightChartView.bottomAnchor)
         ])
         
         self.chart = chart
@@ -133,17 +133,18 @@ class ChartManager {
         let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(dragTheView))
         rightClickMenu.addGestureRecognizer(panGestureRecognizer)
         
-        delegate.view.addSubview(tooltipView)
+        delegate.lightWeightChartView.addSubview(tooltipView)
         
         tooltipView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            tooltipView.leadingAnchor.constraint(equalTo: delegate.view.safeAreaLayoutGuide.leadingAnchor),
-            tooltipView.trailingAnchor.constraint(equalTo: delegate.view.safeAreaLayoutGuide.trailingAnchor),
-            tooltipView.topAnchor.constraint(equalTo: delegate.timeFrameStackView.bottomAnchor),
+            tooltipView.leadingAnchor.constraint(equalTo: chart.leadingAnchor),
+            tooltipView.trailingAnchor.constraint(equalTo: chart.trailingAnchor),
+            tooltipView.topAnchor.constraint(equalTo: chart.topAnchor),
+            tooltipView.bottomAnchor.constraint(equalTo: chart.bottomAnchor)
         ])
         tooltipView.isHidden = true
         
-        delegate.view.addSubview(rightClickMenu)
+        delegate.lightWeightChartView.addSubview(rightClickMenu)
         
         rightClickMenu.backgroundColor = .clear
         rightClickMenu.translatesAutoresizingMaskIntoConstraints = false
@@ -152,13 +153,14 @@ class ChartManager {
         bottomConstraint = rightClickMenu.bottomAnchor.constraint(equalTo: chart.topAnchor)
         leadingConstraint.isActive = true
         bottomConstraint.isActive = true
+        
         rightClickMenu.widthAnchor.constraint(equalToConstant: 63).isActive = true
         rightClickMenu.heightAnchor.constraint(equalToConstant: 30).isActive = true
         
         rightClickMenu.isHidden = true
         
-        delegate.view.bringSubviewToFront(tooltipView)
-        delegate.view.bringSubviewToFront(rightClickMenu)
+        delegate.lightWeightChartView.bringSubviewToFront(tooltipView)
+        delegate.lightWeightChartView.bringSubviewToFront(rightClickMenu)
         
         
         NotificationCenter.default.addObserver(self, selector: #selector(hideMenu), name: NSNotification.Name(rawValue: "anyBtnPressed"), object: nil)
@@ -203,7 +205,7 @@ class ChartManager {
         }
         
         if delegate.isKlineClose {
-            if let nextMinute = nextMinute(currentBusinessDay) {
+            if let nextMinute = nextCandle(currentBusinessDay) {
                 currentBusinessDay = nextMinute
                 currentBar = CandlestickData(time: .utc(timestamp: currentBusinessDay), open: nil, high: nil, low: nil, close: nil)
             }
@@ -227,7 +229,7 @@ class ChartManager {
         series.update(bar: currentBar)
     }
     
-    func nextMinute(_ time: TimeInterval) -> TimeInterval? {
+    func nextCandle(_ time: TimeInterval) -> TimeInterval? {
         let date = Date(timeIntervalSince1970: time)
         var dateComponents = Calendar.current.dateComponents(in: Calendar.current.timeZone, from: date)
         dateComponents.minute! += 1
@@ -239,7 +241,8 @@ class ChartManager {
         
     }
     
-    func nextBusinessDay(_ time: BusinessDay) -> BusinessDay {
+    // Не используется. 2.10
+    /*func nextBusinessDay(_ time: BusinessDay) -> BusinessDay {
         let timeZone = TimeZone(identifier: "UTC")!
         let dateComponents = DateComponents(
             calendar: .current,
@@ -251,7 +254,7 @@ class ChartManager {
         let date = Calendar.current.date(from: dateComponents)!
         let components = Calendar.current.dateComponents(in: timeZone, from: date)
         return BusinessDay(year: components.year!, month: components.month! + 1, day: components.day!)
-    }
+    }*/
     
     
     func setupAlarmLine(_ alarmPrice: Double) {

@@ -18,6 +18,12 @@ extension String {
 }
 
 class DetailViewController: UIViewController, WebSocketManagerDelegate {
+    var lightWeightChartView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
     let upperStackView = UIStackView()
     let leftNavLabel = UILabel()
     let rightNavLabelStack = UIStackView()
@@ -472,6 +478,17 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
         oneHourButton.addTarget(self, action: #selector(timeFrameButtonPressed(sender:)), for: .touchUpInside)
         fourHours.addTarget(self, action: #selector(timeFrameButtonPressed(sender:)), for: .touchUpInside)
         oneDay.addTarget(self, action: #selector(timeFrameButtonPressed(sender:)), for: .touchUpInside)
+        
+        view.addSubview(lightWeightChartView)
+        
+        NSLayoutConstraint.activate([
+            lightWeightChartView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            lightWeightChartView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            lightWeightChartView.topAnchor.constraint(equalTo: timeFrameStackView.bottomAnchor),
+            lightWeightChartView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+        ])
+        
+        
     }
     
     @objc func timeFrameButtonPressed(sender: UIButton) {
@@ -482,11 +499,17 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
         guard let label = sender.titleLabel?.text else { return }
         timeFrame = label
         setBackgroundForButton()
+        
+        for view in self.lightWeightChartView.subviews {
+            view.removeFromSuperview()
+        }
+        
         startChartManager()
     }
     
     func didUpdateminiTicker(_ websocketManager: WebSocketManager, dataModel: [Symbol]) {
     }
+    
     
     func convertCurrentDateToString() -> String {
         let df = DateFormatter()
