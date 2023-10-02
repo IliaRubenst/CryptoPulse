@@ -36,6 +36,7 @@ struct CurrentCandleModel {
 }
 
 struct IndividualSymbolTickerStreamsModel {
+    let symbol: String
     let volumeBase: String
     let volumeQuote: String
     let closePrice: String
@@ -45,19 +46,19 @@ struct IndividualSymbolTickerStreamsModel {
     let priceChangePercent: String
 }
 
-struct PreviousCandlesModel {
-    let openTime: Double
-    let openPrice: String
-    let highPrice: String
-    let lowPrice: String
-    let closePrice: String
-    let volume: String
-    let closeTime: Int
-    let quoteAssetVolume: String
-    let numberOfTrades: Int
-    let takerBuyVolume: String
-    let takerBuyQuoteAssetVolume: String
-}
+//struct PreviousCandlesModel {
+//    let openTime: Double
+//    let openPrice: String
+//    let highPrice: String
+//    let lowPrice: String
+//    let closePrice: String
+//    let volume: String
+//    let closeTime: Int
+//    let quoteAssetVolume: String
+//    let numberOfTrades: Int
+//    let takerBuyVolume: String
+//    let takerBuyQuoteAssetVolume: String
+//}
 
 struct AlarmModel: Codable, Hashable {
     let id: Int

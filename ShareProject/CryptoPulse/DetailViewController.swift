@@ -39,7 +39,7 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
     
     var webSocketManagers = [WebSocketManager]()
     var chartManager: ChartManager!
-    var candles = [PreviousCandlesModel]()
+//    var candles = [PreviousCandlesModel]()
     var data = [CandlestickData]()
     var currentCandelModel: CurrentCandleModel!
 
@@ -73,6 +73,8 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
         
         let defaults = DataLoader(keys: "savedAlarms")
         defaults.loadUserSymbols()
+        
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "chevron.backward")?.withTintColor(.black, renderingMode: .alwaysOriginal), style: .plain, target: self, action: #selector(backTapped))
 
         let setAlarmButton = UIBarButtonItem(image: UIImage(systemName: "bell")?.withTintColor(.black, renderingMode: .alwaysOriginal), style: .plain, target: self, action: #selector(addAlarm))
         navigationItem.rightBarButtonItems = [setAlarmButton]
@@ -96,6 +98,10 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
         chartManager.data.removeAll()
 //        chartManager = nil // Не уверен, что это необходимо, но есть сомнения насчет того, сколько инстансов чартменеджера мы создаем, поэтому перед инициализацией нового, я решил на всякий случай явно грохать старого.
         
+    }
+    
+    @objc func backTapped() {
+    self.navigationController?.popViewController(animated: true)
     }
     
    func setBackgroundForButton() {

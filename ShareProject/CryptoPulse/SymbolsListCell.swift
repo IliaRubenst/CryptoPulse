@@ -13,7 +13,7 @@ class SymbolsListCell: UITableViewCell {
     private let cellStackView = UIStackView()
     private let rightSideCellStackView = UIStackView()
     
-    private let symbolLabel: UILabel = {
+    let symbolLabel: UILabel = {
         let label = UILabel()
         label.textColor = .label
         label.textAlignment = .left
@@ -37,6 +37,14 @@ class SymbolsListCell: UITableViewCell {
         return label
     }()
     
+    let percentChangeLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .label
+        label.textAlignment = .left
+        label.font = .systemFont(ofSize: 15)
+        return label
+    }()
+    
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -47,10 +55,11 @@ class SymbolsListCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    public func configure(symbolLabel: String, priceLabel: String, volumeLabel: String) {
+    public func configure(symbolLabel: String, priceLabel: String, volumeLabel: String, percentChangeLabel: String) {
         self.symbolLabel.text = symbolLabel
         self.priceLabel.text = priceLabel
         self.volumeLabel.text = volumeLabel
+        self.percentChangeLabel.text = percentChangeLabel
     }
     
     private func setupUI() {
@@ -61,16 +70,20 @@ class SymbolsListCell: UITableViewCell {
         
         volumeLabel.translatesAutoresizingMaskIntoConstraints = false
         volumeLabel.textAlignment = .left
-    
+        
+        percentChangeLabel.translatesAutoresizingMaskIntoConstraints = false
+        percentChangeLabel.textAlignment = .left
+        
         rightSideCellStackView.addArrangedSubview(priceLabel)
         rightSideCellStackView.addArrangedSubview(volumeLabel)
+        rightSideCellStackView.addArrangedSubview(percentChangeLabel)
 
         rightSideCellStackView.axis = .vertical
         rightSideCellStackView.distribution = .equalCentering
         rightSideCellStackView.alignment = .leading
-        rightSideCellStackView.spacing = 1.0
+        rightSideCellStackView.spacing = 0.5
         
-        cellStackView.spacing = 1.0
+        cellStackView.spacing = 0.5
         cellStackView.axis = .horizontal
         cellStackView.distribution = .fillEqually
         cellStackView.alignment = .center

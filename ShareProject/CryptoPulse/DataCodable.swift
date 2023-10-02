@@ -7,19 +7,21 @@
 
 import UIKit
 
-struct Coin: Codable {
-    var symbols: Symbol
-}
+//struct Coin: Codable {
+//    var symbols: Symbol
+//}
 
 class Symbol: Codable {
     var symbol: String
     var markPrice: String
     var volume: String?
+    var priceChangePercent: String?
     
-    init(symbol: String, markPrice: String, volume: String? = nil) {
+    init(symbol: String, markPrice: String, volume: String? = nil, priceChangePercent: String? = nil) {
         self.symbol = symbol
         self.markPrice = markPrice
         self.volume = volume
+        self.priceChangePercent = priceChangePercent
     }
     
 //    func volumeFormat(volume: String) -> String {
@@ -32,11 +34,13 @@ class Symbol: Codable {
 
 class FullSymbolData: Codable {
     var s: String
+    var P: String
     var c: String
     var q: String
     
-    init(symbol: String, markPrice: String, volume: String) {
+    init(symbol: String, priceChangePercent: String, markPrice: String, volume: String) {
         self.s = symbol
+        self.P = priceChangePercent
         self.c = markPrice
         self.q = volume
     }
@@ -76,6 +80,7 @@ struct MarkPriceStreamData: Codable {
 }
 
 struct IndividualSymbolTickerStreamsData: Codable {
+    var s: String
     var v: String
     var q: String
     var c: String
@@ -84,7 +89,8 @@ struct IndividualSymbolTickerStreamsData: Codable {
     var l: String
     var P: String
     
-    init(volumeBase: String, volumeQuote: String, closePrice: String, openPrice: String, highPrice: String, lowPrice: String, priceChangePercent: String) {
+    init(symbol: String, volumeBase: String, volumeQuote: String, closePrice: String, openPrice: String, highPrice: String, lowPrice: String, priceChangePercent: String) {
+        self.s = symbol
         self.v = volumeBase
         self.q = volumeQuote
         self.c = closePrice
