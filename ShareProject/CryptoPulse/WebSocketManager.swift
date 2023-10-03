@@ -26,8 +26,6 @@ class WebSocketManager: NSObject, URLSessionWebSocketDelegate {
     var delegate: WebSocketManagerDelegate?
     var actualState = State.currentCandleData
     
-    //    var timeFrame: String = "1m"
-    
     func webSocketConnect(symbol: String, timeFrame: String) {
         var url: String
         let coinSymbol = symbol.lowercased()
@@ -122,7 +120,7 @@ class WebSocketManager: NSObject, URLSessionWebSocketDelegate {
                 let decodedData = try decoder.decode(IndividualSymbolTickerStreamsData.self, from: socketData)
                 let IndividualSymbolTickerStreamsModel = IndividualSymbolTickerStreamsModel(symbol: decodedData.s,
                                                                                             volumeBase: decodedData.v,
-                                                                                            volumeQuote: decodedData.q,
+                                                                                            volumeQuote: decodedData.volume24Format(),
                                                                                             closePrice: decodedData.c,
                                                                                             openPrice: decodedData.o,
                                                                                             highPrice: decodedData.h,
@@ -166,19 +164,12 @@ class WebSocketManager: NSObject, URLSessionWebSocketDelegate {
                 let defaults = DataLoader(keys: "savedFullSymbolsData")
                 defaults.loadUserSymbols()
                 
-//                let newSymbolModel = SymbolsArray.symbols
-                
                 for model in array {
                     if let index = SymbolsArray.symbols.firstIndex(where: { $0.symbol == model.s }) {
                         SymbolsArray.symbols[index].volume = model.q
                         SymbolsArray.symbols[index].priceChangePercent = model.P
                     }
                 }
-                
-//                let miniTickerSYmbolModel = FullSymbolModel(symbol: decodedData.s,
-//                                                            markPrice: decodedData.c,
-//                                                            volume: decodedData.q)
-                
                 if delegate != nil {
                     delegate!.didUpdateminiTicker(self, dataModel: SymbolsArray.symbols)
                 }

@@ -47,8 +47,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
     @objc func showTableView() {
         let detailVC = storyboard?.instantiateViewController(identifier: "SymbolList") as! SymbolsListController
         detailVC.viewCtr = self
-        
-//        navigationController?.pushViewController(detailVC, animated: true)
+
         present(detailVC, animated: true)
     }
     
@@ -157,7 +156,6 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
     }
     
     func didUpdateCandle(_ websocketManager: WebSocketManager, candleModel: CurrentCandleModel) {
-        //        var checkedArray = UserSymbols.savedSymbols
         let gotSymbol = candleModel.pair
         let currentPrice = candleModel.closePrice
         var checkedArray = UserSymbols.savedSymbols.map ({ checkedArray in
@@ -203,30 +201,11 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
     
     func didUpdateminiTicker(_ websocketManager: WebSocketManager, dataModel: [Symbol]) {
         for symbol in SymbolsArray.symbols {
-//            let gotSymbol = symbol.symbol
-//            let currentPrice = symbol.markPrice
-//            let currnetVolume = symbol.volume
-//            let currentPercent = symbol.priceChangePercent
-//            var checkedArray = UserSymbols.savedSymbols.map ({ checkedArray in
-//                if checkedArray.symbol == gotSymbol {
-//                    let index = UserSymbols.savedSymbols.firstIndex { $0.symbol == gotSymbol }
-//                    checkedArray.markPrice = currentPrice
-//                    let volume = Double(currnetVolume ?? "0")! / 1_000_000
-//                    let volume24h = String(format: "%.2fm$", volume)
-//                    checkedArray.volume = volume24h
-//                    checkedArray.priceChangePercent = currentPercent
-//
-//
-//                }
-//                return checkedArray
-//            })
-//        }
-//        collectionView.reloadData()
             if let index = UserSymbols.savedSymbols.firstIndex(where: { $0.symbol == symbol.symbol }) {
-                let volume = Double(symbol.volume ?? "0")! / 1_000_000
-                let volume24h = String(format: "%.2fm$", volume)
+//                let volume = Double(symbol.volume ?? "0")! / 1_000_000
+//                let volume24h = String(format: "%.2fm$", volume)
 
-                UserSymbols.savedSymbols[index].volume = volume24h
+                UserSymbols.savedSymbols[index].volume = symbol.volume24Format()
                 UserSymbols.savedSymbols[index].priceChangePercent = symbol.priceChangePercent
             }
         }

@@ -83,6 +83,8 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "chevron.backward")?.withTintColor(.black, renderingMode: .alwaysOriginal), style: .plain, target: self, action: #selector(backTapped))
 
         let setAlarmButton = UIBarButtonItem(image: UIImage(systemName: "bell")?.withTintColor(.black, renderingMode: .alwaysOriginal), style: .plain, target: self, action: #selector(addAlarm))
+//        let scrreenBtn = UIBarButtonItem(image: UIImage(systemName: "camera")?.withTintColor(.black, renderingMode: .alwaysOriginal), style: .plain, target: self, action: #selector(screenShot))
+
         navigationItem.rightBarButtonItems = [setAlarmButton]
         
         NotificationCenter.default.addObserver(self, selector: #selector(addAlarm), name: NSNotification.Name(rawValue: "button1Pressed"), object: nil)
@@ -94,6 +96,11 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
         startChartManager()
         setBackgroundForButton()
     }
+    
+//    @objc func screenShot() {
+//        chartManager.screenShot()
+//    }
+
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
@@ -146,8 +153,8 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
     
     func didUpdateMarkPriceStream(_ websocketManager: WebSocketManager, dataModel: MarkPriceStreamModel) {
         symbol = dataModel.symbol
-        let dundingrRateDouble = Double(dataModel.fundingRate)! * 100
-        fundingRate = String(format: "%.3f", dundingrRateDouble)
+        let fundingrRateDouble = Double(dataModel.fundingRate)! * 100
+        fundingRate = String(format: "%.3f", fundingrRateDouble)
         nextFundingTime = dataModel.timeTodateFormat(nextFindingTime: dataModel.nextFundingTime)
         rightPartView.text = "funding: \(fundingRate)%\nnext:\(nextFundingTime)"
     }
@@ -157,9 +164,8 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
         
         maxPrice = dataModel.highPrice
         minPrice = dataModel.lowPrice
-        
-        let volume = Double(dataModel.volumeQuote)! / 1_000_000
-        volume24h = String(format: "%.2fm$", volume)
+        volume24h = dataModel.volumeQuote
+//        volume24h = dataModel.volume24Format()
         
         rightUpperNavLabel.text = "\(closePrice)\n\(priceChangePercent)%"
         leftPartView.text = "24h volume\n\(volume24h)"
@@ -175,7 +181,7 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
         
         for (index, state) in AlarmModelsArray.alarms.enumerated() where state.isActive {
             if state.isAlarmUpper {
-                if closePrice >= state.alarmPrice && !isAlertShowing {
+                if closePrice >= state.alarmPrice && !isAlertShowing && symbol == state.symbol {
                     telegramAlram.message = "Цена \(state.symbol) пересекла \(state.alarmPrice) \(downToUp)"
                     telegramAlram.postRequest()
                     
@@ -194,7 +200,7 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
                     defaults.saveData()
                 }
             } else {
-                if closePrice <= state.alarmPrice && !isAlertShowing {
+                if closePrice <= state.alarmPrice && !isAlertShowing && symbol == state.symbol {
                     telegramAlram.message = "Цена \(state.symbol) пересекла \(state.alarmPrice) \(upToDown)"
                     telegramAlram.postRequest()
                     
