@@ -155,7 +155,9 @@ class SymbolsListController: UIViewController, UITableViewDataSource, UITableVie
             
             addAlarmVC.symbol = symbol.symbol
             addAlarmVC.closePrice = symbol.markPrice
+            addAlarmVC.openWebSocket()
             addAlarmVC.updateUI()
+            
             
         }
         searchController.isActive = false

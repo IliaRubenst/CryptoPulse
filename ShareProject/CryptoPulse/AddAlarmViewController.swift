@@ -12,7 +12,7 @@ enum AddAlarmState {
     case editAlarm
 }
 
-class AddAlarmViewController: UIViewController, UITextFieldDelegate {
+class AddAlarmViewController: UIViewController, UITextFieldDelegate, WebSocketManagerDelegate {
     
     var state: AddAlarmState = .newAlarm
     
@@ -21,6 +21,8 @@ class AddAlarmViewController: UIViewController, UITextFieldDelegate {
     var closePrice: String?
     var alarmPrice: Double?
     
+    
+    var webSocketManager: WebSocketManager! = nil
     var openedChart: DetailViewController? = nil
     var openedAlarmsList: AlarmsListViewController? = nil
     
@@ -104,6 +106,7 @@ class AddAlarmViewController: UIViewController, UITextFieldDelegate {
         super.viewDidLoad()
         setupUI()
         updateUI()
+        openWebSocket()
         setupKeyboardDoneButton()
         configureButtons()
     }
@@ -134,6 +137,27 @@ class AddAlarmViewController: UIViewController, UITextFieldDelegate {
         NSLayoutConstraint.activate([colorButton.leadingAnchor.constraint(equalTo: mainStack.leadingAnchor),
                                      colorButton.trailingAnchor.constraint(equalTo: mainStack.trailingAnchor),
                                      colorButton.heightAnchor.constraint(equalToConstant: 50)])
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        if let webSocketManager {
+            webSocketManager.close()
+        }
+    }
+    
+    func openWebSocket() {
+        guard let symbol else { return }
+        webSocketManager = WebSocketManager()
+        webSocketManager.delegate = self
+        webSocketManager.actualState = .individualSymbolTickerStreams
+        
+        webSocketManager.webSocketConnect(symbol: symbol, timeFrame: "1m")
+    }
+    
+    func didUpdateIndividualSymbolTicker(_ websocketManager: WebSocketManager, dataModel: IndividualSymbolTickerStreamsModel) {
+        closePrice = dataModel.closePrice
+        updateUI()
     }
     
     func setupKeyboardDoneButton() {
@@ -218,7 +242,7 @@ class AddAlarmViewController: UIViewController, UITextFieldDelegate {
             AlarmModelsArray.alarms.append(alarmModel)
         case .editAlarm:
             guard let alarmID else { return }
-            guard var alarmToEdit = AlarmModelsArray.alarms.filter({ $0.id == alarmID }).first else { return }
+            guard let alarmToEdit = AlarmModelsArray.alarms.filter({ $0.id == alarmID }).first else { return }
             
             guard let index = AlarmModelsArray.alarms.firstIndex(of: alarmToEdit) else { return }
             AlarmModelsArray.alarms[index].alarmPrice = alarmPrice
