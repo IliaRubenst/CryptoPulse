@@ -7,10 +7,6 @@
 
 import UIKit
 
-//struct Coin: Codable {
-//    var symbols: Symbol
-//}
-
 class Symbol: Codable {
     var symbol: String
     var markPrice: String
@@ -24,12 +20,10 @@ class Symbol: Codable {
         self.priceChangePercent = priceChangePercent
     }
     
-//    func volumeFormat(volume: String) -> String {
-//        let volume = Double(volume) ?? 0 / 1_000_000
-//        let volume24h = String(format: "%.2fm$", volume)
-//        
-//        return volume24h
-//    }
+    func volume24Format() -> String {
+        let volume24h = String(format: "%.2fm$", (Double(volume ?? "0")! / 1_000_000))
+        return volume24h
+    }
 }
 
 class FullSymbolData: Codable {
@@ -43,6 +37,10 @@ class FullSymbolData: Codable {
         self.P = priceChangePercent
         self.c = markPrice
         self.q = volume
+    }
+    func volume24Format() -> String {
+        let volume24h = String(format: "%.2fm$", (Double(q)! / 1_000_000))
+        return volume24h
     }
 }
 
@@ -98,6 +96,11 @@ struct IndividualSymbolTickerStreamsData: Codable {
         self.h = highPrice
         self.l = lowPrice
         self.P = priceChangePercent
+    }
+    
+    func volume24Format() -> String {
+        let volume24h = String(format: "%.2fm$", (Double(q)! / 1_000_000))
+        return volume24h
     }
 }
 

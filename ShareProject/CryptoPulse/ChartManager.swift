@@ -15,11 +15,15 @@ class ChartManager {
     var timeFrame: String
     var isFirstKline = true
     let binanceURL = "https://fapi.binance.com"
+    var numberAfterDecimalPoint: String = "2" {
+        didSet {
+            updateFormat()
+        }
+    }
     
     private var chart: LightweightCharts!
     private var series: CandlestickSeries!
     private var alarmLine: PriceLine!
-    
     
     // for rightClickMenu
     private var leadingConstraint: NSLayoutConstraint!
@@ -96,6 +100,10 @@ class ChartManager {
                     data.append(candle)
                 }
                 
+                if data[0].close! < 1{
+                    numberAfterDecimalPoint = "4"
+                }
+                
                 DispatchQueue.main.async {
                     self.setupSeries()
                 }
@@ -110,10 +118,18 @@ class ChartManager {
         
     }
     
+        func updateFormat() {
+            print(numberAfterDecimalPoint)
+            chart.applyOptions(options: ChartOptions(localization: LocalizationOptions(priceFormatter: .javaScript("function(price) { return '$' + price.toFixed(\(numberAfterDecimalPoint)); }"))))
+        }
+    
     
     func setupChart() {
+        print(numberAfterDecimalPoint)
         let options = ChartOptions(crosshair: CrosshairOptions(mode: .normal),
+                                   localization: LocalizationOptions(priceFormatter: .javaScript("function(price) { return '$' + price.toFixed(\(numberAfterDecimalPoint)); }")),
                                    trackingMode: TrackingModeOptions(exitMode: .onTouchEnd))
+        
         
         let chart = LightweightCharts(options: options)
         
@@ -163,8 +179,16 @@ class ChartManager {
         delegate.lightWeightChartView.bringSubviewToFront(rightClickMenu)
         
         
+        
         NotificationCenter.default.addObserver(self, selector: #selector(hideMenu), name: NSNotification.Name(rawValue: "anyBtnPressed"), object: nil)
     }
+    
+//    func screenShot() {
+//        chart.takeScreenshot { chart in
+//            chart?.ciImage
+//        }
+//    }
+
     
     @objc func dragTheView(recognizer: UIPanGestureRecognizer) {
         if recognizer.state == .began {
