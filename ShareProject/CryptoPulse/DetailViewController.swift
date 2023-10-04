@@ -65,7 +65,6 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
     var volume24h: String = "0.0"
     var maxPrice: String = "0.0"
     var minPrice: String = "0.0"
-    
     var id = 0
     
     var isKlineClose = false
@@ -165,7 +164,6 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
         maxPrice = dataModel.highPrice
         minPrice = dataModel.lowPrice
         volume24h = dataModel.volumeQuote
-//        volume24h = dataModel.volume24Format()
         
         rightUpperNavLabel.text = "\(closePrice)\n\(priceChangePercent)%"
         leftPartView.text = "24h volume\n\(volume24h)"
@@ -493,8 +491,6 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
             lightWeightChartView.topAnchor.constraint(equalTo: timeFrameStackView.bottomAnchor),
             lightWeightChartView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
-        
-        
     }
     
     @objc func timeFrameButtonPressed(sender: UIButton) {
