@@ -233,7 +233,9 @@ class AlarmsListViewController: UIViewController, UITableViewDelegate, UITableVi
             
             URLSession.shared.dataTask(with: request) { data, response, error in
                 if let data = data {
-                    if let response = try? JSONDecoder().decode(AlarmModel.self, from: data) {
+//                    if let response = try? JSONDecoder().decode(AlarmModel.self, from: data) {
+
+                    if (try? JSONDecoder().decode(AlarmModel.self, from: data)) != nil {
                         return
                     }
                     

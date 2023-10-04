@@ -100,12 +100,12 @@ class ChartManager {
                     data.append(candle)
                 }
                 
-                if data[0].close! < 1{
-                    numberAfterDecimalPoint = "4"
-                }
-                
-                DispatchQueue.main.async {
+                DispatchQueue.main.async { [self] in
                     self.setupSeries()
+                    
+                    if data[0].close! < 1{
+                        numberAfterDecimalPoint = "4"
+                    }
                 }
                 
                 delegate.startWebSocketManagers()
@@ -125,7 +125,6 @@ class ChartManager {
     
     
     func setupChart() {
-        print(numberAfterDecimalPoint)
         let options = ChartOptions(crosshair: CrosshairOptions(mode: .normal),
                                    localization: LocalizationOptions(priceFormatter: .javaScript("function(price) { return '$' + price.toFixed(\(numberAfterDecimalPoint)); }")),
                                    trackingMode: TrackingModeOptions(exitMode: .onTouchEnd))
@@ -145,7 +144,7 @@ class ChartManager {
         
         self.chart = chart
         
-        //test
+        //test пока можно передвигать меню с алармами
         let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(dragTheView))
         rightClickMenu.addGestureRecognizer(panGestureRecognizer)
         
@@ -249,7 +248,6 @@ class ChartManager {
             currentBar.high = max(currentBar.high ?? price, price)
             currentBar.low = min(currentBar.low ?? price, price)
         }
-        // здесь косяк при быстром переключении ТФ
         series.update(bar: currentBar)
     }
     
@@ -306,13 +304,10 @@ class ChartManager {
 }
 
 extension ChartManager: ChartDelegate {
-    
-    func didClick(onChart chart: ChartApi, parameters: MouseEventParams) {
-    }
-    
     func didCrosshairMove(onChart chart: ChartApi, parameters: MouseEventParams) {
 //        print(parameters.sourceEvent?.localY)
 //        print(parameters.sourceEvent?.localY)
+        
         if case .utc(timestamp: _) = parameters.time,
            let point = parameters.point,
            case let .barData(data) = parameters.price(forSeries: series) {
@@ -322,7 +317,7 @@ extension ChartManager: ChartDelegate {
             leadingConstraint.constant = CGFloat(point.x) + 5
             bottomConstraint.constant = CGFloat(point.y) + 5
 //            var test = options
-//            print(test?.price)
+//            print(test?.id)
         } else {
             self.tooltipView.isHidden = true
             if tooltipView.isHidden && isWasShown {
@@ -340,5 +335,8 @@ extension ChartManager: ChartDelegate {
     }
     
     func didVisibleTimeRangeChange(onChart chart: ChartApi, parameters: TimeRange?) {
+    }
+    
+    func didClick(onChart chart: ChartApi, parameters: MouseEventParams) {
     }
 }

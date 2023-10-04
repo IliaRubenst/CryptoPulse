@@ -324,7 +324,8 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
             
             URLSession.shared.dataTask(with: request) { data, response, error in
                 if let data = data {
-                    if let response = try? JSONDecoder().decode(AlarmModel.self, from: data) {
+//                    if let response = try? JSONDecoder().decode(AlarmModel.self, from: data) {
+                    if (try? JSONDecoder().decode(AlarmModel.self, from: data)) != nil {
                         return
                     }
                     
@@ -338,21 +339,21 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
         
         leftNavLabel.translatesAutoresizingMaskIntoConstraints = false
 //        leftNavLabel.heightAnchor.constraint(equalToConstant: self.view.frame.height).isActive = true
-        leftNavLabel.widthAnchor.constraint(equalToConstant: 70).isActive = true
+        leftNavLabel.widthAnchor.constraint(equalToConstant: 120).isActive = true
         leftNavLabel.font = .systemFont(ofSize: 13)
         leftNavLabel.text = "\(symbol)"
-        leftNavLabel.textAlignment = .center
+        leftNavLabel.textAlignment = .left
         
         rightUpperNavLabel.translatesAutoresizingMaskIntoConstraints = false
 //        rightUpperNavLabel.heightAnchor.constraint(equalToConstant: self.view.frame.height).isActive = true
-        rightUpperNavLabel.widthAnchor.constraint(equalToConstant: 170).isActive = true
+        rightUpperNavLabel.widthAnchor.constraint(equalToConstant: 160).isActive = true
         rightUpperNavLabel.font = .systemFont(ofSize: 13)
         rightUpperNavLabel.text = "\(closePrice)"
         rightUpperNavLabel.textAlignment = .center
         
         rightLowerNavLabel.translatesAutoresizingMaskIntoConstraints = false
 //        rightLowerNavLabel.heightAnchor.constraint(equalToConstant: self.view.frame.height).isActive = true
-        rightLowerNavLabel.widthAnchor.constraint(equalToConstant: 170).isActive = true
+        rightLowerNavLabel.widthAnchor.constraint(equalToConstant: 160).isActive = true
         rightLowerNavLabel.font = .systemFont(ofSize: 13)
         rightLowerNavLabel.text = "\(priceChangePercent)"
         rightLowerNavLabel.textAlignment = .center
