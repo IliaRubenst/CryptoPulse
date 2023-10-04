@@ -156,10 +156,6 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                 </prototypes>
-                                <connections>
-                                    <outlet property="dataSource" destination="GY7-eo-FkO" id="sW1-Qv-4jz"/>
-                                    <outlet property="delegate" destination="GY7-eo-FkO" id="6Is-o1-zTw"/>
-                                </connections>
                             </tableView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="ni6-Kb-gcD"/>
@@ -172,9 +168,6 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="BhW-Xj-5Ld"/>
-                    <connections>
-                        <outlet property="tableView" destination="xMR-YS-h9W" id="mro-tK-fvp"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lcB-i1-vee" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>

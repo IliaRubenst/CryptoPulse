@@ -80,5 +80,179 @@
             categories = "Layout Issues">
          </BreakpointContent>
       </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "536E55A8-F4B1-4E27-ABFD-8067C5DC5703"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CryptoPulse/CustomButtons.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "63"
+            endingLineNumber = "63"
+            landmarkName = "configure(with:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "536E55A8-F4B1-4E27-ABFD-8067C5DC5703 - 9880cb6de8dbc9ff"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "CyptoPulse.TwoLabelsButton.configure(with: CyptoPulse.TwoLabelsButtonViewModel) -&gt; ()"
+                  moduleName = "CyptoPulse"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/vitalybelikov/Documents/sharedRepo/ShareProject/CryptoPulse/CustomButtons.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "66"
+                  endingLineNumber = "66"
+                  offsetFromSymbolStart = "244">
+               </Location>
+               <Location
+                  uuid = "536E55A8-F4B1-4E27-ABFD-8067C5DC5703 - 9880cb6de8dbc9c0"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "CyptoPulse.TwoLabelsButton.configure(with: CyptoPulse.TwoLabelsButtonViewModel) -&gt; ()"
+                  moduleName = "CyptoPulse"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/vitalybelikov/Documents/sharedRepo/ShareProject/CryptoPulse/CustomButtons.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "67"
+                  endingLineNumber = "67"
+                  offsetFromSymbolStart = "72">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "44AC45D7-1889-404E-A28A-1BB8EF10AE9E"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CryptoPulse/SymbolsListController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "17"
+            endingLineNumber = "17"
+            landmarkName = "tableView"
+            landmarkType = "24">
+            <Locations>
+               <Location
+                  uuid = "44AC45D7-1889-404E-A28A-1BB8EF10AE9E - eeb53fe7a701e5ac"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 () -&gt; __C.UITableView in variable initialization expression of CyptoPulse.SymbolsListController.tableView : __C.UITableView"
+                  moduleName = "CyptoPulse"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/vitalybelikov/Documents/sharedRepo/ShareProject/CryptoPulse/SymbolsListController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "18"
+                  endingLineNumber = "18"
+                  offsetFromSymbolStart = "24">
+               </Location>
+               <Location
+                  uuid = "44AC45D7-1889-404E-A28A-1BB8EF10AE9E - 2a065470be704af4"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "CyptoPulse.SymbolsListController.tableView.getter : __C.UITableView"
+                  moduleName = "CyptoPulse"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/vitalybelikov/Documents/sharedRepo/ShareProject/CryptoPulse/SymbolsListController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "17"
+                  endingLineNumber = "17"
+                  offsetFromSymbolStart = "48">
+               </Location>
+               <Location
+                  uuid = "44AC45D7-1889-404E-A28A-1BB8EF10AE9E - 794d15e12a22b8a"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "CyptoPulse.SymbolsListController.init(nibName: Swift.Optional&lt;Swift.String&gt;, bundle: Swift.Optional&lt;__C.NSBundle&gt;) -&gt; CyptoPulse.SymbolsListController"
+                  moduleName = "CyptoPulse"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/vitalybelikov/Documents/sharedRepo/ShareProject/CryptoPulse/SymbolsListController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "17"
+                  endingLineNumber = "17"
+                  offsetFromSymbolStart = "140">
+               </Location>
+               <Location
+                  uuid = "44AC45D7-1889-404E-A28A-1BB8EF10AE9E - 7c7b3b4b64780fee"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "CyptoPulse.SymbolsListController.init(coder: __C.NSCoder) -&gt; Swift.Optional&lt;CyptoPulse.SymbolsListController&gt;"
+                  moduleName = "CyptoPulse"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/vitalybelikov/Documents/sharedRepo/ShareProject/CryptoPulse/SymbolsListController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "17"
+                  endingLineNumber = "17"
+                  offsetFromSymbolStart = "116">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "01379BB5-33BD-4572-877D-AEF99E29EAA2"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CryptoPulse/SymbolsListController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "101"
+            endingLineNumber = "101"
+            landmarkName = "tableView(_:cellForRowAt:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "01379BB5-33BD-4572-877D-AEF99E29EAA2 - aa8096250b6dbd3a"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "CyptoPulse.SymbolsListController.tableView(_: __C.UITableView, cellForRowAt: Foundation.IndexPath) -&gt; __C.UITableViewCell"
+                  moduleName = "CyptoPulse"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/vitalybelikov/Documents/sharedRepo/ShareProject/CryptoPulse/SymbolsListController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "101"
+                  endingLineNumber = "101"
+                  offsetFromSymbolStart = "2580">
+               </Location>
+               <Location
+                  uuid = "01379BB5-33BD-4572-877D-AEF99E29EAA2 - aa8096250b6dbd5b"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "CyptoPulse.SymbolsListController.tableView(_: __C.UITableView, cellForRowAt: Foundation.IndexPath) -&gt; __C.UITableViewCell"
+                  moduleName = "CyptoPulse"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/vitalybelikov/Documents/sharedRepo/ShareProject/CryptoPulse/SymbolsListController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "102"
+                  endingLineNumber = "102"
+                  offsetFromSymbolStart = "284">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
    </Breakpoints>
 </Bucket>

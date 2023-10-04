@@ -7,13 +7,27 @@
 
 import UIKit
 
+enum SymbolsListSender {
+    case mainView
+    case alarmsView
+}
+
 class SymbolsListController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, UISearchResultsUpdating {
-    @IBOutlet weak var tableView: UITableView!
+    
+    let tableView: UITableView = {
+        let tableView = UITableView()
+        return tableView
+    }()
+    
     private let searchController = UISearchController(searchResultsController: nil)
     private var symbols = SymbolsArray.symbols
     private var filteredSymbols = [Symbol]()
     var webSocket = WebSocketManager()
     var viewCtr: ViewController!
+    
+    var alarmsViewController: AddAlarmViewController!
+    var senderState: SymbolsListSender = .mainView
+    
     let defaults = DataLoader(keys: "savedFullSymbolsData")
     
     private var searchBarIsEmpty: Bool {
@@ -29,8 +43,38 @@ class SymbolsListController: UIViewController, UITableViewDataSource, UITableVie
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.tableView.register(SymbolsListCell.self, forCellReuseIdentifier: SymbolsListCell.identifier)
         
+        setupUI()
+        configureTableView()
+        configureSearchBar()
+        
+//        defaults.loadUserSymbols()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([tableView.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor),
+                                     tableView.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor),
+                                     tableView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
+                                     tableView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor)])
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        defaults.saveData()
+    }
+    
+    func setupUI() {
+        view.addSubview(tableView)
+    }
+    
+    func configureTableView() {
+        tableView.register(SymbolsListCell.self, forCellReuseIdentifier: SymbolsListCell.identifier)
+        tableView.delegate = self
+        tableView.dataSource = self
+    }
+    
+    func configureSearchBar() {
         self.tableView.tableHeaderView = searchController.searchBar
         searchController.searchResultsUpdater = self
         searchController.obscuresBackgroundDuringPresentation = false
@@ -45,13 +89,6 @@ class SymbolsListController: UIViewController, UITableViewDataSource, UITableVie
         searchController.searchBar.scopeButtonTitles = ["All", "USDT", "BUSD"]
         searchController.searchBar.delegate = self
         searchController.searchBar.sizeToFit()
-        
-        
-//        defaults.loadUserSymbols()
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        defaults.saveData()
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -89,20 +126,27 @@ class SymbolsListController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let symbol: Symbol
-        
-        if isFiltering {
-            symbol = filteredSymbols[indexPath.item]
-        } else {
-            symbol = SymbolsArray.symbols[indexPath.item]
+        switch senderState {
+        case .mainView:
+            let symbol: Symbol
+            
+            if isFiltering {
+                symbol = filteredSymbols[indexPath.item]
+            } else {
+                symbol = SymbolsArray.symbols[indexPath.item]
+            }
+            UserSymbols.savedSymbols.append(symbol)
+            viewCtr.closeConnection()
+            viewCtr.getSymbolToWebSocket()
+            
+            let defaults = DataLoader(keys: "savedSymbols")
+            defaults.saveData()
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "newSymbolAdded"), object: nil)
+            
+            
+        case .alarmsView:
+            break
         }
-        UserSymbols.savedSymbols.append(symbol)
-        viewCtr.closeConnection()
-        viewCtr.getSymbolToWebSocket()
-        
-        let defaults = DataLoader(keys: "savedSymbols")
-        defaults.saveData()
-        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "newSymbolAdded"), object: nil)
         searchController.isActive = false
         dismiss(animated: true)
     }

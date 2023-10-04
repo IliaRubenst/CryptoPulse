@@ -32,6 +32,7 @@
 		D87A63FD2ABC581100A29749 /* AlarmsListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D87A63FC2ABC581100A29749 /* AlarmsListViewController.swift */; };
 		D87A64B82AC5711C00A29749 /* AddAlarmViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D87A64B72AC5711C00A29749 /* AddAlarmViewController.swift */; };
 		D87A64BA2AC5733100A29749 /* AlarmTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D87A64B92AC5733100A29749 /* AlarmTableViewCell.swift */; };
+		D87A64C02ACB0C2F00A29749 /* CustomButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = D87A64BF2ACB0C2F00A29749 /* CustomButtons.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -64,6 +65,7 @@
 		D87A63FC2ABC581100A29749 /* AlarmsListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmsListViewController.swift; sourceTree = "<group>"; };
 		D87A64B72AC5711C00A29749 /* AddAlarmViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddAlarmViewController.swift; sourceTree = "<group>"; };
 		D87A64B92AC5733100A29749 /* AlarmTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlarmTableViewCell.swift; sourceTree = "<group>"; };
+		D87A64BF2ACB0C2F00A29749 /* CustomButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomButtons.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -115,6 +117,7 @@
 				49AACC322AB70EA000101C46 /* SymbolsListController.swift */,
 				D87A63FC2ABC581100A29749 /* AlarmsListViewController.swift */,
 				D87A64B72AC5711C00A29749 /* AddAlarmViewController.swift */,
+				D87A64BF2ACB0C2F00A29749 /* CustomButtons.swift */,
 				49367CAF2AAB33BE00827BE9 /* MarketManager.swift */,
 				4979F2072AACAFC0000E039C /* WebSocketManager.swift */,
 				D81365EB2AB207A1005930D2 /* ChartManager.swift */,
@@ -272,6 +275,7 @@
 				D81365EC2AB207A1005930D2 /* ChartManager.swift in Sources */,
 				4979F2082AACAFC0000E039C /* WebSocketManager.swift in Sources */,
 				496BEFDA2AA9EFDF00B15E0F /* AppDelegate.swift in Sources */,
+				D87A64C02ACB0C2F00A29749 /* CustomButtons.swift in Sources */,
 				D81366362AB4C577005930D2 /* Notifications.swift in Sources */,
 				D87A64B82AC5711C00A29749 /* AddAlarmViewController.swift in Sources */,
 				49367CAC2AAAFE7100827BE9 /* CoinCell.swift in Sources */,

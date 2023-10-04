@@ -175,7 +175,7 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
         
         for (index, state) in AlarmModelsArray.alarms.enumerated() where state.isActive {
             if state.isAlarmUpper {
-                if closePrice >= state.alarmPrice && !isAlertShowing {
+                if closePrice >= state.alarmPrice && !isAlertShowing && symbol == state.symbol {
                     telegramAlram.message = "Цена \(state.symbol) пересекла \(state.alarmPrice) \(downToUp)"
                     telegramAlram.postRequest()
                     
@@ -194,7 +194,7 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
                     defaults.saveData()
                 }
             } else {
-                if closePrice <= state.alarmPrice && !isAlertShowing {
+                if closePrice >= state.alarmPrice && !isAlertShowing && symbol == state.symbol {
                     telegramAlram.message = "Цена \(state.symbol) пересекла \(state.alarmPrice) \(upToDown)"
                     telegramAlram.postRequest()
                     
@@ -239,6 +239,17 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
     
     // может перенести два метода в AlarmManager?
     @objc func addAlarm() {
+        // Заготовка
+        /*let addAlarmVC = AddAlarmViewController()
+        addAlarmVC.symbol = symbol
+        addAlarmVC.price = String(closePrice)
+        
+        if let sheet = addAlarmVC.sheetPresentationController {
+            sheet.detents = [.medium()]
+        }
+        
+        present(addAlarmVC, animated: true)*/
+        
         let ac = UIAlertController(title: "Set alarm for \(symbol)", message: nil, preferredStyle: .alert)
         ac.addTextField { textField in
             textField.placeholder = "00.00"
@@ -264,6 +275,7 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
                 
                 AlarmModelsArray.alarms.append(currentModel)
                 self!.addAlarmtoModelDB(alarmModel: currentModel)
+                
                 let defaults = DataLoader(keys: "savedAlarms")
                 defaults.saveData()
 
