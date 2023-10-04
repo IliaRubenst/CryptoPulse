@@ -116,7 +116,7 @@ class LabelColorButton: UIButton {
         let colorWell = UIColorWell()
         
         colorWell.supportsAlpha = false
-        colorWell.selectedColor = .systemGreen
+        colorWell.selectedColor = .systemRed
         colorWell.title = "Выберите цвет"
         return colorWell
     }()

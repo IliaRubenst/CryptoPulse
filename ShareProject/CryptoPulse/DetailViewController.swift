@@ -244,17 +244,19 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
     // может перенести два метода в AlarmManager?
     @objc func addAlarm() {
         // Заготовка
-        /*let addAlarmVC = AddAlarmViewController()
+        let addAlarmVC = AddAlarmViewController()
         addAlarmVC.symbol = symbol
-        addAlarmVC.price = String(closePrice)
+        addAlarmVC.closePrice = String(closePrice)
+        addAlarmVC.symbolButton.isEnabled = false
+        addAlarmVC.openedChart = self
         
         if let sheet = addAlarmVC.sheetPresentationController {
             sheet.detents = [.medium()]
         }
         
-        present(addAlarmVC, animated: true)*/
+        present(addAlarmVC, animated: true)
         
-        let ac = UIAlertController(title: "Set alarm for \(symbol)", message: nil, preferredStyle: .alert)
+        /*let ac = UIAlertController(title: "Set alarm for \(symbol)", message: nil, preferredStyle: .alert)
         ac.addTextField { textField in
             textField.placeholder = "00.00"
             textField.keyboardType = UIKeyboardType.decimalPad
@@ -287,7 +289,7 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
             }
         })
         ac.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-        present(ac, animated: true)
+        present(ac, animated: true)*/
     }
     
     @objc func addAlarmForSelectedPrice() {

@@ -7,11 +7,22 @@
 
 import UIKit
 
+enum AddAlarmState {
+    case newAlarm
+    case editAlarm
+}
+
 class AddAlarmViewController: UIViewController, UITextFieldDelegate {
     
-    var symbol: String = "Инструмент"
-    var price: String = ">"
-    var color: UIColor = .systemRed
+    var state: AddAlarmState = .newAlarm
+    
+    var alarmID: Int?
+    var symbol: String?
+    var closePrice: String?
+    var alarmPrice: Double?
+    
+    var openedChart: DetailViewController? = nil
+    var openedAlarmsList: AlarmsListViewController? = nil
     
     let titleLabel: UILabel = {
         let label = UILabel()
@@ -92,6 +103,7 @@ class AddAlarmViewController: UIViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
+        updateUI()
         setupKeyboardDoneButton()
         configureButtons()
     }
@@ -150,11 +162,23 @@ class AddAlarmViewController: UIViewController, UITextFieldDelegate {
         mainStack.addArrangedSubview(colorButton)
     }
     
+    func updateUI() {
+        if let symbol, let closePrice {
+            symbolButton.configure(with: TwoLabelsButtonViewModel(leftLabel: symbol, rightLabel: closePrice))
+        } else {
+            symbolButton.configure(with: TwoLabelsButtonViewModel(leftLabel: "Инструмент", rightLabel: ">"))
+        }
+        
+        if let alarmPrice {
+            priceButton.textField.text = "\(alarmPrice)"
+        }
+    }
+    
     func configureButtons() {
-        symbolButton.configure(with: TwoLabelsButtonViewModel(leftLabel: symbol, rightLabel: price))
         priceButton.textField.delegate = self
         symbolButton.addTarget(self, action: #selector(openSymbolsList), for: .touchUpInside)
         dismissButton.addTarget(self, action: #selector(dismissSelf), for: .touchUpInside)
+        saveButton.addTarget(self, action: #selector(saveAlarm), for: .touchUpInside)
     }
     
     @objc func dismissSelf() {
@@ -164,14 +188,54 @@ class AddAlarmViewController: UIViewController, UITextFieldDelegate {
     @objc func openSymbolsList() {
         let table = SymbolsListController()
         table.senderState = .alarmsView
-        table.alarmsViewController = self
+        table.addAlarmVC = self
         
         present(table, animated: true)
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
-        if let text = textField.text {
-            print(text)
+        guard let text = textField.text,
+              let alarmPrice = Double(text) else { return }
+        self.alarmPrice = alarmPrice
+    }
+    
+    @objc func saveAlarm() {
+        guard let closePrice,
+              let symbol,
+              let doubleClosePrice = Double(closePrice),
+              let alarmPrice else { return }
+        
+        switch state {
+        case .newAlarm:
+            let isAlarmUpper = alarmPrice > doubleClosePrice ? true : false
+            let id = Int.random(in: 0...999999999)
+            
+            // Вынести этот метод с ДетейлВьюКонтроллера.
+            let dVC = DetailViewController()
+            let currentDate = dVC.convertCurrentDateToString()
+            
+            let alarmModel = AlarmModel(id: id, symbol: symbol, alarmPrice: alarmPrice, isAlarmUpper: isAlarmUpper, isActive: true, date: currentDate)
+            AlarmModelsArray.alarms.append(alarmModel)
+        case .editAlarm:
+            guard let alarmID else { return }
+            guard var alarmToEdit = AlarmModelsArray.alarms.filter({ $0.id == alarmID }).first else { return }
+            
+            guard let index = AlarmModelsArray.alarms.firstIndex(of: alarmToEdit) else { return }
+            AlarmModelsArray.alarms[index].alarmPrice = alarmPrice
         }
+        
+        let defaults = DataLoader(keys: "savedAlarms")
+        defaults.saveData()
+        
+        if let openedChart {
+            openedChart.chartManager.setupAlarmLine(alarmPrice)
+        }
+        
+        if let openedAlarmsList {
+            openedAlarmsList.updateData()
+            openedAlarmsList.tableView.reloadData()
+        }
+        
+        dismissSelf()
     }
 }
