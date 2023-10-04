@@ -95,6 +95,7 @@ class AlarmsListViewController: UIViewController, UITableViewDelegate, UITableVi
     
     @objc func addAlarm() {
         let vc = AddAlarmViewController()
+        vc.openedAlarmsList = self
         
         present(vc, animated: true)
     }
@@ -147,8 +148,9 @@ class AlarmsListViewController: UIViewController, UITableViewDelegate, UITableVi
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let toggleAction = self.toggleStatusAction(rowIndexPathAt: indexPath)
         let deleteAction = self.deleteRowAction(rowIndexPathAt: indexPath)
+        let editAlarmAction = self.editAlarmAction(rowIndexPathAt: indexPath)
         
-        let swipeActions = UISwipeActionsConfiguration(actions: [deleteAction, toggleAction])
+        let swipeActions = UISwipeActionsConfiguration(actions: [deleteAction, editAlarmAction, toggleAction])
         
         return swipeActions
     }
@@ -204,6 +206,38 @@ class AlarmsListViewController: UIViewController, UITableViewDelegate, UITableVi
             action.image = UIImage(systemName: "play")
             action.backgroundColor = .systemGreen
         }
+        
+        return action
+    }
+    
+    func editAlarmAction(rowIndexPathAt indexPath: IndexPath) -> UIContextualAction {
+        let action = UIContextualAction(style: .normal, title: "Редкатировать") { [weak self] _, _, _ in
+            guard let self = self else { return }
+            
+            let alarm = filtredAlarms[indexPath.item]
+            
+            let alarmID = alarm.id
+            let alarmSymbol = alarm.symbol
+            let alarmPrice = alarm.alarmPrice
+            
+            let symbolModelForAlarm = SymbolsArray.symbols.filter { $0.symbol == alarmSymbol }
+            let currentSymbolPrice = symbolModelForAlarm.first?.markPrice
+            
+            let addAlarmVC = AddAlarmViewController()
+            
+            addAlarmVC.state = .editAlarm
+            
+            addAlarmVC.alarmID = alarmID
+            addAlarmVC.symbol = alarmSymbol
+            addAlarmVC.closePrice = currentSymbolPrice
+            addAlarmVC.alarmPrice = alarmPrice
+            addAlarmVC.openedAlarmsList = self
+            
+            present(addAlarmVC, animated: true)
+        }
+        
+        action.backgroundColor = .systemOrange
+        action.image = UIImage(systemName: "pencil")
         
         return action
     }

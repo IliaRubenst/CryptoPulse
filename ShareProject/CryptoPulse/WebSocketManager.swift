@@ -7,13 +7,6 @@
 
 import UIKit
 
-protocol WebSocketManagerDelegate {
-    func didUpdateCandle(_ websocketManager: WebSocketManager, candleModel: CurrentCandleModel)
-    func didUpdateMarkPriceStream(_ websocketManager: WebSocketManager, dataModel: MarkPriceStreamModel)
-    func didUpdateIndividualSymbolTicker(_ websocketManager: WebSocketManager, dataModel: IndividualSymbolTickerStreamsModel)
-    func didUpdateminiTicker(_ websocketManager: WebSocketManager, dataModel: [Symbol])
-}
-
 enum State: CaseIterable {
     case markPriceStream
     case individualSymbolTickerStreams

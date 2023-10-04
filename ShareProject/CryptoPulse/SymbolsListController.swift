@@ -25,7 +25,7 @@ class SymbolsListController: UIViewController, UITableViewDataSource, UITableVie
     var webSocket = WebSocketManager()
     var viewCtr: ViewController!
     
-    var alarmsViewController: AddAlarmViewController!
+    var addAlarmVC: AddAlarmViewController!
     var senderState: SymbolsListSender = .mainView
     
     let defaults = DataLoader(keys: "savedFullSymbolsData")
@@ -145,7 +145,20 @@ class SymbolsListController: UIViewController, UITableViewDataSource, UITableVie
             
             
         case .alarmsView:
-            break
+            let symbol: Symbol
+            
+            if isFiltering {
+                symbol = filteredSymbols[indexPath.item]
+            } else {
+                symbol = SymbolsArray.symbols[indexPath.item]
+            }
+            
+            addAlarmVC.symbol = symbol.symbol
+            addAlarmVC.closePrice = symbol.markPrice
+            addAlarmVC.openWebSocket()
+            addAlarmVC.updateUI()
+            
+            
         }
         searchController.isActive = false
         dismiss(animated: true)

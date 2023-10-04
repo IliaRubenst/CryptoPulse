@@ -63,7 +63,7 @@ struct IndividualSymbolTickerStreamsModel {
 struct AlarmModel: Codable, Hashable {
     let id: Int
     let symbol: String
-    let alarmPrice: Double
+    var alarmPrice: Double
     let isAlarmUpper: Bool
     var isActive: Bool
     let date: String
