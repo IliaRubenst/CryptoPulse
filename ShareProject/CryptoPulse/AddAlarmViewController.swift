@@ -200,6 +200,8 @@ class AddAlarmViewController: UIViewController, UITextFieldDelegate, WebSocketMa
         
         if let alarmPrice {
             priceButton.textField.text = "\(alarmPrice)"
+        } else {
+            priceButton.textField.text = "0.00"
         }
     }
     

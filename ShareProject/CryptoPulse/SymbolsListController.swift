@@ -159,6 +159,7 @@ class SymbolsListController: UIViewController, UITableViewDataSource, UITableVie
             
             addAlarmVC.symbol = symbol.symbol
             addAlarmVC.closePrice = nil
+            addAlarmVC.alarmPrice = nil
             addAlarmVC.updateUI()
             addAlarmVC.openWebSocket()
         }
