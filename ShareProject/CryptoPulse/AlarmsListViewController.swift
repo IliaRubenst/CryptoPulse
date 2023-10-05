@@ -220,8 +220,8 @@ class AlarmsListViewController: UIViewController, UITableViewDelegate, UITableVi
             let alarmSymbol = alarm.symbol
             let alarmPrice = alarm.alarmPrice
             
-            let symbolModelForAlarm = SymbolsArray.symbols.filter { $0.symbol == alarmSymbol }
-            let currentSymbolPrice = symbolModelForAlarm.first?.markPrice
+//            let symbolModelForAlarm = SymbolsArray.symbols.filter { $0.symbol == alarmSymbol }
+//            let currentSymbolPrice = symbolModelForAlarm.first?.markPrice
             
             let addAlarmVC = AddAlarmViewController()
             
@@ -229,7 +229,7 @@ class AlarmsListViewController: UIViewController, UITableViewDelegate, UITableVi
             
             addAlarmVC.alarmID = alarmID
             addAlarmVC.symbol = alarmSymbol
-            addAlarmVC.closePrice = currentSymbolPrice
+//            addAlarmVC.closePrice = currentSymbolPrice
             addAlarmVC.alarmPrice = alarmPrice
             addAlarmVC.openedAlarmsList = self
             

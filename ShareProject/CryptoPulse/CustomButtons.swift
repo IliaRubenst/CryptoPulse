@@ -99,7 +99,7 @@ class LabelTextFiledButton: UIButton, UITextFieldDelegate {
     }
     
     func configureTextField() {        
-        textField.keyboardType = .decimalPad
+        textField.keyboardType = UIKeyboardType.decimalPad
         textField.textAlignment = .right
         textField.textColor = .white
         textField.tintColor = .white

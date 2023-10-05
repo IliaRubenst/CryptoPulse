@@ -106,9 +106,9 @@ class AddAlarmViewController: UIViewController, UITextFieldDelegate, WebSocketMa
         super.viewDidLoad()
         setupUI()
         updateUI()
-        openWebSocket()
         setupKeyboardDoneButton()
         configureButtons()
+        openWebSocket()
     }
     
     override func viewDidLayoutSubviews() {
@@ -155,10 +155,19 @@ class AddAlarmViewController: UIViewController, UITextFieldDelegate, WebSocketMa
         webSocketManager.webSocketConnect(symbol: symbol, timeFrame: "1m")
     }
     
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        if alarmPrice == nil {
+            guard let closePrice else { return }
+            priceButton.textField.text = closePrice
+        }
+    }
+    
     func didUpdateIndividualSymbolTicker(_ websocketManager: WebSocketManager, dataModel: IndividualSymbolTickerStreamsModel) {
         closePrice = dataModel.closePrice
-        updateUI()
+        updateTwoLabelButtonUI()
     }
+    
+    
     
     func setupKeyboardDoneButton() {
         let toolBar = UIToolbar(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 50))
@@ -187,15 +196,30 @@ class AddAlarmViewController: UIViewController, UITextFieldDelegate, WebSocketMa
     }
     
     func updateUI() {
-        if let symbol, let closePrice {
-            symbolButton.configure(with: TwoLabelsButtonViewModel(leftLabel: symbol, rightLabel: closePrice))
-        } else {
-            symbolButton.configure(with: TwoLabelsButtonViewModel(leftLabel: "Инструмент", rightLabel: ">"))
-        }
+        updateTwoLabelButtonUI()
         
         if let alarmPrice {
             priceButton.textField.text = "\(alarmPrice)"
         }
+    }
+    
+    func updateTwoLabelButtonUI() {
+        var leftLabel: String
+        var rightLabel: String
+        
+        if let symbol, let closePrice {
+            leftLabel = symbol
+            rightLabel = closePrice
+        } else if let symbol {
+            leftLabel = symbol
+            rightLabel = "Подключение..."
+        } else {
+            leftLabel = "Инструмент"
+            rightLabel = ">"
+        }
+        
+        let viewModel = TwoLabelsButtonViewModel(leftLabel: leftLabel, rightLabel: rightLabel)
+        symbolButton.configure(with: viewModel)
     }
     
     func configureButtons() {
@@ -218,12 +242,15 @@ class AddAlarmViewController: UIViewController, UITextFieldDelegate, WebSocketMa
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
-        guard let text = textField.text,
-              let alarmPrice = Double(text) else { return }
+        guard let text = textField.text else { return }
+        let formattedText = text.replacingOccurrences(of: ",", with: ".")
+        let alarmPrice = Double(formattedText)
         self.alarmPrice = alarmPrice
     }
     
     @objc func saveAlarm() {
+        didTapDone()
+        
         guard let closePrice,
               let symbol,
               let doubleClosePrice = Double(closePrice),
