@@ -153,13 +153,17 @@ class SymbolsListController: UIViewController, UITableViewDataSource, UITableVie
                 symbol = SymbolsArray.symbols[indexPath.item]
             }
             
+            if addAlarmVC.webSocketManager != nil {
+                addAlarmVC.webSocketManager.close()
+            }
+            
             addAlarmVC.symbol = symbol.symbol
-            addAlarmVC.closePrice = symbol.markPrice
-            addAlarmVC.openWebSocket()
+            addAlarmVC.closePrice = nil
+            addAlarmVC.alarmPrice = nil
             addAlarmVC.updateUI()
-            
-            
+            addAlarmVC.openWebSocket()
         }
+        
         searchController.isActive = false
         dismiss(animated: true)
     }

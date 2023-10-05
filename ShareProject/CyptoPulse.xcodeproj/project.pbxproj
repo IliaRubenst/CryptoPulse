@@ -29,6 +29,7 @@
 		D81365EC2AB207A1005930D2 /* ChartManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D81365EB2AB207A1005930D2 /* ChartManager.swift */; };
 		D81366362AB4C577005930D2 /* Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = D81366352AB4C577005930D2 /* Notifications.swift */; };
 		D868DEC82ACDBC01003822BF /* WebSocketProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = D868DEC72ACDBC01003822BF /* WebSocketProtocol.swift */; };
+		D868DECA2ACEE016003822BF /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D868DEC92ACEE016003822BF /* SettingsViewController.swift */; };
 		D87A63FB2ABC294A00A29749 /* Key.swift in Sources */ = {isa = PBXBuildFile; fileRef = D87A63FA2ABC294900A29749 /* Key.swift */; };
 		D87A63FD2ABC581100A29749 /* AlarmsListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D87A63FC2ABC581100A29749 /* AlarmsListViewController.swift */; };
 		D87A64B82AC5711C00A29749 /* AddAlarmViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D87A64B72AC5711C00A29749 /* AddAlarmViewController.swift */; };
@@ -63,6 +64,7 @@
 		D81365EB2AB207A1005930D2 /* ChartManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartManager.swift; sourceTree = "<group>"; };
 		D81366352AB4C577005930D2 /* Notifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notifications.swift; sourceTree = "<group>"; };
 		D868DEC72ACDBC01003822BF /* WebSocketProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketProtocol.swift; sourceTree = "<group>"; };
+		D868DEC92ACEE016003822BF /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		D87A63FA2ABC294900A29749 /* Key.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Key.swift; sourceTree = "<group>"; };
 		D87A63FC2ABC581100A29749 /* AlarmsListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmsListViewController.swift; sourceTree = "<group>"; };
 		D87A64B72AC5711C00A29749 /* AddAlarmViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddAlarmViewController.swift; sourceTree = "<group>"; };
@@ -136,6 +138,7 @@
 				D87A64B92AC5733100A29749 /* AlarmTableViewCell.swift */,
 				49520E562AC4BCE2009B05BD /* SymbolsListCell.swift */,
 				496BEFDF2AA9EFDF00B15E0F /* Main.storyboard */,
+				D868DEC92ACEE016003822BF /* SettingsViewController.swift */,
 				496BEFE22AA9EFE100B15E0F /* Assets.xcassets */,
 				496BEFE42AA9EFE100B15E0F /* LaunchScreen.storyboard */,
 				496BEFE72AA9EFE100B15E0F /* Info.plist */,
@@ -289,6 +292,7 @@
 				496BEFDC2AA9EFDF00B15E0F /* SceneDelegate.swift in Sources */,
 				4979F2062AAC3905000E039C /* DetailViewController.swift in Sources */,
 				D868DEC82ACDBC01003822BF /* WebSocketProtocol.swift in Sources */,
+				D868DECA2ACEE016003822BF /* SettingsViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -444,6 +448,7 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -476,6 +481,7 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
