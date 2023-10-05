@@ -92,7 +92,7 @@
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0ny-j7-YQF" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2310.6870229007632" y="-1211.267605633803"/>
+            <point key="canvasLocation" x="1963" y="-1216"/>
         </scene>
         <!--Detail View Controller-->
         <scene sceneID="sAR-rT-Y9X">
@@ -108,7 +108,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="aMo-bQ-rBa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3036" y="-1211"/>
+            <point key="canvasLocation" x="2688" y="-1216"/>
         </scene>
         <!--Список уведомлений-->
         <scene sceneID="sYH-PW-4KD">
@@ -124,7 +124,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="CkU-ch-dLc" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2504.5801526717555" y="-526.05633802816908"/>
+            <point key="canvasLocation" x="1961" y="-526"/>
         </scene>
         <!--Symbols List Controller-->
         <scene sceneID="SwH-YG-egc">
@@ -171,7 +171,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lcB-i1-vee" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2311" y="-1883"/>
+            <point key="canvasLocation" x="1960" y="-1884"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="2xY-fj-wDf">
@@ -185,11 +185,12 @@
                     <connections>
                         <segue destination="Ts0-c0-exN" kind="relationship" relationship="viewControllers" id="EuV-TB-sQh"/>
                         <segue destination="29O-8d-yK0" kind="relationship" relationship="viewControllers" id="UMt-zW-UkP"/>
+                        <segue destination="k8o-em-DT4" kind="relationship" relationship="viewControllers" id="WON-Cu-tLW"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="D6n-Zr-5aO" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="801" y="-893"/>
+            <point key="canvasLocation" x="447" y="-526"/>
         </scene>
         <!--Мои списки-->
         <scene sceneID="Cf6-iH-3RL">
@@ -209,7 +210,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OBP-aH-Vqu" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1578" y="-1211"/>
+            <point key="canvasLocation" x="1230" y="-1216"/>
         </scene>
         <!--Уведомления-->
         <scene sceneID="gu4-P4-q8a">
@@ -228,7 +229,23 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2Bt-OJ-5EX" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1636" y="-526"/>
+            <point key="canvasLocation" x="1227" y="-526"/>
+        </scene>
+        <!--Настройки-->
+        <scene sceneID="mFp-5h-ANN">
+            <objects>
+                <viewController id="k8o-em-DT4" customClass="SettingsViewController" customModule="CyptoPulse" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="gNe-Fr-naf">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="eAq-bd-bus"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Настройки" image="gearshape" catalog="system" selectedImage="gearshape.fill" id="59x-bc-7sC"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Rc6-UP-ahY" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1227" y="210"/>
         </scene>
     </scenes>
     <resources>
@@ -236,6 +253,8 @@
         <image name="alarm.fill" catalog="system" width="123" height="128"/>
         <image name="folder" catalog="system" width="128" height="96"/>
         <image name="folder.fill" catalog="system" width="128" height="96"/>
+        <image name="gearshape" catalog="system" width="128" height="123"/>
+        <image name="gearshape.fill" catalog="system" width="128" height="123"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
