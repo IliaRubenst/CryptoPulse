@@ -114,9 +114,9 @@ class SymbolsListController: UIViewController, UITableViewDataSource, UITableVie
         let priceLabel = ("Price: \(symbol.markPrice)")
         let percentLabel = ("\(symbol.priceChangePercent ?? "0") %")
         
-        let volume = Double(symbol.volume ?? "0")! / 1_000_000
-        let volume24h = String(format: "%.2fm$", volume)
-        let volumeLabel = ("Volume 24h: \(volume24h)")
+//        let volume = Double(symbol.volume ?? "0")! / 1_000_000
+//        let volume24h = String(format: "%.2fm$", volume)
+        let volumeLabel = ("Volume 24h: \(symbol.volume24Format())")
         
         cell.configure(symbolLabel: symbolLabel, priceLabel: priceLabel, volumeLabel: volumeLabel, percentChangeLabel: percentLabel)
         

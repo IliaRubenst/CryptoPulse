@@ -125,10 +125,14 @@ class ChartManager {
     
     
     func setupChart() {
-        let options = ChartOptions(crosshair: CrosshairOptions(mode: .normal),
+        let options = ChartOptions(timeScale: TimeScaleOptions(borderVisible: true,
+                                                               timeVisible: true,
+                                                               secondsVisible: true,
+                                                               ticksVisible: true),
+                                   crosshair: CrosshairOptions(mode: .normal),
                                    localization: LocalizationOptions(priceFormatter: .javaScript("function(price) { return '$' + price.toFixed(\(numberAfterDecimalPoint)); }")),
                                    trackingMode: TrackingModeOptions(exitMode: .onTouchEnd))
-        
+
         
         let chart = LightweightCharts(options: options)
         
@@ -143,6 +147,7 @@ class ChartManager {
         ])
         
         self.chart = chart
+        
         
         //test пока можно передвигать меню с алармами
         let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(dragTheView))
@@ -307,7 +312,6 @@ extension ChartManager: ChartDelegate {
     func didCrosshairMove(onChart chart: ChartApi, parameters: MouseEventParams) {
 //        print(parameters.sourceEvent?.localY)
 //        print(parameters.sourceEvent?.localY)
-        
         if case .utc(timestamp: _) = parameters.time,
            let point = parameters.point,
            case let .barData(data) = parameters.price(forSeries: series) {

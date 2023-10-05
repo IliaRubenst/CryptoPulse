@@ -46,8 +46,8 @@ class AlarmsListViewController: UIViewController, UITableViewDelegate, UITableVi
     }
     
     func configureNavButtons() {
-        let eraseList = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(removeAlarmsFromList))
-        let addAlarm = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addAlarm))
+        let eraseList = UIBarButtonItem(image: UIImage(systemName: "trash")?.withTintColor(.black, renderingMode: .alwaysOriginal), style: .plain, target: self, action: #selector(removeAlarmsFromList))
+        let addAlarm = UIBarButtonItem(image: UIImage(systemName: "plus")?.withTintColor(.black, renderingMode: .alwaysOriginal), style: .plain, target: self, action: #selector(addAlarm))
         
         navigationItem.leftBarButtonItem = eraseList
         navigationItem.rightBarButtonItem = addAlarm
@@ -101,16 +101,19 @@ class AlarmsListViewController: UIViewController, UITableViewDelegate, UITableVi
     }
     
     @objc func removeAlarmsFromList() {
-        AlarmModelsArray.alarms.removeAll()
-        filtredAlarms.removeAll()
-        tableView.reloadData()
-//        AlarmModelsArray.alarmaLine.removeAll()
+        let ac = UIAlertController(title: "Вы действительно хотите удалить все уведомления?", message: nil, preferredStyle: .alert)
         
-        let defaults = DataLoader(keys: "savedAlarms")
-        defaults.saveData()
-        
-//        defaults.keys = "savedLines"
-//        defaults.saveData()
+        ac.addAction(UIAlertAction(title: "Да", style: .default) { [weak self] _ in
+            AlarmModelsArray.alarms.removeAll()
+            self?.filtredAlarms.removeAll()
+            self?.tableView.reloadData()
+
+            
+            let defaults = DataLoader(keys: "savedAlarms")
+            defaults.saveData()
+        })
+        ac.addAction(UIAlertAction(title: "Нет", style: .cancel))
+        present(ac, animated: true)
     }
     
     //MARK: - UITableViewDataSource

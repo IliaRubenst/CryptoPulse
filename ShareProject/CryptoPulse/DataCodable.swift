@@ -21,8 +21,9 @@ class Symbol: Codable {
     }
     
     func volume24Format() -> String {
-        let volume24h = String(format: "%.2fm$", (Double(volume ?? "0")! / 1_000_000))
-        return volume24h
+        let volumeDouble = (volume as? NSString)?.doubleValue
+        volume = String(format: "%.2fm$", (volumeDouble ?? 0) / 1_000_000)
+        return volume!
     }
 }
 
