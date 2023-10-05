@@ -264,7 +264,6 @@ class AlarmsListViewController: UIViewController, UITableViewDelegate, UITableVi
             request.addValue("Basic aWxpYTpMSmtiOTkyMDA4MjIh", forHTTPHeaderField: "Authorization")
             request.httpBody = encoded
             
-            
             URLSession.shared.dataTask(with: request) { data, response, error in
                 if let data = data {
 //                    if let response = try? JSONDecoder().decode(AlarmModel.self, from: data) {
@@ -272,7 +271,6 @@ class AlarmsListViewController: UIViewController, UITableViewDelegate, UITableVi
                     if (try? JSONDecoder().decode(AlarmModel.self, from: data)) != nil {
                         return
                     }
-                    
                 }
             }.resume()
         }
@@ -286,13 +284,12 @@ class AlarmsListViewController: UIViewController, UITableViewDelegate, UITableVi
             request.addValue("application/json", forHTTPHeaderField: "Accept")
             request.addValue("Basic aWxpYTpMSmtiOTkyMDA4MjIh", forHTTPHeaderField: "Authorization")
             
-            let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            URLSession.shared.dataTask(with: request) { data, response, error in
                 if error != nil {
                     print(error!)
                     return
                 }
-            }
-            task.resume()
+            }.resume()
         }
     }
     

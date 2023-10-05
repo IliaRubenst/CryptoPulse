@@ -275,16 +275,5 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
             cell.layer.borderColor = #colorLiteral(red: 0.008301745169, green: 0.5873891115, blue: 0.5336645246, alpha: 1)
         }
     }
-    
-    func didUpdateMarkPriceStream(_ websocketManager: WebSocketManager, dataModel: MarkPriceStreamModel) {
-    }
-    
-    func didUpdateIndividualSymbolTicker(_ websocketManager: WebSocketManager, dataModel: IndividualSymbolTickerStreamsModel) {
-    }
-    
-    func didUpdatemarkPriceStream(_ websocketManager: WebSocketManager, dataModel: MarkPriceStreamModel) {
-    }
-    
-
 }
 

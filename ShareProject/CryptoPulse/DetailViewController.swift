@@ -524,10 +524,6 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
         startChartManager()
     }
     
-    func didUpdateminiTicker(_ websocketManager: WebSocketManager, dataModel: [Symbol]) {
-    }
-    
-    
     func convertCurrentDateToString() -> String {
         let df = DateFormatter()
         df.dateFormat = "dd-MM-yyy hh:mm"
