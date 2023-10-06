@@ -73,18 +73,15 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
     
     var timeFrame = "15m"
     
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         let defaults = DataLoader(keys: "savedAlarms")
         defaults.loadUserSymbols()
         
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "chevron.backward")?.withTintColor(.black, renderingMode: .alwaysOriginal), style: .plain, target: self, action: #selector(backTapped))
-
-        let setAlarmButton = UIBarButtonItem(image: UIImage(systemName: "bell")?.withTintColor(.black, renderingMode: .alwaysOriginal), style: .plain, target: self, action: #selector(addAlarm))
-//        let scrreenBtn = UIBarButtonItem(image: UIImage(systemName: "camera")?.withTintColor(.black, renderingMode: .alwaysOriginal), style: .plain, target: self, action: #selector(screenShot))
-
-        navigationItem.rightBarButtonItems = [setAlarmButton]
+        configureNavBarButtons()
         
         NotificationCenter.default.addObserver(self, selector: #selector(addAlarm), name: NSNotification.Name(rawValue: "button1Pressed"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(addAlarmForSelectedPrice), name: NSNotification.Name(rawValue: "button2Pressed"), object: nil)
@@ -95,11 +92,6 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
         startChartManager()
         setBackgroundForButton()
     }
-    
-//    @objc func screenShot() {
-//        chartManager.screenShot()
-//    }
-
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
@@ -114,6 +106,13 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
     
     @objc func backTapped() {
     self.navigationController?.popViewController(animated: true)
+    }
+    
+    func configureNavBarButtons() {
+        navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "chevron.backward")?.withTintColor(.black, renderingMode: .alwaysOriginal), style: .plain, target: self, action: #selector(backTapped))
+        let setAlarmButton = UIBarButtonItem(image: UIImage(systemName: "bell")?.withTintColor(.black, renderingMode: .alwaysOriginal), style: .plain, target: self, action: #selector(addAlarm))
+        let screenShotButton = UIBarButtonItem(image: UIImage(systemName: "camera")?.withTintColor(.black, renderingMode: .alwaysOriginal), style: .plain, target: self, action: #selector(takeScreenShot))
+        navigationItem.rightBarButtonItems = [setAlarmButton, screenShotButton]
     }
     
    func setBackgroundForButton() {
@@ -341,21 +340,21 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
         
         leftNavLabel.translatesAutoresizingMaskIntoConstraints = false
 //        leftNavLabel.heightAnchor.constraint(equalToConstant: self.view.frame.height).isActive = true
-        leftNavLabel.widthAnchor.constraint(equalToConstant: 120).isActive = true
+        leftNavLabel.widthAnchor.constraint(equalToConstant: 100).isActive = true
         leftNavLabel.font = .systemFont(ofSize: 13)
         leftNavLabel.text = "\(symbol)"
         leftNavLabel.textAlignment = .left
         
         rightUpperNavLabel.translatesAutoresizingMaskIntoConstraints = false
 //        rightUpperNavLabel.heightAnchor.constraint(equalToConstant: self.view.frame.height).isActive = true
-        rightUpperNavLabel.widthAnchor.constraint(equalToConstant: 160).isActive = true
+//        rightUpperNavLabel.widthAnchor.constraint(equalToConstant: 160).isActive = true
         rightUpperNavLabel.font = .systemFont(ofSize: 13)
         rightUpperNavLabel.text = "\(closePrice)"
         rightUpperNavLabel.textAlignment = .center
         
         rightLowerNavLabel.translatesAutoresizingMaskIntoConstraints = false
 //        rightLowerNavLabel.heightAnchor.constraint(equalToConstant: self.view.frame.height).isActive = true
-        rightLowerNavLabel.widthAnchor.constraint(equalToConstant: 160).isActive = true
+//        rightLowerNavLabel.widthAnchor.constraint(equalToConstant: 160).isActive = true
         rightLowerNavLabel.font = .systemFont(ofSize: 13)
         rightLowerNavLabel.text = "\(priceChangePercent)"
         rightLowerNavLabel.textAlignment = .center
@@ -369,12 +368,13 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
         rightNavLabelStack.backgroundColor = .clear
         rightNavLabelStack.spacing = 1.0
         
+        upperStackView.translatesAutoresizingMaskIntoConstraints = false
+        
         upperStackView.spacing = 5.0
         upperStackView.addArrangedSubview(leftNavLabel)
         upperStackView.addArrangedSubview(rightNavLabelStack)
-        
-        
-        
+        upperStackView.distribution = .fillEqually
+
         self.navigationItem.titleView = upperStackView
         
         leftPartView.translatesAutoresizingMaskIntoConstraints = false
@@ -530,4 +530,25 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
         let now = df.string(from: Date())
         return now
     }
+    
+    @objc func takeScreenShot() {
+        let screenShot = lightWeightChartView.makeScreenshot()
+        guard let imageToData = screenShot.jpegData(compressionQuality: 1) else {
+            print("Снова ошибка")
+            return
+        }
+        let activityVC = UIActivityViewController(activityItems: [imageToData], applicationActivities: [])
+        present(activityVC, animated: true)
+    }
 }
+
+
+extension UIView {
+    func makeScreenshot() -> UIImage {
+        let renderer = UIGraphicsImageRenderer(bounds: self.bounds)
+        return renderer.image { (context) in
+            self.layer.render(in: context.cgContext)
+        }
+    }
+}
+
