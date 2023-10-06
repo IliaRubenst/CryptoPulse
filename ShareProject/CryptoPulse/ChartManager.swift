@@ -187,13 +187,6 @@ class ChartManager {
         NotificationCenter.default.addObserver(self, selector: #selector(hideMenu), name: NSNotification.Name(rawValue: "anyBtnPressed"), object: nil)
     }
     
-//    func screenShot() {
-//        chart.takeScreenshot { chart in
-//            chart?.ciImage
-//        }
-//    }
-
-    
     @objc func dragTheView(recognizer: UIPanGestureRecognizer) {
         if recognizer.state == .began {
             
