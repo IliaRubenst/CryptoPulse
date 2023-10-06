@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		106F0C10DC4B17426987E520 /* Pods_ShareProject.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE911D65B09CFDE5FBDD2BB0 /* Pods_ShareProject.framework */; };
 		49367CAC2AAAFE7100827BE9 /* CoinCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49367CAB2AAAFE7100827BE9 /* CoinCell.swift */; };
 		49367CAE2AAAFEB800827BE9 /* DataCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49367CAD2AAAFEB800827BE9 /* DataCodable.swift */; };
 		49367CB02AAB33BE00827BE9 /* MarketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49367CAF2AAB33BE00827BE9 /* MarketManager.swift */; };
@@ -35,11 +34,13 @@
 		D87A64B82AC5711C00A29749 /* AddAlarmViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D87A64B72AC5711C00A29749 /* AddAlarmViewController.swift */; };
 		D87A64BA2AC5733100A29749 /* AlarmTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D87A64B92AC5733100A29749 /* AlarmTableViewCell.swift */; };
 		D87A64C02ACB0C2F00A29749 /* CustomButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = D87A64BF2ACB0C2F00A29749 /* CustomButtons.swift */; };
+		FCAB03960FC52A8A35A09D2B /* Pods_CyptoPulse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2556B97124E821A0BB49D7B /* Pods_CyptoPulse.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		035FB156A67A7395BA1B2111 /* Pods-ShareProject.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ShareProject.debug.xcconfig"; path = "Target Support Files/Pods-ShareProject/Pods-ShareProject.debug.xcconfig"; sourceTree = "<group>"; };
 		1C45C2A8B2185C3AC151D8D8 /* Pods-ShareProject.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ShareProject.release.xcconfig"; path = "Target Support Files/Pods-ShareProject/Pods-ShareProject.release.xcconfig"; sourceTree = "<group>"; };
+		448C58D82A36683C2A7213BA /* Pods-CyptoPulse.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CyptoPulse.release.xcconfig"; path = "Target Support Files/Pods-CyptoPulse/Pods-CyptoPulse.release.xcconfig"; sourceTree = "<group>"; };
 		49367CAB2AAAFE7100827BE9 /* CoinCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoinCell.swift; sourceTree = "<group>"; };
 		49367CAD2AAAFEB800827BE9 /* DataCodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataCodable.swift; sourceTree = "<group>"; };
 		49367CAF2AAB33BE00827BE9 /* MarketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarketManager.swift; sourceTree = "<group>"; };
@@ -58,7 +59,8 @@
 		4979F2072AACAFC0000E039C /* WebSocketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketManager.swift; sourceTree = "<group>"; };
 		49AACC322AB70EA000101C46 /* SymbolsListController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SymbolsListController.swift; sourceTree = "<group>"; };
 		49AACC562AB78C7500101C46 /* TooltipView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TooltipView.swift; sourceTree = "<group>"; };
-		CE911D65B09CFDE5FBDD2BB0 /* Pods_ShareProject.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ShareProject.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B2556B97124E821A0BB49D7B /* Pods_CyptoPulse.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CyptoPulse.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D084E73463F482E2996F7D33 /* Pods-CyptoPulse.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CyptoPulse.debug.xcconfig"; path = "Target Support Files/Pods-CyptoPulse/Pods-CyptoPulse.debug.xcconfig"; sourceTree = "<group>"; };
 		D813653D2AB07E6D005930D2 /* UserSymbols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSymbols.swift; sourceTree = "<group>"; };
 		D813653F2AB092B9005930D2 /* DataLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataLoader.swift; sourceTree = "<group>"; };
 		D81365EB2AB207A1005930D2 /* ChartManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartManager.swift; sourceTree = "<group>"; };
@@ -77,7 +79,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				106F0C10DC4B17426987E520 /* Pods_ShareProject.framework in Frameworks */,
+				FCAB03960FC52A8A35A09D2B /* Pods_CyptoPulse.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -89,6 +91,8 @@
 			children = (
 				035FB156A67A7395BA1B2111 /* Pods-ShareProject.debug.xcconfig */,
 				1C45C2A8B2185C3AC151D8D8 /* Pods-ShareProject.release.xcconfig */,
+				D084E73463F482E2996F7D33 /* Pods-CyptoPulse.debug.xcconfig */,
+				448C58D82A36683C2A7213BA /* Pods-CyptoPulse.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -149,7 +153,7 @@
 		7E0A0C748C77B63B062971F5 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				CE911D65B09CFDE5FBDD2BB0 /* Pods_ShareProject.framework */,
+				B2556B97124E821A0BB49D7B /* Pods_CyptoPulse.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -238,7 +242,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-ShareProject-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-CyptoPulse-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -251,15 +255,15 @@
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ShareProject/Pods-ShareProject-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-CyptoPulse/Pods-CyptoPulse-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ShareProject/Pods-ShareProject-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-CyptoPulse/Pods-CyptoPulse-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ShareProject/Pods-ShareProject-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-CyptoPulse/Pods-CyptoPulse-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -434,7 +438,7 @@
 		};
 		496BEFEB2AA9EFE100B15E0F /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 035FB156A67A7395BA1B2111 /* Pods-ShareProject.debug.xcconfig */;
+			baseConfigurationReference = D084E73463F482E2996F7D33 /* Pods-CyptoPulse.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -442,7 +446,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
-				"INFOPLIST_FILE[sdk=*]" = /Users/ilia/SharedRepo/ShareProject/CryptoPulse/Info.plist;
+				"INFOPLIST_FILE[sdk=*]" = $SRCROOT/CryptoPulse/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -467,7 +471,7 @@
 		};
 		496BEFEC2AA9EFE100B15E0F /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 1C45C2A8B2185C3AC151D8D8 /* Pods-ShareProject.release.xcconfig */;
+			baseConfigurationReference = 448C58D82A36683C2A7213BA /* Pods-CyptoPulse.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -475,7 +479,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
-				"INFOPLIST_FILE[sdk=*]" = /Users/ilia/SharedRepo/ShareProject/CryptoPulse/Info.plist;
+				"INFOPLIST_FILE[sdk=*]" = $SRCROOT/CryptoPulse/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;

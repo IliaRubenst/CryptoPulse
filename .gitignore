@@ -1,12 +1,17 @@
+#System
 .DS_Store
-.gitignore.swp
-ShareProject/ShareProject.xcodeproj/project.xcworkspace/xcuserdata/ilia.xcuserdatad/UserInterfaceState.xcuserstate
-ShareProject/.DS_Store
-.DS_Store
-ShareProject/ShareProject.xcodeproj/xcuserdata/vitaly.xcuserdatad/xcschemes/xcschememanagement.plist
-ShareProject/ShareProject.xcodeproj/project.xcworkspace/xcuserdata/vitaly.xcuserdatad/UserInterfaceState.xcuserstate
-ShareProject/ShareProject.xcodeproj/xcuserdata/vitaly.xcuserdatad/xcdebugger/Breakpoints_v2.xcbkptlist
-*.xcuserstate
-ShareProject/ShareProject.xcworkspace/xcuserdata/ilia.xcuserdatad/xcdebugger/Breakpoints_v2.xcbkptlist
 
+#Various settings
+*.xcuserstate
+*.xccheckout
+*.xcscmblueprint
+
+#Pods
+*.xcworkspace
+Pods/
+
+#Other
+xcuserdata/
+
+#Specific
 ShareProject/CryptoPulse/Key.swift
