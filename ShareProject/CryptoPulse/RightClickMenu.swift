@@ -73,3 +73,33 @@ class RightClickMenu: UIView {
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "anyBtnPressed"), object: nil)
     }
 }
+
+
+class AlarmIndicator: UIView {
+    private let indicator = UIView()
+    private let color: UIColor
+    var detailViewController: DetailViewController!
+    
+    init(color: UIColor) {
+        self.color = color
+        super.init(frame: .zero)
+        
+        layer.borderWidth = 2
+        layer.cornerRadius = 5
+        setupSubviews()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func setupSubviews() {
+        self.layer.borderColor = color.cgColor
+        
+        indicator.translatesAutoresizingMaskIntoConstraints = false
+//        indicator.
+        addSubview(indicator)
+        
+    }
+        
+}
