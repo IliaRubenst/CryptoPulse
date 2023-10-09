@@ -31,6 +31,7 @@ class ChartManager {
     var isWasShown = false
     var horizontalLine: CrosshairLineOptions?
     var options: PriceLineOptions!
+    var currentCursorPrice: Double!
     
     var data = [CandlestickData]()
     
@@ -39,6 +40,7 @@ class ChartManager {
     
     private let tooltipView = TooltipView(accentColor: UIColor(red: 0, green: 150/255.0, blue: 136/255.0, alpha: 1))
     private let rightClickMenu = RightClickMenu(color: UIColor(red: 0, green: 150/255.0, blue: 136/255.0, alpha: 1))
+    private let alarmIndicator = RightClickMenu(color: UIColor(red: 0, green: 150/255.0, blue: 136/255.0, alpha: 1))
     
     
     init(delegate: DetailViewController, symbol: String, timeFrame: String) {
@@ -118,10 +120,10 @@ class ChartManager {
         
     }
     
-        func updateFormat() {
-            print(numberAfterDecimalPoint)
-            chart.applyOptions(options: ChartOptions(localization: LocalizationOptions(priceFormatter: .javaScript("function(price) { return '$' + price.toFixed(\(numberAfterDecimalPoint)); }"))))
-        }
+    func updateFormat() {
+        print(numberAfterDecimalPoint)
+        chart.applyOptions(options: ChartOptions(localization: LocalizationOptions(priceFormatter: .javaScript("function(price) { return '$' + price.toFixed(\(numberAfterDecimalPoint)); }"))))
+    }
     
     
     func setupChart() {
@@ -286,8 +288,8 @@ class ChartManager {
         )
         
         alarmLine = series.createPriceLine(options: options)
+        delegate.lightWeightChartView.addSubview(alarmIndicator)
  //       AlarmModelsArray.alarmaLine.append(alarmLine)
-        
     }
     
     func removeAlarmLine(_ index: Int) {
@@ -303,18 +305,17 @@ class ChartManager {
 
 extension ChartManager: ChartDelegate {
     func didCrosshairMove(onChart chart: ChartApi, parameters: MouseEventParams) {
-//        print(parameters.sourceEvent?.localY)
-//        print(parameters.sourceEvent?.localY)
         if case .utc(timestamp: _) = parameters.time,
            let point = parameters.point,
            case let .barData(data) = parameters.price(forSeries: series) {
             tooltipView.update(title: "o:\(data.open!), h:\(data.high!), l:\(data.low!), c:\(data.close!)")
+            series.coordinateToPrice(coordinate: parameters.point!.y) { price in
+                self.currentCursorPrice = price!
+            }
             tooltipView.isHidden = false
             isWasShown = true
             leadingConstraint.constant = CGFloat(point.x) + 5
             bottomConstraint.constant = CGFloat(point.y) + 5
-//            var test = options
-//            print(test?.id)
         } else {
             self.tooltipView.isHidden = true
             if tooltipView.isHidden && isWasShown {

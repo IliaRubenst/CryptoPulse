@@ -292,7 +292,7 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
     }
     
     @objc func addAlarmForSelectedPrice() {
-        let price = chartManager.currentBar.high
+        let price = chartManager.currentCursorPrice
         alarm = price!
         var isAlarmUpper = false
         if alarm > closePrice {
