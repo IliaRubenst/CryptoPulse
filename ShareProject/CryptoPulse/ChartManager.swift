@@ -28,6 +28,8 @@ class ChartManager {
     // for rightClickMenu
     private var leadingConstraint: NSLayoutConstraint!
     private var bottomConstraint: NSLayoutConstraint!
+    
+    private var bottomConstraintForPercent: NSLayoutConstraint!
     var isWasShown = false
     var horizontalLine: CrosshairLineOptions?
     var options: PriceLineOptions!
@@ -39,8 +41,9 @@ class ChartManager {
     lazy var currentBar = CandlestickData(time: .utc(timestamp: currentBusinessDay), open: nil, high: nil, low: nil, close: nil)
     
     private let tooltipView = TooltipView(accentColor: UIColor(red: 0, green: 150/255.0, blue: 136/255.0, alpha: 1))
+    private let perecentChange = PercentChange(color: UIColor(red: 0, green: 150/255.0, blue: 136/255.0, alpha: 1))
     private let rightClickMenu = RightClickMenu(color: UIColor(red: 0, green: 150/255.0, blue: 136/255.0, alpha: 1))
-    private let alarmIndicator = RightClickMenu(color: UIColor(red: 0, green: 150/255.0, blue: 136/255.0, alpha: 1))
+    private let alarmIndicator = AlarmIndicator(color: UIColor(red: 0, green: 150/255.0, blue: 136/255.0, alpha: 1))
     
     
     init(delegate: DetailViewController, symbol: String, timeFrame: String) {
@@ -153,9 +156,11 @@ class ChartManager {
         
         //test пока можно передвигать меню с алармами
         let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(dragTheView))
-        rightClickMenu.addGestureRecognizer(panGestureRecognizer)
+        alarmIndicator.addGestureRecognizer(panGestureRecognizer)
+//        delegate.lightWeightChartView.addSubview(alarmIndicator)
         
         delegate.lightWeightChartView.addSubview(tooltipView)
+        delegate.lightWeightChartView.addSubview(perecentChange)
         
         tooltipView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -165,6 +170,7 @@ class ChartManager {
             tooltipView.bottomAnchor.constraint(equalTo: chart.bottomAnchor)
         ])
         tooltipView.isHidden = true
+        perecentChange.isHidden = tooltipView.isHidden
         
         delegate.lightWeightChartView.addSubview(rightClickMenu)
         
@@ -181,10 +187,12 @@ class ChartManager {
         
         rightClickMenu.isHidden = true
         
+        perecentChange.translatesAutoresizingMaskIntoConstraints = false
+        bottomConstraintForPercent = perecentChange.bottomAnchor.constraint(equalTo: chart.topAnchor)
+        bottomConstraintForPercent.isActive = true
+        
         delegate.lightWeightChartView.bringSubviewToFront(tooltipView)
         delegate.lightWeightChartView.bringSubviewToFront(rightClickMenu)
-        
-        
         
         NotificationCenter.default.addObserver(self, selector: #selector(hideMenu), name: NSNotification.Name(rawValue: "anyBtnPressed"), object: nil)
     }
@@ -195,10 +203,10 @@ class ChartManager {
         } else if recognizer.state == .changed {
             let translation = recognizer.translation(in: self.chart)
             
-            let newX = rightClickMenu.center.x + translation.x
-            let newY = rightClickMenu.center.y + translation.y
+            let newX = alarmIndicator.center.x + translation.x
+            let newY = alarmIndicator.center.y + translation.y
             
-            rightClickMenu.center = CGPoint(x: newX, y: newY)
+            alarmIndicator.center = CGPoint(x: newX, y: newY)
             recognizer.setTranslation(CGPoint.zero, in: self.chart)
 
         } else if recognizer.state == .ended {
@@ -288,13 +296,11 @@ class ChartManager {
         )
         
         alarmLine = series.createPriceLine(options: options)
-        delegate.lightWeightChartView.addSubview(alarmIndicator)
- //       AlarmModelsArray.alarmaLine.append(alarmLine)
+//        delegate.lightWeightChartView.addSubview(alarmIndicator)
     }
     
     func removeAlarmLine(_ index: Int) {
         series.removePriceLine(line: AlarmModelsArray.alarmaLine[index])
-//        AlarmModelsArray.alarmaLine.remove(at: index)
     }
     
     func setupSubscription() {
@@ -309,15 +315,19 @@ extension ChartManager: ChartDelegate {
            let point = parameters.point,
            case let .barData(data) = parameters.price(forSeries: series) {
             tooltipView.update(title: "o:\(data.open!), h:\(data.high!), l:\(data.low!), c:\(data.close!)")
-            series.coordinateToPrice(coordinate: parameters.point!.y) { price in
+            series.coordinateToPrice(coordinate: parameters.point!.y) { [self] price in
                 self.currentCursorPrice = price!
+                self.perecentChange.update(title: "\(String(format: "%.2f%", ((price! * 100) / delegate.closePrice - 100)))")
             }
             tooltipView.isHidden = false
+            perecentChange.isHidden = tooltipView.isHidden
             isWasShown = true
+            bottomConstraintForPercent.constant = CGFloat(point.y) - 17
             leadingConstraint.constant = CGFloat(point.x) + 5
             bottomConstraint.constant = CGFloat(point.y) + 5
         } else {
             self.tooltipView.isHidden = true
+            perecentChange.isHidden = tooltipView.isHidden
             if tooltipView.isHidden && isWasShown {
                 rightClickMenu.isHidden = false
             }

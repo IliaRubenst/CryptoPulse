@@ -156,7 +156,8 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
     func didUpdateCandle(_ websocketManager: WebSocketManager, candleModel: CurrentCandleModel) {
         let gotSymbol = candleModel.pair
         let currentPrice = candleModel.closePrice
-        var checkedArray = UserSymbols.savedSymbols.map ({ checkedArray in
+//        var checkedArray = UserSymbols.savedSymbols.map ({ checkedArray in
+        _ = UserSymbols.savedSymbols.map ({ checkedArray in
             if checkedArray.symbol == gotSymbol {
                 let index = UserSymbols.savedSymbols.firstIndex { $0.symbol == gotSymbol }
                 checkedArray.markPrice = currentPrice

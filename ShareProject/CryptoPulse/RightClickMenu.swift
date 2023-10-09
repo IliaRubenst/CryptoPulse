@@ -8,7 +8,6 @@
 import UIKit
 
 class RightClickMenu: UIView {
-//    private let menuView = UIView()
     private let menuStackView = UIStackView()
     private let color: UIColor
     var detailViewController: DetailViewController!
@@ -26,7 +25,6 @@ class RightClickMenu: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    
     private func setupSubviews() {
         self.layer.borderColor = color.cgColor
         
@@ -42,17 +40,12 @@ class RightClickMenu: UIView {
         let button1 = UIButton(type: .system)
         let button1Image = UIImage(systemName: "bell")?.withTintColor(#colorLiteral(red: 0.008301745169, green: 0.5873891115, blue: 0.5336645246, alpha: 1), renderingMode: .alwaysOriginal)
         button1.setImage(button1Image, for: .normal)
-//        button1.backgroundColor = #colorLiteral(red: 0.9078041315, green: 0.9078041315, blue: 0.9078040719, alpha: 1)
-//        button1.setTitle("Set alarm", for: .normal)
-        
         button1.heightAnchor.constraint(equalToConstant: 30).isActive = true
         button1.widthAnchor.constraint(equalToConstant: 30).isActive = true
         
         let button2 = UIButton(type: .system)
         let button2Image = UIImage(systemName: "bell.badge")?.withTintColor(#colorLiteral(red: 0.008301745169, green: 0.5873891115, blue: 0.5336645246, alpha: 1), renderingMode: .alwaysOriginal)
         button2.setImage(button2Image, for: .normal)
-//        button2.backgroundColor = #colorLiteral(red: 0.9078041315, green: 0.9078041315, blue: 0.9078040719, alpha: 1)
-        //        button2.setTitle("Set price for alarm", for: .normal)
         button2.heightAnchor.constraint(equalToConstant: 30).isActive = true
         button2.widthAnchor.constraint(equalToConstant: 30).isActive = true
         
@@ -76,7 +69,7 @@ class RightClickMenu: UIView {
 
 
 class AlarmIndicator: UIView {
-    private let indicator = UIView()
+    private let indicator = UIImageView()
     private let color: UIColor
     var detailViewController: DetailViewController!
     
@@ -94,12 +87,17 @@ class AlarmIndicator: UIView {
     }
     
     private func setupSubviews() {
+        indicator.image = UIImage(systemName: "alarm")?.withTintColor(#colorLiteral(red: 0.008301745169, green: 0.5873891115, blue: 0.5336645246, alpha: 1), renderingMode: .alwaysOriginal)
         self.layer.borderColor = color.cgColor
         
         indicator.translatesAutoresizingMaskIntoConstraints = false
-//        indicator.
         addSubview(indicator)
         
+        NSLayoutConstraint.activate([
+          indicator.widthAnchor.constraint(equalToConstant: 40),
+          indicator.heightAnchor.constraint(equalToConstant: 40),
+          indicator.centerXAnchor.constraint(equalTo: centerXAnchor, constant: 310),
+          indicator.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 20)
+        ])
     }
-        
 }

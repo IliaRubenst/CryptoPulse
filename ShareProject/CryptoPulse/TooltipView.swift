@@ -14,10 +14,8 @@ class TooltipView: UIView {
     init(accentColor: UIColor) {
         self.accentColor = accentColor
         super.init(frame: .zero)
-        
-//        layer.borderWidth = 2
-//        backgroundColor = .white
         isUserInteractionEnabled = false
+        
         setupSubviews()
     }
     
@@ -30,8 +28,6 @@ class TooltipView: UIView {
     }
     
     private func setupSubviews() {
-//        self.layer.borderColor = accentColor.cgColor
-        
         titleLabel.textColor = .darkText
         titleLabel.font = .systemFont(ofSize: 13)
         titleLabel.textAlignment = .left
@@ -39,14 +35,7 @@ class TooltipView: UIView {
         addSubview(titleLabel)
         
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        
-//        let padding: CGFloat = 5
-//        NSLayoutConstraint.activate([
-//            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: padding),
-//            titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -padding),
-//            titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: padding),
-//        ])
-
     }
-    
 }
+
+
