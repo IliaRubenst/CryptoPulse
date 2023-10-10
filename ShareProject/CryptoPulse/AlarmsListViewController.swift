@@ -7,7 +7,7 @@
 
 import UIKit
 
-class AlarmsListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate {
+class AlarmsListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, UIGestureRecognizerDelegate {
     var tableView = UITableView()
     var searchBar = UISearchBar()
     var filtredAlarms: [AlarmModel] = []
@@ -39,6 +39,8 @@ class AlarmsListViewController: UIViewController, UITableViewDelegate, UITableVi
         configureNavButtons()
         configureSearchBar()
         configureTableView()
+        configureGestureRecogniser()
+        setupKeyboardDoneButton()
     }
     
     func updateData() {
@@ -83,6 +85,26 @@ class AlarmsListViewController: UIViewController, UITableViewDelegate, UITableVi
             tableView.centerXAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.centerXAnchor)])
     }
     
+    func configureGestureRecogniser() {
+        let gestureRecogniser = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
+        gestureRecogniser.delegate = self
+        view.addGestureRecognizer(gestureRecogniser)
+    }
+    
+    func setupKeyboardDoneButton() {
+        let toolBar = UIToolbar(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 50))
+        let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
+        let doneButton = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(hideKeyboard))
+        toolBar.items = [flexibleSpace, doneButton]
+        toolBar.sizeToFit()
+        self.searchBar.inputAccessoryView = toolBar
+    }
+    
+    
+    @objc func hideKeyboard(sender: UIGestureRecognizer) {
+        view.endEditing(true)
+    }
+    
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if !searchText.isEmpty {
             filtredAlarms = AlarmModelsArray.alarms.filter { $0.symbol.contains(searchText.uppercased()) }
@@ -101,18 +123,28 @@ class AlarmsListViewController: UIViewController, UITableViewDelegate, UITableVi
     }
     
     @objc func removeAlarmsFromList() {
-        let ac = UIAlertController(title: "Вы действительно хотите удалить все уведомления?", message: nil, preferredStyle: .alert)
+        let ac = UIAlertController(title: "Очистить уведомления", message: nil, preferredStyle: .actionSheet)
         
-        ac.addAction(UIAlertAction(title: "Да", style: .default) { [weak self] _ in
+        ac.addAction(UIAlertAction(title: "Все", style: .destructive) { [weak self] _ in
             AlarmModelsArray.alarms.removeAll()
-            self?.filtredAlarms.removeAll()
+            self?.updateData()
             self?.tableView.reloadData()
 
             
             let defaults = DataLoader(keys: "savedAlarms")
             defaults.saveData()
         })
-        ac.addAction(UIAlertAction(title: "Нет", style: .cancel))
+        ac.addAction(UIAlertAction(title: "Не активные", style: .default, handler: { [weak self] _ in
+            let activeAlarms = AlarmModelsArray.alarms.filter({ $0.isActive })
+            AlarmModelsArray.alarms = activeAlarms
+            self?.updateData()
+            self?.tableView.reloadData()
+            
+            let defaults = DataLoader(keys: "savedAlarms")
+            defaults.saveData()
+        }))
+        ac.addAction(UIAlertAction(title: "Отмена", style: .cancel))
+        
         present(ac, animated: true)
     }
     
