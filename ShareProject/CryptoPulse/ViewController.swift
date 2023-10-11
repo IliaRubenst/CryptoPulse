@@ -5,6 +5,8 @@
 //  Created by Ilia Ilia on 07.09.2023.
 //
 
+// Коммит для Илюши.
+
 import UIKit
 
 class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout, WebSocketManagerDelegate {
