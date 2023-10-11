@@ -30,6 +30,7 @@ class ChartManager {
     private var bottomConstraint: NSLayoutConstraint!
     
     private var bottomConstraintForPercent: NSLayoutConstraint!
+    
     var isWasShown = false
     var horizontalLine: CrosshairLineOptions?
     var options: PriceLineOptions!
@@ -43,7 +44,7 @@ class ChartManager {
     private let tooltipView = TooltipView(accentColor: UIColor(red: 0, green: 150/255.0, blue: 136/255.0, alpha: 1))
     private let perecentChange = PercentChange(color: UIColor(red: 0, green: 150/255.0, blue: 136/255.0, alpha: 1))
     private let rightClickMenu = RightClickMenu(color: UIColor(red: 0, green: 150/255.0, blue: 136/255.0, alpha: 1))
-    private let alarmIndicator = AlarmIndicator(color: UIColor(red: 0, green: 150/255.0, blue: 136/255.0, alpha: 1))
+    let alarmIndicator = AlarmIndicator(color: UIColor(red: 0, green: 150/255.0, blue: 136/255.0, alpha: 1))
     
     
     init(delegate: DetailViewController, symbol: String, timeFrame: String) {
@@ -153,14 +154,7 @@ class ChartManager {
         
         self.chart = chart
         
-        
-        //test пока можно передвигать меню с алармами
-        let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(dragTheView))
-        alarmIndicator.addGestureRecognizer(panGestureRecognizer)
-//        delegate.lightWeightChartView.addSubview(alarmIndicator)
-        
         delegate.lightWeightChartView.addSubview(tooltipView)
-        delegate.lightWeightChartView.addSubview(perecentChange)
         
         tooltipView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -169,30 +163,42 @@ class ChartManager {
             tooltipView.topAnchor.constraint(equalTo: chart.topAnchor),
             tooltipView.bottomAnchor.constraint(equalTo: chart.bottomAnchor)
         ])
+        
         tooltipView.isHidden = true
-        perecentChange.isHidden = tooltipView.isHidden
-        
+
         delegate.lightWeightChartView.addSubview(rightClickMenu)
-        
-        rightClickMenu.backgroundColor = .clear
+        rightClickMenu.isHidden = true
+
         rightClickMenu.translatesAutoresizingMaskIntoConstraints = false
         
         leadingConstraint = rightClickMenu.leadingAnchor.constraint(equalTo: chart.leadingAnchor)
         bottomConstraint = rightClickMenu.bottomAnchor.constraint(equalTo: chart.topAnchor)
         leadingConstraint.isActive = true
         bottomConstraint.isActive = true
-        
         rightClickMenu.widthAnchor.constraint(equalToConstant: 63).isActive = true
         rightClickMenu.heightAnchor.constraint(equalToConstant: 30).isActive = true
+
+//        delegate.lightWeightChartView.addSubview(alarmIndicator)
+//
+//        alarmIndicator.translatesAutoresizingMaskIntoConstraints = false
+//        NSLayoutConstraint.activate([
+//            alarmIndicator.leadingAnchor.constraint(equalTo: chart.leadingAnchor, constant: 30),
+//            alarmIndicator.widthAnchor.constraint(equalToConstant: 20),
+//            alarmIndicator.heightAnchor.constraint(equalToConstant: 20)
+//        ])
+//
+//        let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(dragTheView))
+//        alarmIndicator.addGestureRecognizer(panGestureRecognizer)
         
-        rightClickMenu.isHidden = true
-        
+        delegate.lightWeightChartView.addSubview(perecentChange)
+        perecentChange.isHidden = tooltipView.isHidden
         perecentChange.translatesAutoresizingMaskIntoConstraints = false
         bottomConstraintForPercent = perecentChange.bottomAnchor.constraint(equalTo: chart.topAnchor)
         bottomConstraintForPercent.isActive = true
         
         delegate.lightWeightChartView.bringSubviewToFront(tooltipView)
         delegate.lightWeightChartView.bringSubviewToFront(rightClickMenu)
+//        delegate.lightWeightChartView.bringSubviewToFront(alarmIndicator)
         
         NotificationCenter.default.addObserver(self, selector: #selector(hideMenu), name: NSNotification.Name(rawValue: "anyBtnPressed"), object: nil)
     }
@@ -203,12 +209,12 @@ class ChartManager {
         } else if recognizer.state == .changed {
             let translation = recognizer.translation(in: self.chart)
             
-            let newX = alarmIndicator.center.x + translation.x
+//            let newX = alarmIndicator.center.x + translation.x
             let newY = alarmIndicator.center.y + translation.y
             
-            alarmIndicator.center = CGPoint(x: newX, y: newY)
+            alarmIndicator.center = CGPoint(x: 40, y: newY)
             recognizer.setTranslation(CGPoint.zero, in: self.chart)
-
+            
         } else if recognizer.state == .ended {
             
         }
@@ -271,24 +277,9 @@ class ChartManager {
         
     }
     
-    // Не используется. 2.10
-    /*func nextBusinessDay(_ time: BusinessDay) -> BusinessDay {
-        let timeZone = TimeZone(identifier: "UTC")!
-        let dateComponents = DateComponents(
-            calendar: .current,
-            timeZone: timeZone,
-            year: time.year,
-            month: time.month - 1,
-            day: time.day + 1
-        )
-        let date = Calendar.current.date(from: dateComponents)!
-        let components = Calendar.current.dateComponents(in: timeZone, from: date)
-        return BusinessDay(year: components.year!, month: components.month! + 1, day: components.day!)
-    }*/
-    
-    
-    func setupAlarmLine(_ alarmPrice: Double) {
+    func setupAlarmLine(_ alarmPrice: Double, id: String) {
         let options = PriceLineOptions(
+            id: id,
             price: alarmPrice,
             color: "#f00",
             lineWidth: .one,
@@ -296,8 +287,12 @@ class ChartManager {
         )
         
         alarmLine = series.createPriceLine(options: options)
-//        delegate.lightWeightChartView.addSubview(alarmIndicator)
+//        setupClockIndicator(alarmPrice)
     }
+    
+//    func setupClockIndicator(_ alarmPrice: Double) {
+//        delegate.lightWeightChartView.addSubview(alarmIndicator)
+//    }
     
     func removeAlarmLine(_ index: Int) {
         series.removePriceLine(line: AlarmModelsArray.alarmaLine[index])

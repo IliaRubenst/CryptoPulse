@@ -128,9 +128,9 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
     }
 
     func setupAlarmLines() {
-        print(AlarmModelsArray.alarms.count)
+//        print(AlarmModelsArray.alarms.count)
         for alarm in AlarmModelsArray.alarms {
-            chartManager.setupAlarmLine(alarm.alarmPrice)
+            chartManager.setupAlarmLine(alarm.alarmPrice, id: String(alarm.id))
         }
     }
     
@@ -292,20 +292,23 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
     }
     
     @objc func addAlarmForSelectedPrice() {
-        let price = chartManager.currentCursorPrice
-        alarm = price!
-        var isAlarmUpper = false
-        if alarm > closePrice {
-            isAlarmUpper = true
-        }
-        id = Int.random(in: 0...999999999)        
-        let currentDate = convertCurrentDateToString()
+        guard let price = chartManager.currentCursorPrice else { return }
+        alarm = price
         
+        let isAlarmUpper = alarm > closePrice ? true : false
+
+        id = Int.random(in: 0...999999999)
+        let idString = String(id)
+        let currentDate = convertCurrentDateToString()
         let currentModel = AlarmModel(id: id, symbol: symbol, alarmPrice: alarm, isAlarmUpper: isAlarmUpper, isActive: true, date: currentDate)
         
         AlarmModelsArray.alarms.append(currentModel)
+        
+        let defaults = DataLoader(keys: "savedAlarms")
+        defaults.saveData()
+        
         addAlarmtoModelDB(alarmModel: currentModel)
-        chartManager.setupAlarmLine(alarm)
+        chartManager.setupAlarmLine(alarm, id: idString)
     }
     
     func addAlarmtoModelDB(alarmModel: AlarmModel) {

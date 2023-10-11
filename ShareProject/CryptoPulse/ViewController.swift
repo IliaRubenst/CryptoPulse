@@ -40,6 +40,11 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
         NotificationCenter.default.addObserver(self, selector: #selector(loadList), name: NSNotification.Name(rawValue: "newSymbolAdded"), object: nil)
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        let defaults = DataLoader(keys: "savedFullSymbolsData")
+        defaults.saveData()
+    }
+    
     @objc func loadList(notification: NSNotification) {
         self.collectionView.reloadData()
     }

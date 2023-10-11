@@ -77,8 +77,6 @@ class AlarmIndicator: UIView {
         self.color = color
         super.init(frame: .zero)
         
-        layer.borderWidth = 2
-        layer.cornerRadius = 5
         setupSubviews()
     }
     
@@ -87,17 +85,11 @@ class AlarmIndicator: UIView {
     }
     
     private func setupSubviews() {
-        indicator.image = UIImage(systemName: "alarm")?.withTintColor(#colorLiteral(red: 0.008301745169, green: 0.5873891115, blue: 0.5336645246, alpha: 1), renderingMode: .alwaysOriginal)
+        indicator.image = UIImage(systemName: "alarm")?.withTintColor(#colorLiteral(red: 1, green: 0.1268401444, blue: 0.1294748783, alpha: 1), renderingMode: .alwaysOriginal)
+        
         self.layer.borderColor = color.cgColor
         
         indicator.translatesAutoresizingMaskIntoConstraints = false
         addSubview(indicator)
-        
-        NSLayoutConstraint.activate([
-          indicator.widthAnchor.constraint(equalToConstant: 40),
-          indicator.heightAnchor.constraint(equalToConstant: 40),
-          indicator.centerXAnchor.constraint(equalTo: centerXAnchor, constant: 310),
-          indicator.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 20)
-        ])
     }
 }
