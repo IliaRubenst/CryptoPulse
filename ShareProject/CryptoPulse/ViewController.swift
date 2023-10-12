@@ -12,6 +12,7 @@ import UIKit
 class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout, WebSocketManagerDelegate {
     let amountCells = 2
     var marketManager = MarketManager()
+    var dbManager = DataBaseManager()
     
     var webSocket = WebSocketManager()
     var isSelected = false
@@ -31,8 +32,8 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
         defaults.loadUserSymbols()
         
         getSymbolToWebSocket()
-        performRequestDB()
-        
+        dbManager.performRequestDB()
+
         self.navigationItem.title = ""
         
         let showTableViewButton = UIBarButtonItem(image: UIImage(systemName: "list.bullet.rectangle.portrait")?.withTintColor(.black, renderingMode: .alwaysOriginal), style: .plain, target: self, action: #selector(showTableView))
@@ -221,52 +222,6 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
     func closeConnection() {
         for delegate in webSocketManagers {
             delegate.close()
-        }
-    }
-    
-    func performRequestDB() {
-        if let url = URL(string: "http://94.241.143.198:8000/api/account/") {
-            var request = URLRequest(url: url)
-            request.httpMethod = "GET"
-            request.addValue("application/json", forHTTPHeaderField: "Accept")
-            request.addValue("Basic aWxpYTpMSmtiOTkyMDA4MjIh", forHTTPHeaderField: "Authorization")
-            
-            URLSession.shared.dataTask(with: request) { [self] data, response, error in
-                if error != nil {
-                    print(error!)
-                    return
-                }
-                DispatchQueue.main.async { [self] in
-                    if let safeData = data {
-                        parseJSONDB(DBData: safeData)
-                    }
-                }
-            }.resume()
-            print("Make \(request.httpMethod!) request to:\(url)")
-        }
-    }
-    //Виталя под солями
-    
-    func parseJSONDB(DBData: Data) {
-        let decoder = JSONDecoder()
-        
-        do {
-            let decodedData = try decoder.decode([Account].self, from: DBData)
-            for data in decodedData {
-                let detailVC = DetailViewController()
-                let currentDate = detailVC.convertCurrentDateToString()
-                
-                AlarmModelsArray.alarms.append(AlarmModel(id: data.id,
-                                                          symbol: data.symbol,
-                                                          alarmPrice: Double(data.alarmPrice),
-                                                          isAlarmUpper: data.isAlarmUpper,
-                                                          isActive: data.isActive,
-                                                          date: currentDate)
-                )}
-            let defaults = DataLoader(keys: "savedAlarms")
-            defaults.saveData()
-        } catch {
-            print(error)
         }
     }
     

@@ -45,6 +45,7 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
     
     var webSocketManagers = [WebSocketManager]()
     var chartManager: ChartManager!
+    var dbManager = DataBaseManager()
 //    var candles = [PreviousCandlesModel]()
     var data = [CandlestickData]()
     var currentCandelModel: CurrentCandleModel!
@@ -192,7 +193,6 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
 //                    chartManager.removeAlarmLine(index)
 //                    AlarmModelsArray.alarms.remove(at: index)
                     AlarmModelsArray.alarms[index].isActive = false
-                    
                     let defaults = DataLoader(keys: "savedAlarms")
                     defaults.saveData()
                 }
@@ -215,6 +215,10 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
                     defaults.saveData()
                 }
             }
+            for alarm in AlarmModelsArray.alarms {
+                dbManager.updateDBData(alarmModel: alarm, change: alarm.id)
+            }
+
         }
     }
     
@@ -307,35 +311,8 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
         let defaults = DataLoader(keys: "savedAlarms")
         defaults.saveData()
         
-        addAlarmtoModelDB(alarmModel: currentModel)
+        dbManager.addAlarmtoModelDB(alarmModel: currentModel)
         chartManager.setupAlarmLine(alarm, id: idString)
-    }
-    
-    func addAlarmtoModelDB(alarmModel: AlarmModel) {
-        if let url = URL(string: "http://94.241.143.198:8000/api/account/") {
-            
-            let alarmModelData = alarmModel
-            guard let encoded = try? JSONEncoder().encode(alarmModelData) else {
-                print("Failed to encode new alarm")
-                return
-            }
-            var request = URLRequest(url: url)
-            request.httpMethod = "POST"
-            request.addValue("application/json", forHTTPHeaderField: "Accept")
-            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-            request.addValue("Basic aWxpYTpMSmtiOTkyMDA4MjIh", forHTTPHeaderField: "Authorization")
-            request.httpBody = encoded
-            
-            URLSession.shared.dataTask(with: request) { data, response, error in
-                if let data = data {
-//                    if let response = try? JSONDecoder().decode(AlarmModel.self, from: data) {
-                    if (try? JSONDecoder().decode(AlarmModel.self, from: data)) != nil {
-                        return
-                    }
-                    
-                }
-            }.resume()
-        }
     }
     
     override func loadView() {

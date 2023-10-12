@@ -12,13 +12,14 @@ class AlarmsListViewController: UIViewController, UITableViewDelegate, UITableVi
     var searchBar = UISearchBar()
     var filtredAlarms: [AlarmModel] = []
     var accounts = [Account]()
+    var dbManager = DataBaseManager()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let defaults = DataLoader(keys: "savedAlarms")
-        defaults.loadUserSymbols()
-        
+//        let defaults = DataLoader(keys: "savedAlarms")
+//        defaults.loadUserSymbols()
+        dbManager.performRequestDB()
         setupUI()
     }
     
@@ -31,7 +32,7 @@ class AlarmsListViewController: UIViewController, UITableViewDelegate, UITableVi
     
     override func viewWillDisappear(_ animated: Bool) {
         for alarm in AlarmModelsArray.alarms {
-            updateDBData(alarmModel: alarm, change: alarm.id)
+            dbManager.updateDBData(alarmModel: alarm, change: alarm.id)
         }
     }
     
@@ -154,7 +155,6 @@ class AlarmsListViewController: UIViewController, UITableViewDelegate, UITableVi
         return filtredAlarms.count
     }
     
-    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: AlarmTableViewCell.identifier, for: indexPath) as? AlarmTableViewCell else { fatalError("Fatal error in AlarmVC CellForRow Method") }
         
@@ -197,7 +197,7 @@ class AlarmsListViewController: UIViewController, UITableViewDelegate, UITableVi
             let itemToRemoveID = filtredAlarms[indexPath.item].id
             filtredAlarms.remove(at: indexPath.item)
             deleteItemFromStaticAlarms(id: itemToRemoveID)
-            removeDBData(remove: itemToRemoveID)
+            dbManager.removeDBData(remove: itemToRemoveID)
             
             let defaults = DataLoader(keys: "savedAlarms")
             defaults.saveData()
@@ -230,6 +230,9 @@ class AlarmsListViewController: UIViewController, UITableViewDelegate, UITableVi
             
             let defaults = DataLoader(keys: "savedAlarms")
             defaults.saveData()
+            for alarm in AlarmModelsArray.alarms {
+                self?.dbManager.updateDBData(alarmModel: alarm, change: alarm.id)
+            }
             
             self?.tableView.reloadData()
         }
@@ -268,7 +271,6 @@ class AlarmsListViewController: UIViewController, UITableViewDelegate, UITableVi
 //            addAlarmVC.closePrice = currentSymbolPrice
             addAlarmVC.alarmPrice = alarmPrice
             addAlarmVC.openedAlarmsList = self
-            updateDBData(alarmModel: alarm, change: alarmID)
             
             present(addAlarmVC, animated: true)
         }
@@ -284,52 +286,6 @@ class AlarmsListViewController: UIViewController, UITableViewDelegate, UITableVi
             print(account)
         }
     }
-    
-    func updateDBData(alarmModel: AlarmModel, change id: Int) {
-        if let url = URL(string: "http://94.241.143.198:8000/api/account/\(id)/") {
-            
-            let alarmModelData = alarmModel
-            guard let encoded = try? JSONEncoder().encode(alarmModelData) else {
-                print("Failed to encode new alarm")
-                return
-            }
-            
-            var request = URLRequest(url: url)
-            request.httpMethod = "PUT"
-            request.addValue("application/JSON", forHTTPHeaderField: "Accept")
-            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-            request.addValue("Basic aWxpYTpMSmtiOTkyMDA4MjIh", forHTTPHeaderField: "Authorization")
-            request.httpBody = encoded
-            
-            URLSession.shared.dataTask(with: request) { data, response, error in
-                if let data = data {
-//                    if let response = try? JSONDecoder().decode(AlarmModel.self, from: data) {
-
-                    if (try? JSONDecoder().decode(AlarmModel.self, from: data)) != nil {
-                        return
-                    }
-                }
-            }.resume()
-        }
-    }
-    
-    
-    func removeDBData(remove id: Int) {
-        if let url = URL(string: "http://94.241.143.198:8000/api/account/\(id)/") {
-            var request = URLRequest(url: url)
-            request.httpMethod = "DELETE"
-            request.addValue("application/json", forHTTPHeaderField: "Accept")
-            request.addValue("Basic aWxpYTpMSmtiOTkyMDA4MjIh", forHTTPHeaderField: "Authorization")
-            
-            URLSession.shared.dataTask(with: request) { data, response, error in
-                if error != nil {
-                    print(error!)
-                    return
-                }
-            }.resume()
-        }
-    }
-    
     
     /*func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
         print("Accessory path =", indexPath)

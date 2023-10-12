@@ -25,6 +25,7 @@ class AddAlarmViewController: UIViewController, UITextFieldDelegate, WebSocketMa
     var webSocketManager: WebSocketManager! = nil
     var openedChart: DetailViewController? = nil
     var openedAlarmsList: AlarmsListViewController? = nil
+    var dbManager: DataBaseManager! = nil
     
     let titleLabel: UILabel = {
         let label = UILabel()
@@ -270,6 +271,7 @@ class AddAlarmViewController: UIViewController, UITextFieldDelegate, WebSocketMa
             
             let alarmModel = AlarmModel(id: id, symbol: symbol, alarmPrice: alarmPrice, isAlarmUpper: isAlarmUpper, isActive: true, date: currentDate)
             AlarmModelsArray.alarms.append(alarmModel)
+            dbManager.addAlarmtoModelDB(alarmModel: alarmModel)
             
             if let openedChart {
                 openedChart.chartManager.setupAlarmLine(alarmPrice, id: idString)
