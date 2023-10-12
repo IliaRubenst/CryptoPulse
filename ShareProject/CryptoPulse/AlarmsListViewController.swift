@@ -284,7 +284,7 @@ class AlarmsListViewController: UIViewController, UITableViewDelegate, UITableVi
     }
     
     func updateDBData(alarmModel: AlarmModel, change id: Int) {
-        if let url = URL(string: "http://127.0.0.1:8000/api/account/\(id)/") {
+        if let url = URL(string: "http://94.241.143.198:8000/api/account/\(id)/") {
             
             let alarmModelData = alarmModel
             guard let encoded = try? JSONEncoder().encode(alarmModelData) else {
@@ -313,7 +313,7 @@ class AlarmsListViewController: UIViewController, UITableViewDelegate, UITableVi
     
     
     func removeDBData(remove id: Int) {
-        if let url = URL(string: "http://127.0.0.1:8000/api/account/\(id)/") {
+        if let url = URL(string: "http://94.241.143.198:8000/api/account/\(id)/") {
             var request = URLRequest(url: url)
             request.httpMethod = "DELETE"
             request.addValue("application/json", forHTTPHeaderField: "Accept")

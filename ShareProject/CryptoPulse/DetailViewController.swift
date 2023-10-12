@@ -312,7 +312,7 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
     }
     
     func addAlarmtoModelDB(alarmModel: AlarmModel) {
-        if let url = URL(string: "http://127.0.0.1:8000/api/account/") {
+        if let url = URL(string: "http://94.241.143.198:8000/api/account/") {
             
             let alarmModelData = alarmModel
             guard let encoded = try? JSONEncoder().encode(alarmModelData) else {

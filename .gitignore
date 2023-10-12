@@ -13,8 +13,9 @@ Pods/
 #Other
 xcuserdata/
 ShareProject/Pods/Pods.xcodeproj/xcuserdata
+ShareProject/CyptoPulse.xcodeproj/xcuserdata
 
 #Specific
 ShareProject/CryptoPulse/Key.swift
 ShareProject/build/
-ShareProject/CyptoPulse.xcodeproj/xcuserdata
+

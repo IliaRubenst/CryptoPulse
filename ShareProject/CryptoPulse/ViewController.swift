@@ -225,7 +225,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
     }
     
     func performRequestDB() {
-        if let url = URL(string: "http://127.0.0.1:8000/api/account/") {
+        if let url = URL(string: "http://94.241.143.198:8000/api/account/") {
             var request = URLRequest(url: url)
             request.httpMethod = "GET"
             request.addValue("application/json", forHTTPHeaderField: "Accept")
