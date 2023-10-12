@@ -231,20 +231,21 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
             request.addValue("application/json", forHTTPHeaderField: "Accept")
             request.addValue("Basic aWxpYTpMSmtiOTkyMDA4MjIh", forHTTPHeaderField: "Authorization")
             
-            let task = URLSession.shared.dataTask(with: request) { [self] data, response, error in
+            URLSession.shared.dataTask(with: request) { [self] data, response, error in
                 if error != nil {
                     print(error!)
                     return
                 }
-                
-                if let safeData = data {
-                    parseJSONDB(DBData: safeData)
+                DispatchQueue.main.async { [self] in
+                    if let safeData = data {
+                        parseJSONDB(DBData: safeData)
+                    }
                 }
-            }
-            task.resume()
+            }.resume()
             print("Make \(request.httpMethod!) request to:\(url)")
         }
     }
+    //Виталя под солями
     
     func parseJSONDB(DBData: Data) {
         let decoder = JSONDecoder()
