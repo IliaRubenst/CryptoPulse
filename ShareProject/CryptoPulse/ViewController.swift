@@ -261,7 +261,6 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
                                                           isAlarmUpper: data.isAlarmUpper,
                                                           isActive: data.isActive,
                                                           date: currentDate)
-
                 )}
             let defaults = DataLoader(keys: "savedAlarms")
             defaults.saveData()

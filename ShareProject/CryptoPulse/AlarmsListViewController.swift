@@ -197,7 +197,8 @@ class AlarmsListViewController: UIViewController, UITableViewDelegate, UITableVi
             let itemToRemoveID = filtredAlarms[indexPath.item].id
             filtredAlarms.remove(at: indexPath.item)
             deleteItemFromStaticAlarms(id: itemToRemoveID)
-
+            removeDBData(remove: itemToRemoveID)
+            
             let defaults = DataLoader(keys: "savedAlarms")
             defaults.saveData()
             
@@ -267,6 +268,7 @@ class AlarmsListViewController: UIViewController, UITableViewDelegate, UITableVi
 //            addAlarmVC.closePrice = currentSymbolPrice
             addAlarmVC.alarmPrice = alarmPrice
             addAlarmVC.openedAlarmsList = self
+            updateDBData(alarmModel: alarm, change: alarmID)
             
             present(addAlarmVC, animated: true)
         }
