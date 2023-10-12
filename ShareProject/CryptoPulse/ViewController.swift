@@ -5,6 +5,8 @@
 //  Created by Ilia Ilia on 07.09.2023.
 //
 
+// Коммит для Илюши.
+
 import UIKit
 
 class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout, WebSocketManagerDelegate {
@@ -38,6 +40,11 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
         
         
         NotificationCenter.default.addObserver(self, selector: #selector(loadList), name: NSNotification.Name(rawValue: "newSymbolAdded"), object: nil)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        let defaults = DataLoader(keys: "savedFullSymbolsData")
+        defaults.saveData()
     }
     
     @objc func loadList(notification: NSNotification) {
@@ -156,7 +163,8 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
     func didUpdateCandle(_ websocketManager: WebSocketManager, candleModel: CurrentCandleModel) {
         let gotSymbol = candleModel.pair
         let currentPrice = candleModel.closePrice
-        var checkedArray = UserSymbols.savedSymbols.map ({ checkedArray in
+//        var checkedArray = UserSymbols.savedSymbols.map ({ checkedArray in
+        _ = UserSymbols.savedSymbols.map ({ checkedArray in
             if checkedArray.symbol == gotSymbol {
                 let index = UserSymbols.savedSymbols.firstIndex { $0.symbol == gotSymbol }
                 checkedArray.markPrice = currentPrice
@@ -217,7 +225,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
     }
     
     func performRequestDB() {
-        if let url = URL(string: "http://127.0.0.1:8000/api/account/") {
+        if let url = URL(string: "http://94.241.143.198:8000/api/account/") {
             var request = URLRequest(url: url)
             request.httpMethod = "GET"
             request.addValue("application/json", forHTTPHeaderField: "Accept")
@@ -253,7 +261,6 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
                                                           isAlarmUpper: data.isAlarmUpper,
                                                           isActive: data.isActive,
                                                           date: currentDate)
-
                 )}
             let defaults = DataLoader(keys: "savedAlarms")
             defaults.saveData()

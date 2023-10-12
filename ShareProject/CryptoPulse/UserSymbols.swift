@@ -14,7 +14,3 @@ struct UserSymbols: Codable {
 struct SymbolsArray {
     static var symbols = [Symbol]()
 }
-//
-//struct UserSymbolsFull: Codable {
-//    static var fullSymbols = [Symbol]()
-//}

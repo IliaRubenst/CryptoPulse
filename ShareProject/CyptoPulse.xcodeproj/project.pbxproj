@@ -19,6 +19,7 @@
 		496BEFE32AA9EFE100B15E0F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 496BEFE22AA9EFE100B15E0F /* Assets.xcassets */; };
 		496BEFE62AA9EFE100B15E0F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 496BEFE42AA9EFE100B15E0F /* LaunchScreen.storyboard */; };
 		4974BE882AB030580070240F /* DataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4974BE872AB030580070240F /* DataModel.swift */; };
+		497669F62AD49445000DDBA8 /* PercentChange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 497669F52AD49445000DDBA8 /* PercentChange.swift */; };
 		4979F2062AAC3905000E039C /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4979F2052AAC3905000E039C /* DetailViewController.swift */; };
 		4979F2082AACAFC0000E039C /* WebSocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4979F2072AACAFC0000E039C /* WebSocketManager.swift */; };
 		49AACC332AB70EA000101C46 /* SymbolsListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49AACC322AB70EA000101C46 /* SymbolsListController.swift */; };
@@ -55,6 +56,7 @@
 		496BEFE52AA9EFE100B15E0F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		496BEFE72AA9EFE100B15E0F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4974BE872AB030580070240F /* DataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataModel.swift; sourceTree = "<group>"; };
+		497669F52AD49445000DDBA8 /* PercentChange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PercentChange.swift; sourceTree = "<group>"; };
 		4979F2052AAC3905000E039C /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		4979F2072AACAFC0000E039C /* WebSocketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketManager.swift; sourceTree = "<group>"; };
 		49AACC322AB70EA000101C46 /* SymbolsListController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SymbolsListController.swift; sourceTree = "<group>"; };
@@ -137,12 +139,13 @@
 				D81366352AB4C577005930D2 /* Notifications.swift */,
 				49AACC562AB78C7500101C46 /* TooltipView.swift */,
 				494FF85C2ABB4B140041791B /* RightClickMenu.swift */,
+				497669F52AD49445000DDBA8 /* PercentChange.swift */,
 				D87A63FA2ABC294900A29749 /* Key.swift */,
 				49367CAB2AAAFE7100827BE9 /* CoinCell.swift */,
 				D87A64B92AC5733100A29749 /* AlarmTableViewCell.swift */,
 				49520E562AC4BCE2009B05BD /* SymbolsListCell.swift */,
-				496BEFDF2AA9EFDF00B15E0F /* Main.storyboard */,
 				D868DEC92ACEE016003822BF /* SettingsViewController.swift */,
+				496BEFDF2AA9EFDF00B15E0F /* Main.storyboard */,
 				496BEFE22AA9EFE100B15E0F /* Assets.xcassets */,
 				496BEFE42AA9EFE100B15E0F /* LaunchScreen.storyboard */,
 				496BEFE72AA9EFE100B15E0F /* Info.plist */,
@@ -285,6 +288,7 @@
 				D81365EC2AB207A1005930D2 /* ChartManager.swift in Sources */,
 				4979F2082AACAFC0000E039C /* WebSocketManager.swift in Sources */,
 				496BEFDA2AA9EFDF00B15E0F /* AppDelegate.swift in Sources */,
+				497669F62AD49445000DDBA8 /* PercentChange.swift in Sources */,
 				D87A64C02ACB0C2F00A29749 /* CustomButtons.swift in Sources */,
 				D81366362AB4C577005930D2 /* Notifications.swift in Sources */,
 				D87A64B82AC5711C00A29749 /* AddAlarmViewController.swift in Sources */,
@@ -444,7 +448,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 8B274TVL49;
 				GENERATE_INFOPLIST_FILE = YES;
 				"INFOPLIST_FILE[sdk=*]" = $SRCROOT/CryptoPulse/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -477,7 +481,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 8B274TVL49;
 				GENERATE_INFOPLIST_FILE = YES;
 				"INFOPLIST_FILE[sdk=*]" = $SRCROOT/CryptoPulse/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;

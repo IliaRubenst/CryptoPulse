@@ -8,7 +8,6 @@
 import UIKit
 
 class RightClickMenu: UIView {
-//    private let menuView = UIView()
     private let menuStackView = UIStackView()
     private let color: UIColor
     var detailViewController: DetailViewController!
@@ -26,7 +25,6 @@ class RightClickMenu: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    
     private func setupSubviews() {
         self.layer.borderColor = color.cgColor
         
@@ -42,17 +40,12 @@ class RightClickMenu: UIView {
         let button1 = UIButton(type: .system)
         let button1Image = UIImage(systemName: "bell")?.withTintColor(#colorLiteral(red: 0.008301745169, green: 0.5873891115, blue: 0.5336645246, alpha: 1), renderingMode: .alwaysOriginal)
         button1.setImage(button1Image, for: .normal)
-//        button1.backgroundColor = #colorLiteral(red: 0.9078041315, green: 0.9078041315, blue: 0.9078040719, alpha: 1)
-//        button1.setTitle("Set alarm", for: .normal)
-        
         button1.heightAnchor.constraint(equalToConstant: 30).isActive = true
         button1.widthAnchor.constraint(equalToConstant: 30).isActive = true
         
         let button2 = UIButton(type: .system)
         let button2Image = UIImage(systemName: "bell.badge")?.withTintColor(#colorLiteral(red: 0.008301745169, green: 0.5873891115, blue: 0.5336645246, alpha: 1), renderingMode: .alwaysOriginal)
         button2.setImage(button2Image, for: .normal)
-//        button2.backgroundColor = #colorLiteral(red: 0.9078041315, green: 0.9078041315, blue: 0.9078040719, alpha: 1)
-        //        button2.setTitle("Set price for alarm", for: .normal)
         button2.heightAnchor.constraint(equalToConstant: 30).isActive = true
         button2.widthAnchor.constraint(equalToConstant: 30).isActive = true
         
@@ -71,5 +64,32 @@ class RightClickMenu: UIView {
     @objc func button2Pressed() {
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "button2Pressed"), object: nil)
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "anyBtnPressed"), object: nil)
+    }
+}
+
+
+class AlarmIndicator: UIView {
+    private let indicator = UIImageView()
+    private let color: UIColor
+    var detailViewController: DetailViewController!
+    
+    init(color: UIColor) {
+        self.color = color
+        super.init(frame: .zero)
+        
+        setupSubviews()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func setupSubviews() {
+        indicator.image = UIImage(systemName: "alarm")?.withTintColor(#colorLiteral(red: 1, green: 0.1268401444, blue: 0.1294748783, alpha: 1), renderingMode: .alwaysOriginal)
+        
+        self.layer.borderColor = color.cgColor
+        
+        indicator.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(indicator)
     }
 }

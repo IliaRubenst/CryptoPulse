@@ -262,6 +262,7 @@ class AddAlarmViewController: UIViewController, UITextFieldDelegate, WebSocketMa
         case .newAlarm:
             let isAlarmUpper = alarmPrice > doubleClosePrice ? true : false
             let id = Int.random(in: 0...999999999)
+            let idString = String(id)
             
             // Вынести этот метод с ДетейлВьюКонтроллера.
             let dVC = DetailViewController()
@@ -269,6 +270,11 @@ class AddAlarmViewController: UIViewController, UITextFieldDelegate, WebSocketMa
             
             let alarmModel = AlarmModel(id: id, symbol: symbol, alarmPrice: alarmPrice, isAlarmUpper: isAlarmUpper, isActive: true, date: currentDate)
             AlarmModelsArray.alarms.append(alarmModel)
+            
+            if let openedChart {
+                openedChart.chartManager.setupAlarmLine(alarmPrice, id: idString)
+            }
+            
         case .editAlarm:
             guard let alarmID else { return }
             guard let alarmToEdit = AlarmModelsArray.alarms.filter({ $0.id == alarmID }).first else { return }
@@ -279,10 +285,6 @@ class AddAlarmViewController: UIViewController, UITextFieldDelegate, WebSocketMa
         
         let defaults = DataLoader(keys: "savedAlarms")
         defaults.saveData()
-        
-        if let openedChart {
-            openedChart.chartManager.setupAlarmLine(alarmPrice)
-        }
         
         if let openedAlarmsList {
             openedAlarmsList.updateData()
