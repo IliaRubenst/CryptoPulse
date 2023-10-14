@@ -270,8 +270,20 @@ class AddAlarmViewController: UIViewController, UITextFieldDelegate, WebSocketMa
             let currentDate = dVC.convertCurrentDateToString()
             
             let alarmModel = AlarmModel(id: id, symbol: symbol, alarmPrice: alarmPrice, isAlarmUpper: isAlarmUpper, isActive: true, date: currentDate)
-            AlarmModelsArray.alarms.append(alarmModel)
-            dbManager.addAlarmtoModelDB(alarmModel: alarmModel)
+//            AlarmModelsArray.alarms.append(alarmModel)
+            dbManager.addAlarmtoModelDB(alarmModel: alarmModel) { data, error  in
+                if error == nil {
+                    AlarmModelsArray.alarms.removeAll()
+                    self.dbManager.performRequestDB { (data, error) in
+                        if error == nil {
+                        } else {
+                            print("Не удалось получить данные из БД")
+                        }
+                    }
+                } else {
+                    print("Не удалось создать аларм в БД")
+                }
+            }
             
             if let openedChart {
                 openedChart.chartManager.setupAlarmLine(alarmPrice, id: idString)
@@ -285,8 +297,8 @@ class AddAlarmViewController: UIViewController, UITextFieldDelegate, WebSocketMa
             AlarmModelsArray.alarms[index].alarmPrice = alarmPrice
         }
         
-        let defaults = DataLoader(keys: "savedAlarms")
-        defaults.saveData()
+//        let defaults = DataLoader(keys: "savedAlarms")
+//        defaults.saveData()
         
         if let openedAlarmsList {
             openedAlarmsList.updateData()

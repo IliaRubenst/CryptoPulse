@@ -27,15 +27,15 @@ struct DataLoader {
                     print("Failed to load symbols")
                 }
             }
-        } else if keys == "savedAlarms" {
-            if let savedSymbols = userDefaults.object(forKey: keys) as? Data {
-                let jsonDecoder = JSONDecoder()
-                do {
-                    AlarmModelsArray.alarms = try jsonDecoder.decode([AlarmModel].self, from: savedSymbols)
-                } catch {
-                    print("Failed to load symbols")
-                }
-            }
+//        } else if keys == "savedAlarms" {
+//            if let savedSymbols = userDefaults.object(forKey: keys) as? Data {
+//                let jsonDecoder = JSONDecoder()
+//                do {
+//                    AlarmModelsArray.alarms = try jsonDecoder.decode([AlarmModel].self, from: savedSymbols)
+//                } catch {
+//                    print("Failed to load symbols")
+//                }
+//            }
         } else if keys == "savedFullSymbolsData" {
             if let savedSymbols = userDefaults.object(forKey: keys) as? Data {
                 let jsonDecoder = JSONDecoder()

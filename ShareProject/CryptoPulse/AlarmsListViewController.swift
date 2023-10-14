@@ -19,21 +19,24 @@ class AlarmsListViewController: UIViewController, UITableViewDelegate, UITableVi
         
 //        let defaults = DataLoader(keys: "savedAlarms")
 //        defaults.loadUserSymbols()
-        dbManager.performRequestDB()
+
         setupUI()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
+//        dbManager.performRequestDB()
         updateData()
         tableView.reloadData()
+        for alarm in AlarmModelsArray.alarms {
+            print(alarm)
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        for alarm in AlarmModelsArray.alarms {
-            dbManager.updateDBData(alarmModel: alarm, change: alarm.id)
-        }
+//        for alarm in AlarmModelsArray.alarms {
+//            dbManager.updateDBData(alarmModel: alarm, change: alarm.id)
+//        }
     }
     
     func setupUI() {
@@ -132,8 +135,8 @@ class AlarmsListViewController: UIViewController, UITableViewDelegate, UITableVi
             self?.tableView.reloadData()
 
             
-            let defaults = DataLoader(keys: "savedAlarms")
-            defaults.saveData()
+//            let defaults = DataLoader(keys: "savedAlarms")
+//            defaults.saveData()
         })
         ac.addAction(UIAlertAction(title: "Не активные", style: .default, handler: { [weak self] _ in
             let activeAlarms = AlarmModelsArray.alarms.filter({ $0.isActive })
@@ -141,8 +144,8 @@ class AlarmsListViewController: UIViewController, UITableViewDelegate, UITableVi
             self?.updateData()
             self?.tableView.reloadData()
             
-            let defaults = DataLoader(keys: "savedAlarms")
-            defaults.saveData()
+//            let defaults = DataLoader(keys: "savedAlarms")
+//            defaults.saveData()
         }))
         ac.addAction(UIAlertAction(title: "Отмена", style: .cancel))
         
@@ -199,8 +202,8 @@ class AlarmsListViewController: UIViewController, UITableViewDelegate, UITableVi
             deleteItemFromStaticAlarms(id: itemToRemoveID)
             dbManager.removeDBData(remove: itemToRemoveID)
             
-            let defaults = DataLoader(keys: "savedAlarms")
-            defaults.saveData()
+//            let defaults = DataLoader(keys: "savedAlarms")
+//            defaults.saveData()
             
             
             tableView.deleteRows(at: [indexPath], with: .fade)
@@ -228,8 +231,8 @@ class AlarmsListViewController: UIViewController, UITableViewDelegate, UITableVi
             AlarmModelsArray.alarms[indexPath.item].isActive.toggle()
             self?.filtredAlarms[indexPath.item].isActive.toggle()
             
-            let defaults = DataLoader(keys: "savedAlarms")
-            defaults.saveData()
+//            let defaults = DataLoader(keys: "savedAlarms")
+//            defaults.saveData()
             for alarm in AlarmModelsArray.alarms {
                 self?.dbManager.updateDBData(alarmModel: alarm, change: alarm.id)
             }

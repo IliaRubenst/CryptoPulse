@@ -32,7 +32,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
         defaults.loadUserSymbols()
         
         getSymbolToWebSocket()
-        dbManager.performRequestDB()
+        dbManager.performRequestDB() { _,_ in }
 
         self.navigationItem.title = ""
         

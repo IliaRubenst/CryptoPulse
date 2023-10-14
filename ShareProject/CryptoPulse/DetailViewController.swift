@@ -79,8 +79,8 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let defaults = DataLoader(keys: "savedAlarms")
-        defaults.loadUserSymbols()
+//        let defaults = DataLoader(keys: "savedAlarms")
+//        defaults.loadUserSymbols()
         
         configureNavBarButtons()
         
@@ -193,8 +193,8 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
 //                    chartManager.removeAlarmLine(index)
 //                    AlarmModelsArray.alarms.remove(at: index)
                     AlarmModelsArray.alarms[index].isActive = false
-                    let defaults = DataLoader(keys: "savedAlarms")
-                    defaults.saveData()
+//                    let defaults = DataLoader(keys: "savedAlarms")
+//                    defaults.saveData()
                 }
             } else {
                 if closePrice <= state.alarmPrice && !isAlertShowing && symbol == state.symbol {
@@ -211,13 +211,13 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
 //                    AlarmModelsArray.alarms.remove(at: index)
                     AlarmModelsArray.alarms[index].isActive = false
                     
-                    let defaults = DataLoader(keys: "savedAlarms")
-                    defaults.saveData()
+//                    let defaults = DataLoader(keys: "savedAlarms")
+//                    defaults.saveData()
                 }
             }
-            for alarm in AlarmModelsArray.alarms {
-                dbManager.updateDBData(alarmModel: alarm, change: alarm.id)
-            }
+//            for alarm in AlarmModelsArray.alarms {
+//                dbManager.updateDBData(alarmModel: alarm, change: alarm.id)
+//            }
 
         }
     }
@@ -305,13 +305,24 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
         let idString = String(id)
         let currentDate = convertCurrentDateToString()
         let currentModel = AlarmModel(id: id, symbol: symbol, alarmPrice: alarm, isAlarmUpper: isAlarmUpper, isActive: true, date: currentDate)
+
+        dbManager.addAlarmtoModelDB(alarmModel: currentModel) { data, error  in
+            if error == nil {
+                AlarmModelsArray.alarms.removeAll()
+                self.dbManager.performRequestDB { (data, error) in
+                    if error == nil {
+                    } else {
+                        print("Не удалось получить данные из БД")
+                    }
+                }
+            } else {
+                print("Не удалось создать аларм в БД")
+            }
+        }
+//        AlarmModelsArray.alarms.append(currentModel)
+//        let defaults = DataLoader(keys: "savedAlarms")
+//        defaults.saveData()
         
-        AlarmModelsArray.alarms.append(currentModel)
-        
-        let defaults = DataLoader(keys: "savedAlarms")
-        defaults.saveData()
-        
-        dbManager.addAlarmtoModelDB(alarmModel: currentModel)
         chartManager.setupAlarmLine(alarm, id: idString)
     }
     

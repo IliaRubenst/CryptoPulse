@@ -8,7 +8,7 @@
 import Foundation
 
 class DataBaseManager {
-    func performRequestDB() {
+    func performRequestDB(completion: @escaping (Data?, Error?) -> Void) {
         if let url = URL(string: "http://94.241.143.198:8000/api/account/") {
             var request = URLRequest(url: url)
             request.httpMethod = "GET"
@@ -25,14 +25,14 @@ class DataBaseManager {
                         parseJSONDB(DBData: safeData)
                     }
                 }
+                completion(data, error)
             }.resume()
             print("Make \(request.httpMethod!) request to:\(url)")
         }
     }
     
-    func addAlarmtoModelDB(alarmModel: AlarmModel) {
+    func addAlarmtoModelDB(alarmModel: AlarmModel, completion: @escaping (Data?, Error?) -> Void) {
         if let url = URL(string: "http://94.241.143.198:8000/api/account/") {
-            
             let alarmModelData = alarmModel
             guard let encoded = try? JSONEncoder().encode(alarmModelData) else {
                 print("Failed to encode new alarm")
@@ -47,18 +47,18 @@ class DataBaseManager {
             
             URLSession.shared.dataTask(with: request) { data, response, error in
                 if let data = data {
-//                    if let response = try? JSONDecoder().decode(AlarmModel.self, from: data) {
                     if (try? JSONDecoder().decode(AlarmModel.self, from: data)) != nil {
                         return
                     }
-                    
                 }
+                completion(data, error)
             }.resume()
         }
     }
     
     func updateDBData(alarmModel: AlarmModel, change id: Int) {
         if let url = URL(string: "http://94.241.143.198:8000/api/account/\(id)/") {
+//        if let url = URL(string: "http://127.0.0.1:8000/api/account/\(id)/") {
             
             let alarmModelData = alarmModel
             guard let encoded = try? JSONEncoder().encode(alarmModelData) else {
@@ -88,6 +88,7 @@ class DataBaseManager {
     
     func removeDBData(remove id: Int) {
         if let url = URL(string: "http://94.241.143.198:8000/api/account/\(id)/") {
+//        if let url = URL(string: "http://127.0.0.1:8000/api/account/\(id)/") {
             var request = URLRequest(url: url)
             request.httpMethod = "DELETE"
             request.addValue("application/json", forHTTPHeaderField: "Accept")
@@ -124,6 +125,4 @@ class DataBaseManager {
             print(error)
         }
     }
-    
-    
 }
