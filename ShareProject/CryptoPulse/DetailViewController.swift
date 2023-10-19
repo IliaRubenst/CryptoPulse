@@ -181,7 +181,7 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
             if state.isAlarmUpper {
                 if closePrice >= state.alarmPrice && !isAlertShowing && symbol == state.symbol {
                     telegramAlram.message = "Цена \(state.symbol) пересекла \(state.alarmPrice) \(downToUp)"
-                    telegramAlram.postRequest()
+//                    telegramAlram.postRequest()
                     
                     let ac = UIAlertController(title: "Alarm for \(state.symbol)", message: "The price crossed \(state.alarmPrice) \(downToUp) ", preferredStyle: .alert)
                     isAlertShowing = true
@@ -199,7 +199,7 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
             } else {
                 if closePrice <= state.alarmPrice && !isAlertShowing && symbol == state.symbol {
                     telegramAlram.message = "Цена \(state.symbol) пересекла \(state.alarmPrice) \(upToDown)"
-                    telegramAlram.postRequest()
+//                    telegramAlram.postRequest()
                     
                     let ac = UIAlertController(title: "Alarm for \(state.symbol)", message: "The price crossed \(state.alarmPrice) \(upToDown) ", preferredStyle: .alert)
                     isAlertShowing = true

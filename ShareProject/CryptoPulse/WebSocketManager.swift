@@ -19,6 +19,7 @@ class WebSocketManager: NSObject, URLSessionWebSocketDelegate {
     var delegate: WebSocketManagerDelegate?
     var actualState = State.currentCandleData
     
+    // MARK: - URL Construction
     func webSocketConnect(symbol: String, timeFrame: String) {
         var url: String
         let coinSymbol = symbol.lowercased()

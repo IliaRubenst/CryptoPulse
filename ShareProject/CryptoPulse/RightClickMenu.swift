@@ -71,7 +71,6 @@ class RightClickMenu: UIView {
 class AlarmIndicator: UIView {
     private let indicator = UIImageView()
     private let color: UIColor
-    var detailViewController: DetailViewController!
     
     init(color: UIColor) {
         self.color = color
