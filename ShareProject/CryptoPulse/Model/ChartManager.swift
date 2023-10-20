@@ -157,6 +157,7 @@ class ChartManager {
         delegate.lightWeightChartView.addSubview(tooltipView)
         
         tooltipView.translatesAutoresizingMaskIntoConstraints = false
+        
         NSLayoutConstraint.activate([
             tooltipView.leadingAnchor.constraint(equalTo: chart.leadingAnchor),
             tooltipView.trailingAnchor.constraint(equalTo: chart.trailingAnchor),

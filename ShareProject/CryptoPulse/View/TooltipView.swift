@@ -8,13 +8,22 @@
 import UIKit
 
 class TooltipView: UIView {
-    private let titleLabel = UILabel()
+    private lazy var titleLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .darkText
+        label.font = .systemFont(ofSize: 13)
+        label.textAlignment = .left
+        return label
+    }()
+    
     private let accentColor: UIColor
     
     init(accentColor: UIColor) {
         self.accentColor = accentColor
         super.init(frame: .zero)
+        
         isUserInteractionEnabled = false
+        titleLabel.textColor = .darkText
         
         setupSubviews()
     }
@@ -28,10 +37,6 @@ class TooltipView: UIView {
     }
     
     private func setupSubviews() {
-        titleLabel.textColor = .darkText
-        titleLabel.font = .systemFont(ofSize: 13)
-        titleLabel.textAlignment = .left
-        
         addSubview(titleLabel)
         
         titleLabel.translatesAutoresizingMaskIntoConstraints = false

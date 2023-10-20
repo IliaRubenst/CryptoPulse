@@ -93,7 +93,7 @@ extension SymbolsListController: UITableViewDataSource {
         let percentLabel = ("\(symbol.priceChangePercent ?? "0") %")
         let volumeLabel = ("Volume 24h: \(symbol.volume24Format())")
         
-        cell.configure(symbolLabel: symbolLabel, priceLabel: priceLabel, volumeLabel: volumeLabel, percentChangeLabel: percentLabel)
+        cell.configure(symbol: symbolLabel, price: priceLabel, volume: volumeLabel, percentChange: percentLabel)
         
         changeBorderColor(symbol: symbol, cell: cell)
         

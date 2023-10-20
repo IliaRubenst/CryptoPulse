@@ -101,6 +101,50 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
+		49673F212AE1832B00014D05 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				49367CAD2AAAFEB800827BE9 /* DataCodable.swift */,
+				4974BE872AB030580070240F /* DataModel.swift */,
+				D813653D2AB07E6D005930D2 /* UserSymbols.swift */,
+				49367CAF2AAB33BE00827BE9 /* MarketManager.swift */,
+				4979F2072AACAFC0000E039C /* WebSocketManager.swift */,
+				D81365EB2AB207A1005930D2 /* ChartManager.swift */,
+				497FBFEF2AD882640082BF04 /* DataBaseManager.swift */,
+				D813653F2AB092B9005930D2 /* DataLoader.swift */,
+				D868DEC72ACDBC01003822BF /* WebSocketProtocol.swift */,
+				D81366352AB4C577005930D2 /* Notifications.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		49673F222AE183C200014D05 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				D87A64B92AC5733100A29749 /* AlarmTableViewCell.swift */,
+				49367CAB2AAAFE7100827BE9 /* CoinCell.swift */,
+				49520E562AC4BCE2009B05BD /* SymbolsListCell.swift */,
+				494FF85C2ABB4B140041791B /* RightClickMenu.swift */,
+				D87A64BF2ACB0C2F00A29749 /* CustomButtons.swift */,
+				49AACC562AB78C7500101C46 /* TooltipView.swift */,
+				497669F52AD49445000DDBA8 /* PercentChange.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		49673F232AE183EC00014D05 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				496BEFDD2AA9EFDF00B15E0F /* ViewController.swift */,
+				4979F2052AAC3905000E039C /* DetailViewController.swift */,
+				49AACC322AB70EA000101C46 /* SymbolsListController.swift */,
+				D87A63FC2ABC581100A29749 /* AlarmsListViewController.swift */,
+				D87A64B72AC5711C00A29749 /* AddAlarmViewController.swift */,
+				D868DEC92ACEE016003822BF /* SettingsViewController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
 		496BEFCD2AA9EFDF00B15E0F = {
 			isa = PBXGroup;
 			children = (
@@ -122,32 +166,12 @@
 		496BEFD82AA9EFDF00B15E0F /* CryptoPulse */ = {
 			isa = PBXGroup;
 			children = (
+				49673F212AE1832B00014D05 /* Model */,
+				49673F222AE183C200014D05 /* View */,
+				49673F232AE183EC00014D05 /* Controller */,
 				496BEFD92AA9EFDF00B15E0F /* AppDelegate.swift */,
 				496BEFDB2AA9EFDF00B15E0F /* SceneDelegate.swift */,
-				496BEFDD2AA9EFDF00B15E0F /* ViewController.swift */,
-				4979F2052AAC3905000E039C /* DetailViewController.swift */,
-				49AACC322AB70EA000101C46 /* SymbolsListController.swift */,
-				D87A63FC2ABC581100A29749 /* AlarmsListViewController.swift */,
-				D87A64B72AC5711C00A29749 /* AddAlarmViewController.swift */,
-				D87A64BF2ACB0C2F00A29749 /* CustomButtons.swift */,
-				49367CAF2AAB33BE00827BE9 /* MarketManager.swift */,
-				4979F2072AACAFC0000E039C /* WebSocketManager.swift */,
-				D81365EB2AB207A1005930D2 /* ChartManager.swift */,
-				497FBFEF2AD882640082BF04 /* DataBaseManager.swift */,
-				D813653D2AB07E6D005930D2 /* UserSymbols.swift */,
-				49367CAD2AAAFEB800827BE9 /* DataCodable.swift */,
-				4974BE872AB030580070240F /* DataModel.swift */,
-				D813653F2AB092B9005930D2 /* DataLoader.swift */,
-				D868DEC72ACDBC01003822BF /* WebSocketProtocol.swift */,
-				D81366352AB4C577005930D2 /* Notifications.swift */,
-				49AACC562AB78C7500101C46 /* TooltipView.swift */,
-				494FF85C2ABB4B140041791B /* RightClickMenu.swift */,
-				497669F52AD49445000DDBA8 /* PercentChange.swift */,
 				D87A63FA2ABC294900A29749 /* Key.swift */,
-				49367CAB2AAAFE7100827BE9 /* CoinCell.swift */,
-				D87A64B92AC5733100A29749 /* AlarmTableViewCell.swift */,
-				49520E562AC4BCE2009B05BD /* SymbolsListCell.swift */,
-				D868DEC92ACEE016003822BF /* SettingsViewController.swift */,
 				496BEFDF2AA9EFDF00B15E0F /* Main.storyboard */,
 				496BEFE22AA9EFE100B15E0F /* Assets.xcassets */,
 				496BEFE42AA9EFE100B15E0F /* LaunchScreen.storyboard */,

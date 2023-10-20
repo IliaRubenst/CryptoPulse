@@ -28,9 +28,6 @@ class AlarmsListViewController: UIViewController, UITableViewDelegate, UITableVi
 //        dbManager.performRequestDB()
         updateData()
         tableView.reloadData()
-        for alarm in AlarmModelsArray.alarms {
-            print(alarm)
-        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -283,20 +280,4 @@ class AlarmsListViewController: UIViewController, UITableViewDelegate, UITableVi
         
         return action
     }
-    
-    @objc func printResponse() {
-        for account in AlarmModelsArray.alarms {
-            print(account)
-        }
-    }
-    
-    /*func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
-        print("Accessory path =", indexPath)
-        
-        let ownerCell = tableView.cellForRow(at: indexPath)
-        print("Cell title =", ownerCell?.textLabel?.text ?? "nil")
-    }*/
-    
-    
-    
 }

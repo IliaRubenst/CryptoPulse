@@ -33,14 +33,14 @@ class AlarmTableViewCell: UITableViewCell {
     let priceLabel: UILabel = {
         let label = UILabel()
         label.text = "Missed to fill label"
-        label.textAlignment = .right
+        label.textAlignment = .left
         return label
     }()
     
     let statusLabel: UILabel = {
         let label = UILabel()
         label.text = "Missed to fill label"
-        label.textAlignment = .right
+        label.textAlignment = .left
         return label
     }()
     
@@ -66,7 +66,7 @@ class AlarmTableViewCell: UITableViewCell {
         stackView.contentMode = .scaleToFill
         stackView.axis = .vertical
         stackView.distribution = .fillEqually
-        stackView.alignment = .center
+        stackView.alignment = .leading
         stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
     }()
@@ -88,7 +88,8 @@ class AlarmTableViewCell: UITableViewCell {
             labelColor.topAnchor.constraint(equalTo: self.contentView.topAnchor),
             labelColor.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor),
             labelColor.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor),
-            labelColor.widthAnchor.constraint(equalToConstant: 5)])
+            labelColor.widthAnchor.constraint(equalToConstant: 5)
+        ])
         
         self.contentView.addSubview(horizontalStackView)
         
@@ -96,7 +97,14 @@ class AlarmTableViewCell: UITableViewCell {
             horizontalStackView.topAnchor.constraint(equalTo: self.contentView.topAnchor),
             horizontalStackView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor),
             horizontalStackView.leadingAnchor.constraint(equalTo: labelColor.trailingAnchor),
-            horizontalStackView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor)])
+            horizontalStackView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor)
+        ])
+        
+        leftVerticalStackView.isLayoutMarginsRelativeArrangement = true
+        leftVerticalStackView.layoutMargins = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 0)
+
+        rightVerticalStackView.isLayoutMarginsRelativeArrangement = true
+        rightVerticalStackView.layoutMargins = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 10)
         
         horizontalStackView.addArrangedSubview(leftVerticalStackView)
         horizontalStackView.addArrangedSubview(rightVerticalStackView)
@@ -106,11 +114,5 @@ class AlarmTableViewCell: UITableViewCell {
         
         rightVerticalStackView.addArrangedSubview(priceLabel)
         rightVerticalStackView.addArrangedSubview(statusLabel)
-        
-        NSLayoutConstraint.activate([tickerLabel.leadingAnchor.constraint(equalTo: labelColor.trailingAnchor, constant: 10),
-                                     dateLabel.leadingAnchor.constraint(equalTo: labelColor.trailingAnchor, constant: 10),
-                                     priceLabel.trailingAnchor.constraint(equalTo: rightVerticalStackView.trailingAnchor, constant: -10),
-                                     statusLabel.trailingAnchor.constraint(equalTo: rightVerticalStackView.trailingAnchor, constant: -10)])
     }
-    
 }

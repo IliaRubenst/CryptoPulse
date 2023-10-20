@@ -25,6 +25,4 @@ class CoinCell: UICollectionViewCell {
             contentView.backgroundColor = #colorLiteral(red: 0.9112530351, green: 0.9112530351, blue: 0.9112530351, alpha: 1)
         }
     }
-    
-    
 }

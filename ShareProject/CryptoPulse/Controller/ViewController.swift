@@ -5,7 +5,6 @@
 //  Created by Ilia Ilia on 07.09.2023.
 //
 
-// Коммит для Илюши.
 
 import UIKit
 
@@ -19,7 +18,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
     var isReload = false
     var currentVolume = "0.0"
     
-    var data: FullSymbolsArray!
+//    var data: FullSymbolsArray!
     
     var webSocketManagers = [WebSocketManager]()
 
@@ -158,7 +157,20 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
     }
     
     @objc func loadTickers() {
-        marketManager.fetchRequest()
+        marketManager.fetchRequest() { [weak self] result in
+            switch result {
+            case .success(let newSymbols):
+                DispatchQueue.main.async {
+                    SymbolsArray.symbols = newSymbols
+                }
+            case .failure(let error):
+                DispatchQueue.main.async {
+                    let alert = UIAlertController(title: "Ошибка", message: error.localizedDescription, preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                    self?.present(alert, animated: true, completion: nil)
+                }
+            }
+        }
     }
     
     func didUpdateCandle(_ websocketManager: WebSocketManager, candleModel: CurrentCandleModel) {
