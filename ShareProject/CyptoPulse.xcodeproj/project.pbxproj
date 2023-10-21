@@ -25,6 +25,7 @@
 		497FBFF02AD882640082BF04 /* DataBaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 497FBFEF2AD882640082BF04 /* DataBaseManager.swift */; };
 		49AACC332AB70EA000101C46 /* SymbolsListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49AACC322AB70EA000101C46 /* SymbolsListController.swift */; };
 		49AACC572AB78C7500101C46 /* TooltipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49AACC562AB78C7500101C46 /* TooltipView.swift */; };
+		49F979DB2AE2A63A000DDD7E /* ColorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F979DA2AE2A63A000DDD7E /* ColorManager.swift */; };
 		D813653E2AB07E6D005930D2 /* UserSymbols.swift in Sources */ = {isa = PBXBuildFile; fileRef = D813653D2AB07E6D005930D2 /* UserSymbols.swift */; };
 		D81365402AB092B9005930D2 /* DataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D813653F2AB092B9005930D2 /* DataLoader.swift */; };
 		D81365EC2AB207A1005930D2 /* ChartManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D81365EB2AB207A1005930D2 /* ChartManager.swift */; };
@@ -63,6 +64,7 @@
 		497FBFEF2AD882640082BF04 /* DataBaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataBaseManager.swift; sourceTree = "<group>"; };
 		49AACC322AB70EA000101C46 /* SymbolsListController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SymbolsListController.swift; sourceTree = "<group>"; };
 		49AACC562AB78C7500101C46 /* TooltipView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TooltipView.swift; sourceTree = "<group>"; };
+		49F979DA2AE2A63A000DDD7E /* ColorManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorManager.swift; sourceTree = "<group>"; };
 		B2556B97124E821A0BB49D7B /* Pods_CyptoPulse.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CyptoPulse.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D084E73463F482E2996F7D33 /* Pods-CyptoPulse.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CyptoPulse.debug.xcconfig"; path = "Target Support Files/Pods-CyptoPulse/Pods-CyptoPulse.debug.xcconfig"; sourceTree = "<group>"; };
 		D813653D2AB07E6D005930D2 /* UserSymbols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSymbols.swift; sourceTree = "<group>"; };
@@ -114,6 +116,7 @@
 				D813653F2AB092B9005930D2 /* DataLoader.swift */,
 				D868DEC72ACDBC01003822BF /* WebSocketProtocol.swift */,
 				D81366352AB4C577005930D2 /* Notifications.swift */,
+				49F979DA2AE2A63A000DDD7E /* ColorManager.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -309,6 +312,7 @@
 				49AACC332AB70EA000101C46 /* SymbolsListController.swift in Sources */,
 				D87A63FD2ABC581100A29749 /* AlarmsListViewController.swift in Sources */,
 				D87A64BA2AC5733100A29749 /* AlarmTableViewCell.swift in Sources */,
+				49F979DB2AE2A63A000DDD7E /* ColorManager.swift in Sources */,
 				49520E572AC4BCE2009B05BD /* SymbolsListCell.swift in Sources */,
 				494FF85D2ABB4B140041791B /* RightClickMenu.swift in Sources */,
 				49367CB02AAB33BE00827BE9 /* MarketManager.swift in Sources */,

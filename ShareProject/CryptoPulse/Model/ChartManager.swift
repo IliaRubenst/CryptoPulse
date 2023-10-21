@@ -31,7 +31,7 @@ class ChartManager {
     
     private var bottomConstraintForPercent: NSLayoutConstraint!
     
-    var isWasShown = false
+    var isWasShown = true
     var horizontalLine: CrosshairLineOptions?
     var options: PriceLineOptions!
     var currentCursorPrice: Double!
@@ -307,33 +307,58 @@ class ChartManager {
 
 extension ChartManager: ChartDelegate {
     func didCrosshairMove(onChart chart: ChartApi, parameters: MouseEventParams) {
-        if case .utc(timestamp: _) = parameters.time,
-           let point = parameters.point,
-           case let .barData(data) = parameters.price(forSeries: series) {
-            tooltipView.update(title: "o:\(data.open!), h:\(data.high!), l:\(data.low!), c:\(data.close!)")
-            series.coordinateToPrice(coordinate: parameters.point!.y) { [self] price in
-                self.currentCursorPrice = price!
-                self.perecentChange.update(title: "\(String(format: "%.2f%", ((price! * 100) / delegate.closePrice - 100)))")
-            }
-            tooltipView.isHidden = false
-            perecentChange.isHidden = tooltipView.isHidden
-            isWasShown = true
-            bottomConstraintForPercent.constant = CGFloat(point.y) - 17
-            leadingConstraint.constant = CGFloat(point.x) + 5
-            bottomConstraint.constant = CGFloat(point.y) + 5
-        } else {
-            self.tooltipView.isHidden = true
-            perecentChange.isHidden = tooltipView.isHidden
-            if tooltipView.isHidden && isWasShown {
-                rightClickMenu.isHidden = false
-            }
-            if parameters.sourceEvent?.localX == nil && !isWasShown {
-                rightClickMenu.isHidden = true
-            }
-            isWasShown = false
+        guard case .utc(timestamp: _) = parameters.time,
+              let point = parameters.point,
+              case let .barData(data) = parameters.price(forSeries: series),
+              let open = data.open,
+              let high = data.high,
+              let low = data.low,
+              let close = data.close else {
+                  
+            handleViewsVisibilityOnFailure(parameters: parameters)
+            return
         }
+
+        updateViews(with: open, high: high, low: low, close: close, point: point)
+        updateCurrentCursorPrice(from: point.y)
+        toggleDisplayViews(isHidden: false)
     }
     
+    private func updateViews(with open: Double, high: Double, low: Double, close: Double, point: Point) {
+        tooltipView.update(title: "o:\(open), h:\(high), l:\(low), c:\(close)")
+        bottomConstraintForPercent.constant = CGFloat(point.y) - 17
+        leadingConstraint.constant = CGFloat(point.x) + 5
+        bottomConstraint.constant = CGFloat(point.y) + 5
+        isWasShown = false
+    }
+
+    private func updateCurrentCursorPrice(from coordinate: Double) {
+        series.coordinateToPrice(coordinate: coordinate) { [self] price in
+            guard let price = price else { return }
+            currentCursorPrice = price
+            let percentChange = ((price * 100) / delegate.closePrice - 100)
+            perecentChange.update(title: String(format: "%.2f%", percentChange))
+        }
+        rightClickMenu.isHidden = true
+    }
+
+    private func toggleDisplayViews(isHidden: Bool) {
+        tooltipView.isHidden = isHidden
+        perecentChange.isHidden = isHidden
+        rightClickMenu.isHidden = !isHidden
+    }
+    
+    private func handleViewsVisibilityOnFailure(parameters: MouseEventParams) {
+        toggleDisplayViews(isHidden: true)
+        if rightClickMenu.isHidden && !isWasShown {
+            rightClickMenu.isHidden = false
+        }
+        if !rightClickMenu.isHidden && isWasShown {
+            rightClickMenu.isHidden = true
+        }
+        isWasShown = true
+    }
+
     @objc func hideMenu(notification: NSNotification) {
         rightClickMenu.isHidden = true
     }

@@ -142,11 +142,9 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
         
         chartManager.tick()
         alarmObserver()
-        if Double(priceChangePercent)! >= 0 {
-            rightLowerNavLabel.textColor = #colorLiteral(red: 0.008301745169, green: 0.5873891115, blue: 0.5336645246, alpha: 1)
-        } else {
-            rightLowerNavLabel.textColor = #colorLiteral(red: 1, green: 0, blue: 0, alpha: 1)
-        }
+        
+        ColorManager.percentText(priceChangePercent: priceChangePercent, rightLowerNavLabel: rightLowerNavLabel)
+        
         rightLowerNavLabel.text = "\(priceChangePercent)%"
     }
     

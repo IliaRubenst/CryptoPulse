@@ -82,7 +82,8 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
         cell.volumeLabel.text = UserSymbols.savedSymbols[indexPath.item].volume
         cell.percentChangeLabel.text = ("\(UserSymbols.savedSymbols[indexPath.item].priceChangePercent ?? "0") %")
         
-        changeBorderColor(indexPath, cell: cell)
+        ColorManager.changeCoinCell(indexPath: indexPath, cell: cell)
+//        changeBorderColor(indexPath, cell: cell)
         
         cell.layer.borderWidth = 1
         cell.layer.cornerRadius = 5
@@ -234,16 +235,6 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
     func closeConnection() {
         for delegate in webSocketManagers {
             delegate.close()
-        }
-    }
-    
-    func changeBorderColor(_ indexPath: IndexPath, cell: CoinCell) {
-        if Double(UserSymbols.savedSymbols[indexPath.item].priceChangePercent ?? "0") ?? 0 < 0 {
-            cell.percentChangeLabel.textColor = #colorLiteral(red: 1, green: 0, blue: 0, alpha: 1)
-            cell.layer.borderColor = #colorLiteral(red: 1, green: 0, blue: 0, alpha: 1)
-        } else {
-            cell.percentChangeLabel.textColor = #colorLiteral(red: 0.008301745169, green: 0.5873891115, blue: 0.5336645246, alpha: 1)
-            cell.layer.borderColor = #colorLiteral(red: 0.008301745169, green: 0.5873891115, blue: 0.5336645246, alpha: 1)
         }
     }
 }

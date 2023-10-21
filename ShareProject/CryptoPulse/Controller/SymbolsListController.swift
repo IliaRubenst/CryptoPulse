@@ -95,8 +95,8 @@ extension SymbolsListController: UITableViewDataSource {
         
         cell.configure(symbol: symbolLabel, price: priceLabel, volume: volumeLabel, percentChange: percentLabel)
         
-        changeBorderColor(symbol: symbol, cell: cell)
-        
+        ColorManager.changeSymbolsListCellColor(symbol: symbol, cell: cell)
+
         return cell
     }
 }
@@ -204,15 +204,5 @@ extension SymbolsListController {
             return categoryMatch && symbol.symbol.lowercased().contains(searchText.lowercased())
         })
         tableView.reloadData()
-    }
-    
-    func changeBorderColor(symbol: Symbol, cell: SymbolsListCell) {
-        if Double(symbol.priceChangePercent ?? "0") ?? 0 < 0 {
-            cell.symbolLabel.textColor = #colorLiteral(red: 1, green: 0, blue: 0, alpha: 1)
-            cell.percentChangeLabel.textColor = #colorLiteral(red: 1, green: 0, blue: 0, alpha: 1)
-        } else {
-            cell.symbolLabel.textColor = #colorLiteral(red: 0.008301745169, green: 0.5873891115, blue: 0.5336645246, alpha: 1)
-            cell.percentChangeLabel.textColor = #colorLiteral(red: 0.008301745169, green: 0.5873891115, blue: 0.5336645246, alpha: 1)
-        }
     }
 }

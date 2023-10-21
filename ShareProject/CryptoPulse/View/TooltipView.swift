@@ -8,28 +8,31 @@
 import UIKit
 
 class TooltipView: UIView {
+    private let accentColor: UIColor
+    
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.textColor = .darkText
         label.font = .systemFont(ofSize: 13)
         label.textAlignment = .left
         return label
     }()
     
-    private let accentColor: UIColor
-    
     init(accentColor: UIColor) {
-        self.accentColor = accentColor
+        self.accentColor = .black
         super.init(frame: .zero)
         
         isUserInteractionEnabled = false
-        titleLabel.textColor = .darkText
-        
         setupSubviews()
+        setupConstraints()
     }
     
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        self.accentColor = .black
+        super.init(coder: coder)
+        
+        isUserInteractionEnabled = false
+        setupSubviews()
+        setupConstraints()
     }
     
     func update(title: String) {
@@ -38,8 +41,13 @@ class TooltipView: UIView {
     
     private func setupSubviews() {
         addSubview(titleLabel)
-        
+        titleLabel.textColor = accentColor
+    }
+    
+    private func setupConstraints() {
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        //сюда нужно будет добавить констрейты и убрать их из чарт менеджера
     }
 }
 

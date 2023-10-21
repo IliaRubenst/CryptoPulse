@@ -26,10 +26,8 @@ class PercentChange: UIView {
     
     func update(title: String) {
         percentLabel.text = title
-        if Double(title)! >= 0 {
-            percentLabel.textColor = #colorLiteral(red: 0.008301745169, green: 0.5873891115, blue: 0.5336645246, alpha: 1)
-        } else {
-            percentLabel.textColor = #colorLiteral(red: 1, green: 0, blue: 0, alpha: 1)
+        if let value = Double(title) {
+            percentLabel.textColor = UIColor.colorBasedOnValue(value)
         }
     }
     
