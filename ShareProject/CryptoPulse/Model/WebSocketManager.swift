@@ -172,20 +172,6 @@ class WebSocketManager: NSObject, URLSessionWebSocketDelegate {
             }
         }
     }
-    
-    /*func send() {
-        if !isClose {
-            DispatchQueue.global().asyncAfter(deadline: .now() + 5) {
-                self.send()
-                self.webSocket?.send(.string("Send new message: \(Int.random(in: 0...1000))"), completionHandler: { error in
-                    if let error = error {
-                        print("Send error: \(error)")
-                    }
-                })
-            }
-        }
-    }*/
-    
 }
 
 

@@ -286,7 +286,7 @@ class AddAlarmViewController: UIViewController, UITextFieldDelegate, WebSocketMa
             }
             
             if let openedChart {
-                openedChart.chartManager.setupAlarmLine(alarmPrice, id: idString)
+                openedChart.alarmManager?.setupAlarmLine(alarmPrice, id: idString)
             }
             
         case .editAlarm:

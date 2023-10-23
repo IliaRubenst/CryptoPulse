@@ -23,6 +23,7 @@
 		4979F2062AAC3905000E039C /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4979F2052AAC3905000E039C /* DetailViewController.swift */; };
 		4979F2082AACAFC0000E039C /* WebSocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4979F2072AACAFC0000E039C /* WebSocketManager.swift */; };
 		497FBFF02AD882640082BF04 /* DataBaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 497FBFEF2AD882640082BF04 /* DataBaseManager.swift */; };
+		4995E7A02AE642A500DAC777 /* AlarmManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4995E79F2AE642A500DAC777 /* AlarmManager.swift */; };
 		49AACC332AB70EA000101C46 /* SymbolsListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49AACC322AB70EA000101C46 /* SymbolsListController.swift */; };
 		49AACC572AB78C7500101C46 /* TooltipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49AACC562AB78C7500101C46 /* TooltipView.swift */; };
 		49F979DB2AE2A63A000DDD7E /* ColorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F979DA2AE2A63A000DDD7E /* ColorManager.swift */; };
@@ -62,6 +63,7 @@
 		4979F2052AAC3905000E039C /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		4979F2072AACAFC0000E039C /* WebSocketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketManager.swift; sourceTree = "<group>"; };
 		497FBFEF2AD882640082BF04 /* DataBaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataBaseManager.swift; sourceTree = "<group>"; };
+		4995E79F2AE642A500DAC777 /* AlarmManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmManager.swift; sourceTree = "<group>"; };
 		49AACC322AB70EA000101C46 /* SymbolsListController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SymbolsListController.swift; sourceTree = "<group>"; };
 		49AACC562AB78C7500101C46 /* TooltipView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TooltipView.swift; sourceTree = "<group>"; };
 		49F979DA2AE2A63A000DDD7E /* ColorManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorManager.swift; sourceTree = "<group>"; };
@@ -117,6 +119,7 @@
 				D868DEC72ACDBC01003822BF /* WebSocketProtocol.swift */,
 				D81366352AB4C577005930D2 /* Notifications.swift */,
 				49F979DA2AE2A63A000DDD7E /* ColorManager.swift */,
+				4995E79F2AE642A500DAC777 /* AlarmManager.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -327,6 +330,7 @@
 				49367CAC2AAAFE7100827BE9 /* CoinCell.swift in Sources */,
 				D87A63FB2ABC294A00A29749 /* Key.swift in Sources */,
 				49367CAE2AAAFEB800827BE9 /* DataCodable.swift in Sources */,
+				4995E7A02AE642A500DAC777 /* AlarmManager.swift in Sources */,
 				49AACC572AB78C7500101C46 /* TooltipView.swift in Sources */,
 				D81365402AB092B9005930D2 /* DataLoader.swift in Sources */,
 				496BEFDC2AA9EFDF00B15E0F /* SceneDelegate.swift in Sources */,

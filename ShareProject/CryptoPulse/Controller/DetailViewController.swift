@@ -17,6 +17,12 @@ extension String {
     }
 }
 
+private enum Constants {
+    static let backImageName = "chevron.backward"
+    static let bellImageName = "bell"
+    static let cameraImageName = "camera"
+}
+
 class DetailViewController: UIViewController, WebSocketManagerDelegate {
     var lightWeightChartView: UIView = {
         let view = UIView()
@@ -49,6 +55,7 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
 //    var candles = [PreviousCandlesModel]()
     var data = [CandlestickData]()
     var currentCandelModel: CurrentCandleModel!
+    var alarmManager: AlarmManager?
 
     
     var price: String = ""
@@ -70,7 +77,7 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
     
     var isKlineClose = false
     var alarm: Double = 0
-    var isAlertShowing: Bool = false
+//    var isAlertShowing: Bool = false
     
     var timeFrame = "15m"
     
@@ -91,7 +98,8 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         startChartManager()
-        setBackgroundForButton()
+        
+        ColorManager.setBackgroundForButton(buttonNames: [oneMinuteButton, fiveMinutesButton, fifteenMinutesButton, oneHourButton, fourHours, oneDay], timeFrame: timeFrame)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -105,44 +113,34 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
         
     }
     
+    
+    
     @objc func backTapped() {
-    self.navigationController?.popViewController(animated: true)
+        self.navigationController?.popViewController(animated: true)
     }
     
-    func configureNavBarButtons() {
-        navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "chevron.backward")?.withTintColor(.black, renderingMode: .alwaysOriginal), style: .plain, target: self, action: #selector(backTapped))
-        let setAlarmButton = UIBarButtonItem(image: UIImage(systemName: "bell")?.withTintColor(.black, renderingMode: .alwaysOriginal), style: .plain, target: self, action: #selector(addAlarm))
-        let screenShotButton = UIBarButtonItem(image: UIImage(systemName: "camera")?.withTintColor(.black, renderingMode: .alwaysOriginal), style: .plain, target: self, action: #selector(takeScreenShot))
+    private func configureNavBarButtons() {
+        navigationItem.leftBarButtonItem = createBarButtonItem(imageName: Constants.backImageName, action: #selector(backTapped))
+        
+        let setAlarmButton = createBarButtonItem(imageName: Constants.bellImageName, action: #selector(addAlarm))
+        let screenShotButton = createBarButtonItem(imageName: Constants.cameraImageName, action: #selector(takeScreenShot))
+        
         navigationItem.rightBarButtonItems = [setAlarmButton, screenShotButton]
     }
     
-   func setBackgroundForButton() {
-        let names = [oneMinuteButton, fiveMinutesButton, fifteenMinutesButton, oneHourButton, fourHours, oneDay]
-        for name in names {
-            if name.titleLabel?.text == timeFrame {
-                name.backgroundColor = #colorLiteral(red: 0.008301745169, green: 0.5873891115, blue: 0.5336645246, alpha: 1)
-            } else {
-                name.backgroundColor = .clear
-            }
-        }
-
+    private func createBarButtonItem(imageName: String, action: Selector) -> UIBarButtonItem {
+        let buttonImage = UIImage(systemName: imageName)?.withTintColor(.black, renderingMode: .alwaysOriginal)
+        return UIBarButtonItem(image: buttonImage, style: .plain, target: self, action: action)
     }
 
-    func setupAlarmLines() {
-//        print(AlarmModelsArray.alarms.count)
-        for alarm in AlarmModelsArray.alarms {
-            chartManager.setupAlarmLine(alarm.alarmPrice, id: String(alarm.id))
-        }
-    }
     
     func didUpdateCandle(_ websocketManager: WebSocketManager, candleModel: CurrentCandleModel) {
         closePrice = Double(candleModel.closePrice)!
         isKlineClose = candleModel.isKlineClose
         currentCandelModel = candleModel
-        
+
         chartManager.tick()
-        alarmObserver()
-        
+        alarmManager?.alarmObserver(for: symbol, equal: closePrice)
         ColorManager.percentText(priceChangePercent: priceChangePercent, rightLowerNavLabel: rightLowerNavLabel)
         
         rightLowerNavLabel.text = "\(priceChangePercent)%"
@@ -167,59 +165,7 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
         leftPartView.text = "24h volume\n\(volume24h)"
         middlePartView.text = "max: \(maxPrice)\nmin: \(minPrice)"
     }
-    
-    
-    func alarmObserver() {
-        let upToDown = "сверху вниз"
-        let downToUp = "снизу вверх"
         
-        var telegramAlram = TelegramNotifications()
-        
-        for (index, state) in AlarmModelsArray.alarms.enumerated() where state.isActive {
-            if state.isAlarmUpper {
-                if closePrice >= state.alarmPrice && !isAlertShowing && symbol == state.symbol {
-                    telegramAlram.message = "Цена \(state.symbol) пересекла \(state.alarmPrice) \(downToUp)"
-//                    telegramAlram.postRequest()
-                    
-                    let ac = UIAlertController(title: "Alarm for \(state.symbol)", message: "The price crossed \(state.alarmPrice) \(downToUp) ", preferredStyle: .alert)
-                    isAlertShowing = true
-                    ac.addAction(UIAlertAction(title: "OK", style: .default) { [weak self] _ in
-                        self?.isAlertShowing = false
-                    })
-                    present(ac, animated: true)
-                    
-//                    chartManager.removeAlarmLine(index)
-//                    AlarmModelsArray.alarms.remove(at: index)
-                    AlarmModelsArray.alarms[index].isActive = false
-//                    let defaults = DataLoader(keys: "savedAlarms")
-//                    defaults.saveData()
-                }
-            } else {
-                if closePrice <= state.alarmPrice && !isAlertShowing && symbol == state.symbol {
-                    telegramAlram.message = "Цена \(state.symbol) пересекла \(state.alarmPrice) \(upToDown)"
-//                    telegramAlram.postRequest()
-                    
-                    let ac = UIAlertController(title: "Alarm for \(state.symbol)", message: "The price crossed \(state.alarmPrice) \(upToDown) ", preferredStyle: .alert)
-                    isAlertShowing = true
-                    ac.addAction(UIAlertAction(title: "OK", style: .default) { [weak self] _ in
-                        self?.isAlertShowing = false
-                    })
-                    present(ac, animated: true)
-//                    chartManager.removeAlarmLine(index)
-//                    AlarmModelsArray.alarms.remove(at: index)
-                    AlarmModelsArray.alarms[index].isActive = false
-                    
-//                    let defaults = DataLoader(keys: "savedAlarms")
-//                    defaults.saveData()
-                }
-            }
-//            for alarm in AlarmModelsArray.alarms {
-//                dbManager.updateDBData(alarmModel: alarm, change: alarm.id)
-//            }
-
-        }
-    }
-    
     func startChartManager() {
         chartManager = nil // Не уверен, что это необходимо, но есть сомнения насчет того, сколько инстансов чартменеджера мы создаем, поэтому перед инициализацией нового, я решил на всякий случай явно грохать старого.
         
@@ -256,41 +202,6 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
         }
         
         present(addAlarmVC, animated: true)
-        
-        /*let ac = UIAlertController(title: "Set alarm for \(symbol)", message: nil, preferredStyle: .alert)
-        ac.addTextField { textField in
-            textField.placeholder = "00.00"
-            textField.keyboardType = UIKeyboardType.decimalPad
-        }
-        
-        ac.addAction(UIAlertAction(title: "Apply", style: .default) { [weak self] _ in
-            guard let text = ac.textFields?[0].text else { return }
-            if text != "" && text.isNumeric {
-                self!.alarm = Double(text)!
-                var isAlarmUpper = false
-                if self!.alarm > self!.closePrice {
-                    isAlarmUpper = true
-                }
-                self?.id = Int.random(in: 0...999999999)
-                
-                let currentDate = self?.convertCurrentDateToString()
-                guard let unwrappedDate = currentDate else {
-                    fatalError("Current date is nil")
-                }
-                
-                let currentModel = AlarmModel(id: self!.id, symbol: self!.symbol, alarmPrice: self!.alarm, isAlarmUpper: isAlarmUpper, isActive: true, date: unwrappedDate)
-                
-                AlarmModelsArray.alarms.append(currentModel)
-                self!.addAlarmtoModelDB(alarmModel: currentModel)
-                
-                let defaults = DataLoader(keys: "savedAlarms")
-                defaults.saveData()
-
-                self?.chartManager.setupAlarmLine(self!.alarm)
-            }
-        })
-        ac.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-        present(ac, animated: true)*/
     }
     
     @objc func addAlarmForSelectedPrice() {
@@ -321,7 +232,7 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
 //        let defaults = DataLoader(keys: "savedAlarms")
 //        defaults.saveData()
         
-        chartManager.setupAlarmLine(alarm, id: idString)
+        alarmManager?.setupAlarmLine(alarm, id: idString)
     }
     
     override func loadView() {
@@ -504,7 +415,7 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
         
         guard let label = sender.titleLabel?.text else { return }
         timeFrame = label
-        setBackgroundForButton()
+        ColorManager.setBackgroundForButton(buttonNames: [oneMinuteButton, fiveMinutesButton, fifteenMinutesButton, oneHourButton, fourHours, oneDay], timeFrame: timeFrame)
         
         for view in self.lightWeightChartView.subviews {
             view.removeFromSuperview()
@@ -540,4 +451,5 @@ extension UIView {
         }
     }
 }
+
 

@@ -10,6 +10,7 @@ import LightweightCharts
 
 class ChartManager {
     var delegate: DetailViewController!
+    var alarmManager: AlarmManager!
     
     var symbol: String
     var timeFrame: String
@@ -22,8 +23,7 @@ class ChartManager {
     }
     
     private var chart: LightweightCharts!
-    private var series: CandlestickSeries!
-    private var alarmLine: PriceLine!
+    var series: CandlestickSeries!
     
     // for rightClickMenu
     private var leadingConstraint: NSLayoutConstraint!
@@ -81,18 +81,6 @@ class ChartManager {
         do {
             if let decodedData = try JSONSerialization.jsonObject(with: marketData, options: []) as? [[Any]] {
                 for i in 0..<decodedData.count {
-                    //                    let candle = PreviousCandlesModel(openTime: decodedData[i][0] as! Double,
-                    //                                                      openPrice: decodedData[i][1] as! String,
-                    //                                                      highPrice: decodedData[i][2] as! String,
-                    //                                                      lowPrice: decodedData[i][3] as! String,
-                    //                                                      closePrice: decodedData[i][4] as! String,
-                    //                                                      volume: decodedData[i][5] as! String,
-                    //                                                      closeTime: decodedData[i][6] as! Int,
-                    //                                                      quoteAssetVolume: decodedData[i][7] as! String,
-                    //                                                      numberOfTrades: decodedData[i][8] as! Int,
-                    //                                                      takerBuyVolume: decodedData[i][9] as! String,
-                    //                                                      takerBuyQuoteAssetVolume: decodedData[i][10] as! String)
-                    //                    delegate.candles.append(candle)
                     let openPrice = decodedData[i][1] as! String
                     let highPrice = decodedData[i][2] as! String
                     let lowPrice = decodedData[i][3] as! String
@@ -141,6 +129,9 @@ class ChartManager {
 
         
         let chart = LightweightCharts(options: options)
+        
+        alarmManager = AlarmManager(detailViewController: delegate, chartManager: self)
+        alarmManager?.setupAlarmLines()
         
         delegate.lightWeightChartView.addSubview(chart)
         
@@ -225,9 +216,9 @@ class ChartManager {
         let series = chart.addCandlestickSeries(options: nil)
         self.series = series
         data.removeLast()
-        
+        print("Chart manager series: \(String(describing: series))")
         series.setData(data: data)
-        delegate.setupAlarmLines()
+        alarmManager.setupAlarmLines()
     }
     
     func tick() {
@@ -276,27 +267,6 @@ class ChartManager {
         }
         return timeInterval
         
-    }
-    
-    func setupAlarmLine(_ alarmPrice: Double, id: String) {
-        let options = PriceLineOptions(
-            id: id,
-            price: alarmPrice,
-            color: "#f00",
-            lineWidth: .one,
-            lineStyle: .solid
-        )
-        
-        alarmLine = series.createPriceLine(options: options)
-//        setupClockIndicator(alarmPrice)
-    }
-    
-//    func setupClockIndicator(_ alarmPrice: Double) {
-//        delegate.lightWeightChartView.addSubview(alarmIndicator)
-//    }
-    
-    func removeAlarmLine(_ index: Int) {
-        series.removePriceLine(line: AlarmModelsArray.alarmaLine[index])
     }
     
     func setupSubscription() {
@@ -350,12 +320,15 @@ extension ChartManager: ChartDelegate {
     
     private func handleViewsVisibilityOnFailure(parameters: MouseEventParams) {
         toggleDisplayViews(isHidden: true)
+        
         if rightClickMenu.isHidden && !isWasShown {
             rightClickMenu.isHidden = false
         }
+        
         if !rightClickMenu.isHidden && isWasShown {
             rightClickMenu.isHidden = true
         }
+        
         isWasShown = true
     }
 
@@ -369,3 +342,6 @@ extension ChartManager: ChartDelegate {
     func didClick(onChart chart: ChartApi, parameters: MouseEventParams) {
     }
 }
+
+
+
