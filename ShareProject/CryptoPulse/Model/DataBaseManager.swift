@@ -91,8 +91,7 @@ class DataBaseManager {
         do {
             let decodedData = try decoder.decode([Account].self, from: DBData)
             for data in decodedData {
-                let detailVC = DetailViewController()
-                let currentDate = detailVC.convertCurrentDateToString()
+                let currentDate = AlarmManager.convertCurrentDateToString()
                 
                 AlarmModelsArray.alarms.append(AlarmModel(id: data.id,
                                                           symbol: data.symbol,

@@ -267,7 +267,7 @@ class AddAlarmViewController: UIViewController, UITextFieldDelegate, WebSocketMa
             
             // Вынести этот метод с ДетейлВьюКонтроллера.
             let dVC = DetailViewController()
-            let currentDate = dVC.convertCurrentDateToString()
+            let currentDate = AlarmManager.convertCurrentDateToString()
             
             let alarmModel = AlarmModel(id: id, symbol: symbol, alarmPrice: alarmPrice, isAlarmUpper: isAlarmUpper, isActive: true, date: currentDate)
 //            AlarmModelsArray.alarms.append(alarmModel)

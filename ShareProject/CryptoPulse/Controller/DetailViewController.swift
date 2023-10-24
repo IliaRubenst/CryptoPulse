@@ -23,12 +23,215 @@ private enum Constants {
     static let cameraImageName = "camera"
 }
 
-class DetailViewController: UIViewController, WebSocketManagerDelegate {
+class DetailViewController: UIViewController {
     var lightWeightChartView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
+    
+    var helper: DetailViewHelper!
+    var webSocketManagers = [WebSocketManager]()
+    var chartManager: ChartManager!
+    var dbManager = DataBaseManager()
+    var data = [CandlestickData]()
+    var currentCandelModel: CurrentCandleModel!
+    var alarmManager: AlarmManager?
+
+    var price: String = ""
+    
+    // data from CurrentCandleData
+    var closePrice: Double = 0
+    
+    // data from MarkPriceStream
+    var symbol: String = ""
+    var fundingRate: String = "0.0"
+    var nextFundingTime: String = "00:00:00"
+    
+    //data from IndividualSymbolTickerStreams
+    var priceChangePercent: String = "0.0"
+    var volume24h: String = "0.0"
+    var maxPrice: String = "0.0"
+    var minPrice: String = "0.0"
+
+    
+    var isKlineClose = false
+    var timeFrame = "15m"
+    
+    override func loadView() {
+        super.loadView()
+
+        helper = DetailViewHelper(viewController: self)
+        helper.loadViewComponents()
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        addObservers()
+        configureNavBarButtons()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        setupChartManager()
+        alarmManager = AlarmManager(detailViewController: self, chartManager: chartManager)
+        setupButtonBackgrounds()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+
+        for view in self.lightWeightChartView.subviews {
+            view.removeFromSuperview()
+        }
+        
+        terminateWebSocketsManagers()
+        clearChartManager()
+        clearAlarmManager()
+    }
+    
+    private func addObservers() {
+        NotificationCenter.default.addObserver(self, selector: #selector(addAlarm), name: NSNotification.Name(rawValue: "button1Pressed"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(addAlarmForSelectedPrice), name: NSNotification.Name(rawValue: "button2Pressed"), object: nil)
+    }
+    
+    @objc func addAlarmForSelectedPrice() {
+            alarmManager?.addAlarmForSelectedPrice(alarmPrice: chartManager.currentCursorPrice, closePrice: closePrice, symbol: symbol)
+    }
+    
+    @objc func addAlarm() {
+        alarmManager?.addAlarm(symbol: symbol, closePrice: closePrice, openedChart: self)
+    }
+    
+    @objc func backTapped() {
+        self.navigationController?.popViewController(animated: true)
+    }
+    
+    private func configureNavBarButtons() {
+        navigationItem.leftBarButtonItem = createBarButtonItem(imageName: Constants.backImageName, action: #selector(backTapped))
+        
+        let setAlarmButton = createBarButtonItem(imageName: Constants.bellImageName, action: #selector(addAlarm))
+        let screenShotButton = createBarButtonItem(imageName: Constants.cameraImageName, action: #selector(takeScreenShot))
+        
+        navigationItem.rightBarButtonItems = [setAlarmButton, screenShotButton]
+    }
+    
+    private func createBarButtonItem(imageName: String, action: Selector) -> UIBarButtonItem {
+        let buttonImage = UIImage(systemName: imageName)?.withTintColor(.black, renderingMode: .alwaysOriginal)
+        return UIBarButtonItem(image: buttonImage, style: .plain, target: self, action: action)
+    }
+    
+    private func setupChartManager() {
+        chartManager = ChartManager(delegate: self, symbol: symbol, timeFrame: timeFrame)
+        startChartManager()
+    }
+    
+    private func setupButtonBackgrounds() {
+        ColorManager.setBackgroundForButton(buttonNames: [helper.oneMinuteButton, helper.fiveMinutesButton, helper.fifteenMinutesButton, helper.oneHourButton, helper.fourHours, helper.oneDay], timeFrame: timeFrame)
+    }
+    
+    func startChartManager() {
+//        chartManager = nil // Не уверен, что это необходимо, но есть сомнения насчет того, сколько инстансов чартменеджера мы создаем, поэтому перед инициализацией нового, я решил на всякий случай явно грохать старого.
+        self.chartManager?.data.removeAll()
+        self.chartManager = nil
+        self.chartManager = ChartManager(delegate: self, symbol: symbol, timeFrame: timeFrame)
+        chartManager.fetchRequest(symbol: symbol, timeFrame: timeFrame)
+        chartManager.setupChart()
+        
+        chartManager.setupSubscription()
+    }
+    
+    func startWebSocketManagers() {
+        terminateWebSocketsManagers()
+        
+        for state in State.allCases {
+            let manager = WebSocketManager()
+            manager.delegate = self
+            manager.actualState = state
+            manager.webSocketConnect(symbol: symbol, timeFrame: timeFrame)
+
+            webSocketManagers.append(manager)
+        }
+    }
+    
+    private func terminateWebSocketsManagers() {
+        webSocketManagers.forEach { $0.close() }
+        webSocketManagers = []
+    }
+    
+    private func clearChartManager() {
+        chartManager.data.removeAll()
+        chartManager = nil
+    }
+    
+    private func clearAlarmManager() {
+        alarmManager = nil
+    }
+        
+    @objc func takeScreenShot() {
+        let screenShot = lightWeightChartView.makeScreenshot()
+        guard let imageToData = screenShot.jpegData(compressionQuality: 1) else {
+            print("Снова ошибка")
+            return
+        }
+        let activityVC = UIActivityViewController(activityItems: [imageToData], applicationActivities: [])
+        present(activityVC, animated: true)
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+}
+
+// MARK: - WebSocketManagerDelegate Methods
+extension DetailViewController: WebSocketManagerDelegate {
+    func didUpdateCandle(_ websocketManager: WebSocketManager, candleModel: CurrentCandleModel) {
+        closePrice = Double(candleModel.closePrice)!
+        isKlineClose = candleModel.isKlineClose
+        currentCandelModel = candleModel
+
+        chartManager.tick()
+        alarmManager?.alarmObserver(for: symbol, equal: closePrice)
+        ColorManager.percentText(priceChangePercent: priceChangePercent, rightLowerNavLabel: helper.rightLowerNavLabel)
+        
+        helper.rightLowerNavLabel.text = "\(priceChangePercent)%"
+    }
+    
+    func didUpdateMarkPriceStream(_ websocketManager: WebSocketManager, dataModel: MarkPriceStreamModel) {
+        symbol = dataModel.symbol
+        let fundingrRateDouble = Double(dataModel.fundingRate)! * 100
+        fundingRate = String(format: "%.3f", fundingrRateDouble)
+        nextFundingTime = dataModel.timeTodateFormat(nextFindingTime: dataModel.nextFundingTime)
+        helper.rightPartView.text = "funding: \(fundingRate)%\nnext:\(nextFundingTime)"
+    }
+    
+    func didUpdateIndividualSymbolTicker(_ websocketManager: WebSocketManager, dataModel: IndividualSymbolTickerStreamsModel) {
+        priceChangePercent = dataModel.priceChangePercent
+        
+        maxPrice = dataModel.highPrice
+        minPrice = dataModel.lowPrice
+        volume24h = dataModel.volumeQuote
+        
+        helper.rightUpperNavLabel.text = "\(closePrice)\n\(priceChangePercent)%"
+        helper.leftPartView.text = "24h volume\n\(volume24h)"
+        helper.middlePartView.text = "max: \(maxPrice)\nmin: \(minPrice)"
+    }
+}
+
+
+extension UIView {
+    func makeScreenshot() -> UIImage {
+        let renderer = UIGraphicsImageRenderer(bounds: self.bounds)
+        return renderer.image { (context) in
+            self.layer.render(in: context.cgContext)
+        }
+    }
+}
+
+final class DetailViewHelper {
+    unowned var viewController: DetailViewController
     
     let upperStackView = UIStackView()
     let leftNavLabel = UILabel()
@@ -49,332 +252,101 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
     let fourHours = UIButton()
     let oneDay = UIButton()
     
-    var webSocketManagers = [WebSocketManager]()
-    var chartManager: ChartManager!
-    var dbManager = DataBaseManager()
-//    var candles = [PreviousCandlesModel]()
-    var data = [CandlestickData]()
-    var currentCandelModel: CurrentCandleModel!
-    var alarmManager: AlarmManager?
+    let buttonHeight = CGFloat(20)
 
-    
-    var price: String = ""
-    
-    // data from CurrentCandleData
-    var closePrice: Double = 0
-    
-    // data from MarkPriceStream
-    var symbol: String = ""
-    var fundingRate: String = "0.0"
-    var nextFundingTime: String = "00:00:00"
-    
-    //data from IndividualSymbolTickerStreams
-    var priceChangePercent: String = "0.0"
-    var volume24h: String = "0.0"
-    var maxPrice: String = "0.0"
-    var minPrice: String = "0.0"
-    var id = 0
-    
-    var isKlineClose = false
-    var alarm: Double = 0
-//    var isAlertShowing: Bool = false
-    
-    var timeFrame = "15m"
-    
-    
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-//        let defaults = DataLoader(keys: "savedAlarms")
-//        defaults.loadUserSymbols()
-        
-        configureNavBarButtons()
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(addAlarm), name: NSNotification.Name(rawValue: "button1Pressed"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(addAlarmForSelectedPrice), name: NSNotification.Name(rawValue: "button2Pressed"), object: nil)
+    init(viewController: DetailViewController) {
+        self.viewController = viewController
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        startChartManager()
-        
-        ColorManager.setBackgroundForButton(buttonNames: [oneMinuteButton, fiveMinutesButton, fifteenMinutesButton, oneHourButton, fourHours, oneDay], timeFrame: timeFrame)
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        for manager in webSocketManagers {
+    @objc func timeFrameButtonPressed(sender: UIButton) {
+        for manager in viewController.webSocketManagers {
             manager.close()
         }
         
-        chartManager.data.removeAll()
-//        chartManager = nil // Не уверен, что это необходимо, но есть сомнения насчет того, сколько инстансов чартменеджера мы создаем, поэтому перед инициализацией нового, я решил на всякий случай явно грохать старого.
+        guard let label = sender.titleLabel?.text else { return }
+        viewController.timeFrame = label
+        ColorManager.setBackgroundForButton(buttonNames: [oneMinuteButton, fiveMinutesButton, fifteenMinutesButton, oneHourButton, fourHours, oneDay], timeFrame: viewController.timeFrame)
         
-    }
-    
-    
-    
-    @objc func backTapped() {
-        self.navigationController?.popViewController(animated: true)
-    }
-    
-    private func configureNavBarButtons() {
-        navigationItem.leftBarButtonItem = createBarButtonItem(imageName: Constants.backImageName, action: #selector(backTapped))
-        
-        let setAlarmButton = createBarButtonItem(imageName: Constants.bellImageName, action: #selector(addAlarm))
-        let screenShotButton = createBarButtonItem(imageName: Constants.cameraImageName, action: #selector(takeScreenShot))
-        
-        navigationItem.rightBarButtonItems = [setAlarmButton, screenShotButton]
-    }
-    
-    private func createBarButtonItem(imageName: String, action: Selector) -> UIBarButtonItem {
-        let buttonImage = UIImage(systemName: imageName)?.withTintColor(.black, renderingMode: .alwaysOriginal)
-        return UIBarButtonItem(image: buttonImage, style: .plain, target: self, action: action)
-    }
-
-    
-    func didUpdateCandle(_ websocketManager: WebSocketManager, candleModel: CurrentCandleModel) {
-        closePrice = Double(candleModel.closePrice)!
-        isKlineClose = candleModel.isKlineClose
-        currentCandelModel = candleModel
-
-        chartManager.tick()
-        alarmManager?.alarmObserver(for: symbol, equal: closePrice)
-        ColorManager.percentText(priceChangePercent: priceChangePercent, rightLowerNavLabel: rightLowerNavLabel)
-        
-        rightLowerNavLabel.text = "\(priceChangePercent)%"
-    }
-    
-    func didUpdateMarkPriceStream(_ websocketManager: WebSocketManager, dataModel: MarkPriceStreamModel) {
-        symbol = dataModel.symbol
-        let fundingrRateDouble = Double(dataModel.fundingRate)! * 100
-        fundingRate = String(format: "%.3f", fundingrRateDouble)
-        nextFundingTime = dataModel.timeTodateFormat(nextFindingTime: dataModel.nextFundingTime)
-        rightPartView.text = "funding: \(fundingRate)%\nnext:\(nextFundingTime)"
-    }
-    
-    func didUpdateIndividualSymbolTicker(_ websocketManager: WebSocketManager, dataModel: IndividualSymbolTickerStreamsModel) {
-        priceChangePercent = dataModel.priceChangePercent
-        
-        maxPrice = dataModel.highPrice
-        minPrice = dataModel.lowPrice
-        volume24h = dataModel.volumeQuote
-        
-        rightUpperNavLabel.text = "\(closePrice)\n\(priceChangePercent)%"
-        leftPartView.text = "24h volume\n\(volume24h)"
-        middlePartView.text = "max: \(maxPrice)\nmin: \(minPrice)"
-    }
-        
-    func startChartManager() {
-        chartManager = nil // Не уверен, что это необходимо, но есть сомнения насчет того, сколько инстансов чартменеджера мы создаем, поэтому перед инициализацией нового, я решил на всякий случай явно грохать старого.
-        
-        chartManager = ChartManager(delegate: self, symbol: symbol, timeFrame: timeFrame)
-        chartManager.fetchRequest(symbol: symbol, timeFrame: timeFrame)
-        chartManager.setupChart()
-        
-        chartManager.setupSubscription()
-    }
-    
-    func startWebSocketManagers() {
-        for state in State.allCases {
-            let manager = WebSocketManager()
-            manager.delegate = self
-            manager.actualState = state
-            manager.webSocketConnect(symbol: symbol, timeFrame: timeFrame)
-
-            webSocketManagers.append(manager)
+        for view in viewController.lightWeightChartView.subviews {
+            view.removeFromSuperview()
         }
+        viewController.startChartManager()
     }
     
-    
-    // может перенести два метода в AlarmManager?
-    @objc func addAlarm() {
-        // Заготовка
-        let addAlarmVC = AddAlarmViewController()
-        addAlarmVC.symbol = symbol
-        addAlarmVC.closePrice = String(closePrice)
-        addAlarmVC.symbolButton.isEnabled = false
-        addAlarmVC.openedChart = self
-        
-        if let sheet = addAlarmVC.sheetPresentationController {
-            sheet.detents = [.medium()]
-        }
-        
-        present(addAlarmVC, animated: true)
+    private func setupLabel(_ label: UILabel, text: String, textAlign: NSTextAlignment = .center) {
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = .systemFont(ofSize: 13)
+        label.text = text
+        label.textAlignment = textAlign
     }
     
-    @objc func addAlarmForSelectedPrice() {
-        guard let price = chartManager.currentCursorPrice else { return }
-        alarm = price
-        
-        let isAlarmUpper = alarm > closePrice ? true : false
+    private func setupStackView(_ stackView: UIStackView, axis: NSLayoutConstraint.Axis, spacing: CGFloat, distribution: UIStackView.Distribution = .fillEqually) {
+        stackView.axis = axis
+        stackView.distribution = distribution
+        stackView.spacing = spacing
+        stackView.alignment = .center
+        stackView.backgroundColor = .clear
+    }
+    
+    func setupButton(_ button: UIButton, title: String) {
+        button.setTitle(title, for: .normal)
+        button.setTitleColor(.black, for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 13)
+        button.layer.borderWidth = 1
+        button.layer.cornerRadius = 5
+        button.heightAnchor.constraint(equalToConstant: buttonHeight).isActive = true
+    }
 
-        id = Int.random(in: 0...999999999)
-        let idString = String(id)
-        let currentDate = convertCurrentDateToString()
-        let currentModel = AlarmModel(id: id, symbol: symbol, alarmPrice: alarm, isAlarmUpper: isAlarmUpper, isActive: true, date: currentDate)
-
-        dbManager.addAlarmtoModelDB(alarmModel: currentModel) { data, error  in
-            if error == nil {
-                AlarmModelsArray.alarms.removeAll()
-                self.dbManager.performRequestDB { (data, error) in
-                    if error == nil {
-                    } else {
-                        print("Не удалось получить данные из БД")
-                    }
-                }
-            } else {
-                print("Не удалось создать аларм в БД")
-            }
-        }
-//        AlarmModelsArray.alarms.append(currentModel)
-//        let defaults = DataLoader(keys: "savedAlarms")
-//        defaults.saveData()
+    func loadViewComponents() {
+        viewController.navigationItem.titleView = upperStackView
         
-        alarmManager?.setupAlarmLine(alarm, id: idString)
-    }
-    
-    override func loadView() {
-        super.loadView()
-        
-        leftNavLabel.translatesAutoresizingMaskIntoConstraints = false
-//        leftNavLabel.heightAnchor.constraint(equalToConstant: self.view.frame.height).isActive = true
-        leftNavLabel.widthAnchor.constraint(equalToConstant: 100).isActive = true
-        leftNavLabel.font = .systemFont(ofSize: 13)
-        leftNavLabel.text = "\(symbol)"
-        leftNavLabel.textAlignment = .left
-        
-        rightUpperNavLabel.translatesAutoresizingMaskIntoConstraints = false
-//        rightUpperNavLabel.heightAnchor.constraint(equalToConstant: self.view.frame.height).isActive = true
-//        rightUpperNavLabel.widthAnchor.constraint(equalToConstant: 160).isActive = true
-        rightUpperNavLabel.font = .systemFont(ofSize: 13)
-        rightUpperNavLabel.text = "\(closePrice)"
-        rightUpperNavLabel.textAlignment = .center
-        
-        rightLowerNavLabel.translatesAutoresizingMaskIntoConstraints = false
-//        rightLowerNavLabel.heightAnchor.constraint(equalToConstant: self.view.frame.height).isActive = true
-//        rightLowerNavLabel.widthAnchor.constraint(equalToConstant: 160).isActive = true
-        rightLowerNavLabel.font = .systemFont(ofSize: 13)
-        rightLowerNavLabel.text = "\(priceChangePercent)"
-        rightLowerNavLabel.textAlignment = .center
+        setupLabel(leftNavLabel, text: "\(viewController.symbol)", textAlign: .left)
+        setupLabel(rightUpperNavLabel, text: "\(viewController.closePrice)")
+        setupLabel(rightLowerNavLabel, text: "\(viewController.priceChangePercent)")
         
         rightNavLabelStack.addArrangedSubview(rightUpperNavLabel)
         rightNavLabelStack.addArrangedSubview(rightLowerNavLabel)
         
-        rightNavLabelStack.axis = .vertical
-        rightNavLabelStack.distribution = .equalCentering
-        rightNavLabelStack.alignment = .center
-        rightNavLabelStack.backgroundColor = .clear
-        rightNavLabelStack.spacing = 1.0
-        
+        setupStackView(rightNavLabelStack, axis: .vertical, spacing: 1.0)
+        setupStackView(upperStackView, axis: .horizontal, spacing: 5.0)
         upperStackView.translatesAutoresizingMaskIntoConstraints = false
-        
-        upperStackView.spacing = 5.0
+
         upperStackView.addArrangedSubview(leftNavLabel)
         upperStackView.addArrangedSubview(rightNavLabelStack)
-        upperStackView.distribution = .fillEqually
 
-        self.navigationItem.titleView = upperStackView
-        
-        leftPartView.translatesAutoresizingMaskIntoConstraints = false
-//        leftPartView.heightAnchor.constraint(equalToConstant: self.view.frame.width / 3).isActive = true
-//        leftPartView.widthAnchor.constraint(equalToConstant: self.view.frame.width / 3).isActive = true
-        leftPartView.font = .systemFont(ofSize: 13)
+        setupLabel(leftPartView, text: "24h volume\n\(viewController.volume24h)")
         leftPartView.numberOfLines = 2
-        leftPartView.text = "24h volume\n\(volume24h)"
-        leftPartView.textAlignment = .center
-
-        middlePartView.translatesAutoresizingMaskIntoConstraints = false
-//        middlePartView.heightAnchor.constraint(equalToConstant: self.view.frame.width / 3).isActive = true
-//        middlePartView.widthAnchor.constraint(equalToConstant: self.view.frame.width / 3).isActive = true
-        middlePartView.font = .systemFont(ofSize: 13)
+        
+        setupLabel(middlePartView, text: "max: \(viewController.maxPrice)\nmin: \(viewController.minPrice)")
         middlePartView.numberOfLines = 2
-        middlePartView.text = "max: \(maxPrice)\nmin: \(minPrice)"
-        middlePartView.textAlignment = .center
 
-        rightPartView.translatesAutoresizingMaskIntoConstraints = false
-//        rightPartView.heightAnchor.constraint(equalToConstant: self.view.frame.width / 3).isActive = true
-//        rightPartView.widthAnchor.constraint(equalToConstant: self.view.frame.width / 3).isActive = true
-        rightPartView.font = .systemFont(ofSize: 13)
+        setupLabel(rightPartView, text: "funding: \(viewController.fundingRate)%\nnext:\(viewController.nextFundingTime)")
         rightPartView.numberOfLines = 2
-        rightPartView.text = "funding: \(fundingRate)%\nnext:\(nextFundingTime)"
-        rightPartView.textAlignment = .center
 
-        lowerStackView.axis = .horizontal
-        lowerStackView.distribution = .fillEqually
-        lowerStackView.alignment = .center
-        lowerStackView.backgroundColor = .clear
-        lowerStackView.spacing = 5.0
+        
+        setupStackView(lowerStackView, axis: .horizontal, spacing: 5.0)
+        lowerStackView.translatesAutoresizingMaskIntoConstraints = false
         
         lowerStackView.addArrangedSubview(leftPartView)
         lowerStackView.addArrangedSubview(middlePartView)
         lowerStackView.addArrangedSubview(rightPartView)
         
-        self.view.addSubview(lowerStackView)
+        viewController.view.addSubview(lowerStackView)
         
-        lowerStackView.translatesAutoresizingMaskIntoConstraints = false
-        lowerStackView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 3).isActive = true
-        lowerStackView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -3).isActive = true
-        lowerStackView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor).isActive = true
+
+        lowerStackView.leadingAnchor.constraint(equalTo: viewController.view.leadingAnchor, constant: 3).isActive = true
+        lowerStackView.trailingAnchor.constraint(equalTo: viewController.view.trailingAnchor, constant: -3).isActive = true
+        lowerStackView.topAnchor.constraint(equalTo: viewController.view.safeAreaLayoutGuide.topAnchor).isActive = true
         lowerStackView.heightAnchor.constraint(equalToConstant: 40).isActive = true
         
-        let buttonHeight = CGFloat(20)
-//        let buttonWidth = CGFloat(20)
+        setupButton(oneMinuteButton, title: "1m")
+        setupButton(fiveMinutesButton, title: "5m")
+        setupButton(fifteenMinutesButton, title: "15m")
+        setupButton(oneHourButton, title: "1h")
+        setupButton(fourHours, title: "4h")
+        setupButton(oneDay, title: "1d")
         
-        oneMinuteButton.setTitle("1m", for: .normal)
-        oneMinuteButton.setTitleColor(.black, for: .normal)
-        oneMinuteButton.titleLabel?.font = .systemFont(ofSize: 13)
-        oneMinuteButton.layer.borderWidth = 1
-        oneMinuteButton.layer.cornerRadius = 5
-        oneMinuteButton.heightAnchor.constraint(equalToConstant: buttonHeight).isActive = true
-//        oneMinuteButton.widthAnchor.constraint(equalToConstant: buttonWidth).isActive = true
-
-        fiveMinutesButton.setTitle("5m", for: .normal)
-        fiveMinutesButton.setTitleColor(.black, for: .normal)
-        fiveMinutesButton.titleLabel?.font = .systemFont(ofSize: 13)
-        fiveMinutesButton.layer.borderWidth = 1
-        fiveMinutesButton.layer.cornerRadius = 5
-        fiveMinutesButton.heightAnchor.constraint(equalToConstant: buttonHeight).isActive = true
-//        fiveMinutesButton.widthAnchor.constraint(equalToConstant: buttonWidth).isActive = true
-        
-        fifteenMinutesButton.setTitle("15m", for: .normal)
-        fifteenMinutesButton.setTitleColor(.black, for: .normal)
-        fifteenMinutesButton.titleLabel?.font = .systemFont(ofSize: 13)
-        fifteenMinutesButton.layer.borderWidth = 1
-        fifteenMinutesButton.layer.cornerRadius = 5
-        fifteenMinutesButton.heightAnchor.constraint(equalToConstant: buttonHeight).isActive = true
-//        fifteenMinutesButton.widthAnchor.constraint(equalToConstant: buttonWidth).isActive = true
-        
-        oneHourButton.setTitle("1h", for: .normal)
-        oneHourButton.setTitleColor(.black, for: .normal)
-        oneHourButton.titleLabel?.font = .systemFont(ofSize: 13)
-        oneHourButton.layer.borderWidth = 1
-        oneHourButton.layer.cornerRadius = 5
-        oneHourButton.heightAnchor.constraint(equalToConstant: buttonHeight).isActive = true
-//        oneHourButton.widthAnchor.constraint(equalToConstant: buttonWidth).isActive = true
-        
-        fourHours.setTitle("4h", for: .normal)
-        fourHours.setTitleColor(.black, for: .normal)
-        fourHours.titleLabel?.font = .systemFont(ofSize: 13)
-        fourHours.layer.borderWidth = 1
-        fourHours.layer.cornerRadius = 5
-        fourHours.heightAnchor.constraint(equalToConstant: buttonHeight).isActive = true
-//        fourHours.widthAnchor.constraint(equalToConstant: buttonWidth).isActive = true
-        
-        oneDay.setTitle("1d", for: .normal)
-        oneDay.setTitleColor(.black, for: .normal)
-        oneDay.titleLabel?.font = .systemFont(ofSize: 13)
-        oneDay.layer.borderWidth = 1
-        oneDay.layer.cornerRadius = 5
-        oneDay.heightAnchor.constraint(equalToConstant: buttonHeight).isActive = true
-//        oneDay.widthAnchor.constraint(equalToConstant: buttonWidth).isActive = true
-
-        timeFrameStackView.axis = .horizontal
-        timeFrameStackView.distribution = .fillEqually
-        timeFrameStackView.alignment = .center
-        timeFrameStackView.backgroundColor = .clear
-        timeFrameStackView.spacing = 2.0
+        setupStackView(timeFrameStackView, axis: .horizontal, spacing: 5.0)
         
         timeFrameStackView.addArrangedSubview(oneMinuteButton)
         timeFrameStackView.addArrangedSubview(fiveMinutesButton)
@@ -383,11 +355,11 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
         timeFrameStackView.addArrangedSubview(fourHours)
         timeFrameStackView.addArrangedSubview(oneDay)
 
-        self.view.addSubview(timeFrameStackView)
+        viewController.view.addSubview(timeFrameStackView)
         
         timeFrameStackView.translatesAutoresizingMaskIntoConstraints = false
-        timeFrameStackView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 5).isActive = true
-        timeFrameStackView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -5).isActive = true
+        timeFrameStackView.leadingAnchor.constraint(equalTo: viewController.view.leadingAnchor, constant: 5).isActive = true
+        timeFrameStackView.trailingAnchor.constraint(equalTo: viewController.view.trailingAnchor, constant: -5).isActive = true
         timeFrameStackView.topAnchor.constraint(equalTo: lowerStackView.bottomAnchor).isActive = true
         timeFrameStackView.heightAnchor.constraint(equalToConstant: buttonHeight).isActive = true
         
@@ -398,57 +370,14 @@ class DetailViewController: UIViewController, WebSocketManagerDelegate {
         fourHours.addTarget(self, action: #selector(timeFrameButtonPressed(sender:)), for: .touchUpInside)
         oneDay.addTarget(self, action: #selector(timeFrameButtonPressed(sender:)), for: .touchUpInside)
         
-        view.addSubview(lightWeightChartView)
+        viewController.view.addSubview(viewController.lightWeightChartView)
         
         NSLayoutConstraint.activate([
-            lightWeightChartView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            lightWeightChartView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            lightWeightChartView.topAnchor.constraint(equalTo: timeFrameStackView.bottomAnchor),
-            lightWeightChartView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+            viewController.lightWeightChartView.leadingAnchor.constraint(equalTo: viewController.view.safeAreaLayoutGuide.leadingAnchor),
+            viewController.lightWeightChartView.trailingAnchor.constraint(equalTo: viewController.view.safeAreaLayoutGuide.trailingAnchor),
+            viewController.lightWeightChartView.topAnchor.constraint(equalTo: timeFrameStackView.bottomAnchor),
+            viewController.lightWeightChartView.bottomAnchor.constraint(equalTo: viewController.view.safeAreaLayoutGuide.bottomAnchor)
         ])
-    }
-    
-    @objc func timeFrameButtonPressed(sender: UIButton) {
-        for manager in webSocketManagers {
-            manager.close()
-        }
-        
-        guard let label = sender.titleLabel?.text else { return }
-        timeFrame = label
-        ColorManager.setBackgroundForButton(buttonNames: [oneMinuteButton, fiveMinutesButton, fifteenMinutesButton, oneHourButton, fourHours, oneDay], timeFrame: timeFrame)
-        
-        for view in self.lightWeightChartView.subviews {
-            view.removeFromSuperview()
-        }
-        
-        startChartManager()
-    }
-    
-    func convertCurrentDateToString() -> String {
-        let df = DateFormatter()
-        df.dateFormat = "dd-MM-yyy hh:mm"
-        let now = df.string(from: Date())
-        return now
-    }
-    
-    @objc func takeScreenShot() {
-        let screenShot = lightWeightChartView.makeScreenshot()
-        guard let imageToData = screenShot.jpegData(compressionQuality: 1) else {
-            print("Снова ошибка")
-            return
-        }
-        let activityVC = UIActivityViewController(activityItems: [imageToData], applicationActivities: [])
-        present(activityVC, animated: true)
-    }
-}
-
-
-extension UIView {
-    func makeScreenshot() -> UIImage {
-        let renderer = UIGraphicsImageRenderer(bounds: self.bounds)
-        return renderer.image { (context) in
-            self.layer.render(in: context.cgContext)
-        }
     }
 }
 

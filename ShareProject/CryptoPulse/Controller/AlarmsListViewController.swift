@@ -25,7 +25,6 @@ class AlarmsListViewController: UIViewController, UITableViewDelegate, UITableVi
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-//        dbManager.performRequestDB()
         updateData()
         tableView.reloadData()
     }

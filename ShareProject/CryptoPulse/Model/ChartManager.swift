@@ -113,12 +113,12 @@ class ChartManager {
     }
     
     func updateFormat() {
-        print(numberAfterDecimalPoint)
         chart.applyOptions(options: ChartOptions(localization: LocalizationOptions(priceFormatter: .javaScript("function(price) { return '$' + price.toFixed(\(numberAfterDecimalPoint)); }"))))
     }
     
     
     func setupChart() {
+        
         let options = ChartOptions(timeScale: TimeScaleOptions(borderVisible: true,
                                                                timeVisible: true,
                                                                secondsVisible: true,
@@ -216,7 +216,6 @@ class ChartManager {
         let series = chart.addCandlestickSeries(options: nil)
         self.series = series
         data.removeLast()
-        print("Chart manager series: \(String(describing: series))")
         series.setData(data: data)
         alarmManager.setupAlarmLines()
     }
