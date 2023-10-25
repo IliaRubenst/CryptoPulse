@@ -20,7 +20,7 @@ class AlarmManager {
     var id = 0
     var isAlertShowing: Bool = false
     
-    init(detailViewController: UIViewController, chartManager: ChartManager) {
+    init(detailViewController: UIViewController?, chartManager: ChartManager) {
         self.detailViewController = detailViewController
         self.chartManager = chartManager
     }
@@ -41,7 +41,7 @@ class AlarmManager {
             lineWidth: .one,
             lineStyle: .solid
         )
-
+        print("for \(chartManager) create priceLine: \(options)")
         alarmLine = chartManager.series?.createPriceLine(options: options)
     }
     
@@ -65,6 +65,18 @@ class AlarmManager {
         openedChart.present(addAlarmVC, animated: true)
     }
     
+    func addAlarmForCurrentPrice(alarmPrice: Double, closePrice: Double, symbol: String) {
+        let isAlarmUpper = alarmPrice > closePrice ? true : false
+        id = Int.random(in: 0...999999999)
+        let idString = String(id)
+        let currentDate = AlarmManager.convertCurrentDateToString()
+        
+        let newAlarm = AlarmModel(id: id, symbol: symbol, alarmPrice: alarmPrice, isAlarmUpper: isAlarmUpper, isActive: true, date: currentDate)
+        storeAlarmInDB(newAlarm)
+        print("\(alarmPrice), \(idString)")
+        setupAlarmLine(alarmPrice, id: idString)
+    }
+    
     func addAlarmForSelectedPrice(alarmPrice: Double, closePrice: Double, symbol: String) {
         guard let price = chartManager.currentCursorPrice else {
             print("currentCursorPrice не задана")
@@ -78,6 +90,7 @@ class AlarmManager {
         
         let newAlarm = AlarmModel(id: id, symbol: symbol, alarmPrice: alarmPrice, isAlarmUpper: isAlarmUpper, isActive: true, date: currentDate)
         storeAlarmInDB(newAlarm)
+        print("\(alarmPrice), \(idString)")
         setupAlarmLine(alarmPrice, id: idString)
     }
     

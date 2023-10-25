@@ -126,16 +126,22 @@ class AlarmsListViewController: UIViewController, UITableViewDelegate, UITableVi
         let ac = UIAlertController(title: "Очистить уведомления", message: nil, preferredStyle: .actionSheet)
         
         ac.addAction(UIAlertAction(title: "Все", style: .destructive) { [weak self] _ in
+            for alarm in AlarmModelsArray.alarms {
+                self?.dbManager.removeDBData(remove: alarm.id)
+            }
             AlarmModelsArray.alarms.removeAll()
+
             self?.updateData()
             self?.tableView.reloadData()
-
             
 //            let defaults = DataLoader(keys: "savedAlarms")
 //            defaults.saveData()
         })
         ac.addAction(UIAlertAction(title: "Не активные", style: .default, handler: { [weak self] _ in
             let activeAlarms = AlarmModelsArray.alarms.filter({ $0.isActive })
+            for alarm in AlarmModelsArray.alarms where !alarm.isActive {
+                self?.dbManager.removeDBData(remove: alarm.id)
+            }
             AlarmModelsArray.alarms = activeAlarms
             self?.updateData()
             self?.tableView.reloadData()

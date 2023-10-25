@@ -46,7 +46,8 @@ struct MarketManager {
         }
     }
 }
-// пока не используется
+
+// пока не используется(нужен для загрузки данных по старым свечам)
 class CandleStickDataManager {
     let binanceURL = "https://fapi.binance.com"
     var delegate: DetailViewController!

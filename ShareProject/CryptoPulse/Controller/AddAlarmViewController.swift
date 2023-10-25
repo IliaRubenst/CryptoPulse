@@ -26,6 +26,8 @@ class AddAlarmViewController: UIViewController, UITextFieldDelegate, WebSocketMa
     var openedChart: DetailViewController? = nil
     var openedAlarmsList: AlarmsListViewController? = nil
     var dbManager: DataBaseManager! = nil
+    var alarmManager: AlarmManager! = nil
+    var chartManager: ChartManager! = nil
     
     let titleLabel: UILabel = {
         let label = UILabel()
@@ -105,6 +107,9 @@ class AddAlarmViewController: UIViewController, UITextFieldDelegate, WebSocketMa
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        dbManager = DataBaseManager()
+        chartManager = ChartManager(delegate: openedChart!, symbol: openedChart!.symbol, timeFrame: openedChart!.timeFrame)
+        alarmManager = AlarmManager(detailViewController: openedChart!, chartManager: chartManager)
         setupUI()
         updateUI()
         setupKeyboardDoneButton()
@@ -261,30 +266,9 @@ class AddAlarmViewController: UIViewController, UITextFieldDelegate, WebSocketMa
         
         switch state {
         case .newAlarm:
-            let isAlarmUpper = alarmPrice > doubleClosePrice ? true : false
+            alarmManager.addAlarmForCurrentPrice(alarmPrice: alarmPrice, closePrice: doubleClosePrice, symbol: symbol)
             let id = Int.random(in: 0...999999999)
             let idString = String(id)
-            
-            // Вынести этот метод с ДетейлВьюКонтроллера.
-            let dVC = DetailViewController()
-            let currentDate = AlarmManager.convertCurrentDateToString()
-            
-            let alarmModel = AlarmModel(id: id, symbol: symbol, alarmPrice: alarmPrice, isAlarmUpper: isAlarmUpper, isActive: true, date: currentDate)
-//            AlarmModelsArray.alarms.append(alarmModel)
-            dbManager.addAlarmtoModelDB(alarmModel: alarmModel) { data, error  in
-                if error == nil {
-                    AlarmModelsArray.alarms.removeAll()
-                    self.dbManager.performRequestDB { (data, error) in
-                        if error == nil {
-                        } else {
-                            print("Не удалось получить данные из БД")
-                        }
-                    }
-                } else {
-                    print("Не удалось создать аларм в БД")
-                }
-            }
-            
             if let openedChart {
                 openedChart.alarmManager?.setupAlarmLine(alarmPrice, id: idString)
             }
@@ -295,6 +279,7 @@ class AddAlarmViewController: UIViewController, UITextFieldDelegate, WebSocketMa
             
             guard let index = AlarmModelsArray.alarms.firstIndex(of: alarmToEdit) else { return }
             AlarmModelsArray.alarms[index].alarmPrice = alarmPrice
+            dbManager.updateDBData(alarmModel: alarmToEdit, change: alarmID)
         }
         
 //        let defaults = DataLoader(keys: "savedAlarms")
