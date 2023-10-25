@@ -91,8 +91,8 @@ class CandleStickDataManager {
                                                  close: (Double(closePrice)))
                     candles.append(candle)
                 }
-                DispatchQueue.main.async { [self] in
-                    delegate.chartManager.setupSeries()
+                DispatchQueue.main.async { [weak self] in
+                    self?.delegate.chartManager.setupSeries()
 //
 //                    if ChartManager.data[0].close! < 1{
 //                        ChartManager.numberAfterDecimalPoint = "4"

@@ -20,6 +20,7 @@ class SymbolsListController: UIViewController {
     var senderState: SymbolsListSender = .mainView
     let defaults = DataLoader(keys: "savedFullSymbolsData")
     let tableView = UITableView()
+    var marketManager = MarketManager()
     
     var displayedSymbols: [Symbol] {
         if isFiltering() {
@@ -33,7 +34,7 @@ class SymbolsListController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        defaults.loadUserSymbols()
         setupUI()
         configureTableView()
         configureSearchBar()

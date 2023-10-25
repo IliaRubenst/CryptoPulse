@@ -9,7 +9,7 @@ import Foundation
 import LightweightCharts
 
 class ChartManager {
-    var delegate: DetailViewController!
+    weak var delegate: DetailViewController!
     var alarmManager: AlarmManager!
     
     var symbol: String
@@ -22,19 +22,19 @@ class ChartManager {
         }
     }
     
-    private var chart: LightweightCharts!
-    var series: CandlestickSeries!
+    private var chart: LightweightCharts?
+    var series: CandlestickSeries?
     
     // for rightClickMenu
-    private var leadingConstraint: NSLayoutConstraint!
-    private var bottomConstraint: NSLayoutConstraint!
+    private var leadingConstraint: NSLayoutConstraint?
+    private var bottomConstraint: NSLayoutConstraint?
     
-    private var bottomConstraintForPercent: NSLayoutConstraint!
+    private var bottomConstraintForPercent: NSLayoutConstraint?
     
     var isWasShown = true
     var horizontalLine: CrosshairLineOptions?
     var options: PriceLineOptions!
-    var currentCursorPrice: Double!
+    var currentCursorPrice: Double?
     
     var data = [CandlestickData]()
     
@@ -44,7 +44,7 @@ class ChartManager {
     private let tooltipView = TooltipView(accentColor: UIColor(red: 0, green: 150/255.0, blue: 136/255.0, alpha: 1))
     private let perecentChange = PercentChange(color: UIColor(red: 0, green: 150/255.0, blue: 136/255.0, alpha: 1))
     private let rightClickMenu = RightClickMenu(color: UIColor(red: 0, green: 150/255.0, blue: 136/255.0, alpha: 1))
-    let alarmIndicator = AlarmIndicator(color: UIColor(red: 0, green: 150/255.0, blue: 136/255.0, alpha: 1))
+    private let alarmIndicator = AlarmIndicator(color: UIColor(red: 0, green: 150/255.0, blue: 136/255.0, alpha: 1))
     
     
     init(delegate: DetailViewController, symbol: String, timeFrame: String) {
@@ -59,7 +59,7 @@ class ChartManager {
         print(urlString)
         performRequest(urlString: urlString)
     }
-    
+
     func performRequest(urlString: String)  {
         if let url = URL(string: urlString) {
             let session = URLSession(configuration: .default)
@@ -70,13 +70,13 @@ class ChartManager {
                 }
                 if let safeData = data {
                     parseJSON(marketData: safeData)
-                    
+
                 }
             }
             task.resume()
         }
     }
-    
+
     func parseJSON(marketData: Data)  {
         do {
             if let decodedData = try JSONSerialization.jsonObject(with: marketData, options: []) as? [[Any]] {
@@ -85,7 +85,7 @@ class ChartManager {
                     let highPrice = decodedData[i][2] as! String
                     let lowPrice = decodedData[i][3] as! String
                     let closePrice = decodedData[i][4] as! String
-                    
+
                     let candle = CandlestickData(time: .utc(timestamp: (decodedData[i][0] as! Double) / 1000),
                                                  open: (Double(openPrice)),
                                                  high: (Double(highPrice)),
@@ -93,15 +93,18 @@ class ChartManager {
                                                  close: (Double(closePrice)))
                     data.append(candle)
                 }
-                
-                DispatchQueue.main.async { [self] in
-                    self.setupSeries()
-                    
-                    if data[0].close! < 1{
-                        numberAfterDecimalPoint = "4"
+
+                DispatchQueue.main.async { [weak self] in
+                    self?.setupSeries()
+                    if self?.data[0].close == nil {
+                        print("Не удалось загрузить данные data[0].close.")
+                    } else {
+                        if (self?.data[0].close)! < 1 {
+                            self?.numberAfterDecimalPoint = "4"
+                        }
                     }
                 }
-                
+
                 delegate.startWebSocketManagers()
             } else {
                 print("Ошибка приведения типа")
@@ -109,11 +112,11 @@ class ChartManager {
         } catch let error as NSError {
             print("Failed to load: \(error.localizedDescription)")
         }
-        
+
     }
     
     func updateFormat() {
-        chart.applyOptions(options: ChartOptions(localization: LocalizationOptions(priceFormatter: .javaScript("function(price) { return '$' + price.toFixed(\(numberAfterDecimalPoint)); }"))))
+        chart?.applyOptions(options: ChartOptions(localization: LocalizationOptions(priceFormatter: .javaScript("function(price) { return '$' + price.toFixed(\(numberAfterDecimalPoint)); }"))))
     }
     
     
@@ -165,8 +168,8 @@ class ChartManager {
         
         leadingConstraint = rightClickMenu.leadingAnchor.constraint(equalTo: chart.leadingAnchor)
         bottomConstraint = rightClickMenu.bottomAnchor.constraint(equalTo: chart.topAnchor)
-        leadingConstraint.isActive = true
-        bottomConstraint.isActive = true
+        leadingConstraint?.isActive = true
+        bottomConstraint?.isActive = true
         rightClickMenu.widthAnchor.constraint(equalToConstant: 63).isActive = true
         rightClickMenu.heightAnchor.constraint(equalToConstant: 30).isActive = true
 
@@ -186,7 +189,7 @@ class ChartManager {
         perecentChange.isHidden = tooltipView.isHidden
         perecentChange.translatesAutoresizingMaskIntoConstraints = false
         bottomConstraintForPercent = perecentChange.bottomAnchor.constraint(equalTo: chart.topAnchor)
-        bottomConstraintForPercent.isActive = true
+        bottomConstraintForPercent?.isActive = true
         
         delegate.lightWeightChartView.bringSubviewToFront(tooltipView)
         delegate.lightWeightChartView.bringSubviewToFront(rightClickMenu)
@@ -213,10 +216,10 @@ class ChartManager {
     }
     
     func setupSeries() {
-        let series = chart.addCandlestickSeries(options: nil)
+        let series = chart?.addCandlestickSeries(options: nil)
         self.series = series
         data.removeLast()
-        series.setData(data: data)
+        series?.setData(data: data)
         alarmManager.setupAlarmLines()
     }
     
@@ -253,7 +256,7 @@ class ChartManager {
             currentBar.high = max(currentBar.high ?? price, price)
             currentBar.low = min(currentBar.low ?? price, price)
         }
-        series.update(bar: currentBar)
+        series?.update(bar: currentBar)
     }
     
     func nextCandle(_ time: TimeInterval) -> TimeInterval? {
@@ -269,8 +272,8 @@ class ChartManager {
     }
     
     func setupSubscription() {
-        chart.delegate = self
-        chart.subscribeCrosshairMove()
+        chart?.delegate = self
+        chart?.subscribeCrosshairMove()
     }
 }
 
@@ -278,7 +281,7 @@ extension ChartManager: ChartDelegate {
     func didCrosshairMove(onChart chart: ChartApi, parameters: MouseEventParams) {
         guard case .utc(timestamp: _) = parameters.time,
               let point = parameters.point,
-              case let .barData(data) = parameters.price(forSeries: series),
+              case let .barData(data) = parameters.price(forSeries: series!),
               let open = data.open,
               let high = data.high,
               let low = data.low,
@@ -295,14 +298,14 @@ extension ChartManager: ChartDelegate {
     
     private func updateViews(with open: Double, high: Double, low: Double, close: Double, point: Point) {
         tooltipView.update(title: "o:\(open), h:\(high), l:\(low), c:\(close)")
-        bottomConstraintForPercent.constant = CGFloat(point.y) - 17
-        leadingConstraint.constant = CGFloat(point.x) + 5
-        bottomConstraint.constant = CGFloat(point.y) + 5
+        bottomConstraintForPercent?.constant = CGFloat(point.y) - 17
+        leadingConstraint?.constant = CGFloat(point.x) + 5
+        bottomConstraint?.constant = CGFloat(point.y) + 5
         isWasShown = false
     }
 
     private func updateCurrentCursorPrice(from coordinate: Double) {
-        series.coordinateToPrice(coordinate: coordinate) { [self] price in
+        series?.coordinateToPrice(coordinate: coordinate) { [self] price in
             guard let price = price else { return }
             currentCursorPrice = price
             let percentChange = ((price * 100) / delegate.closePrice - 100)

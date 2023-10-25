@@ -37,6 +37,7 @@ class DetailViewController: UIViewController {
     var data = [CandlestickData]()
     var currentCandelModel: CurrentCandleModel!
     var alarmManager: AlarmManager?
+    var candleStickDataManager: CandleStickDataManager!
 
     var price: String = ""
     
@@ -98,7 +99,7 @@ class DetailViewController: UIViewController {
     }
     
     @objc func addAlarmForSelectedPrice() {
-            alarmManager?.addAlarmForSelectedPrice(alarmPrice: chartManager.currentCursorPrice, closePrice: closePrice, symbol: symbol)
+        alarmManager?.addAlarmForSelectedPrice(alarmPrice: chartManager.currentCursorPrice!, closePrice: closePrice, symbol: symbol)
     }
     
     @objc func addAlarm() {

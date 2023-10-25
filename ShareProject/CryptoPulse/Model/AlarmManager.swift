@@ -20,7 +20,7 @@ class AlarmManager {
     var id = 0
     var isAlertShowing: Bool = false
     
-    init(detailViewController: UIViewController?, chartManager: ChartManager) {
+    init(detailViewController: UIViewController, chartManager: ChartManager) {
         self.detailViewController = detailViewController
         self.chartManager = chartManager
     }
@@ -41,13 +41,12 @@ class AlarmManager {
             lineWidth: .one,
             lineStyle: .solid
         )
-        print("for \(chartManager) create priceLine: \(options)")
         alarmLine = chartManager.series?.createPriceLine(options: options)
     }
     
     // Removes an alarm line given an index (not currently in use)
     func removeAlarmLine(_ index: Int) {
-        chartManager.series.removePriceLine(line: AlarmModelsArray.alarmaLine[index])
+        chartManager.series?.removePriceLine(line: AlarmModelsArray.alarmaLine[index])
     }
     
     // Add an alarm and associate it with a detail view controller

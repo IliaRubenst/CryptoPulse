@@ -18,8 +18,6 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
     var isReload = false
     var currentVolume = "0.0"
     
-//    var data: FullSymbolsArray!
-    
     var webSocketManagers = [WebSocketManager]()
 
     override func viewDidLoad() {
@@ -36,10 +34,15 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
         self.navigationItem.title = ""
         
         let showTableViewButton = UIBarButtonItem(image: UIImage(systemName: "list.bullet.rectangle.portrait")?.withTintColor(.black, renderingMode: .alwaysOriginal), style: .plain, target: self, action: #selector(showTableView))
-        navigationItem.rightBarButtonItems = [showTableViewButton]
+        let showArray = UIBarButtonItem(image: UIImage(systemName: "bell")?.withTintColor(.black, renderingMode: .alwaysOriginal), style: .plain, target: self, action: #selector(showList))
+        navigationItem.rightBarButtonItems = [showTableViewButton, showArray]
         
         
         NotificationCenter.default.addObserver(self, selector: #selector(loadList), name: NSNotification.Name(rawValue: "newSymbolAdded"), object: nil)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        loadTickers()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -163,6 +166,8 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
             case .success(let newSymbols):
                 DispatchQueue.main.async {
                     SymbolsArray.symbols = newSymbols
+                    let defaults = DataLoader(keys: "savedFullSymbolsData")
+                    defaults.saveData()
                 }
             case .failure(let error):
                 DispatchQueue.main.async {
@@ -172,6 +177,10 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
                 }
             }
         }
+    }
+    
+    @objc func showList() {
+        print(SymbolsArray.symbols.count)
     }
     
     func didUpdateCandle(_ websocketManager: WebSocketManager, candleModel: CurrentCandleModel) {
