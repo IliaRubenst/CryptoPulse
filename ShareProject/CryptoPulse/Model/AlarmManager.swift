@@ -77,19 +77,18 @@ class AlarmManager {
     }
     
     func addAlarmForSelectedPrice(alarmPrice: Double, closePrice: Double, symbol: String) {
-        guard let price = chartManager.currentCursorPrice else {
-            print("currentCursorPrice не задана")
-            return
-        }
+//        guard let price = chartManager.currentCursorPrice else {
+//            print("currentCursorPrice не задана")
+//            return
+//        }
 
-        let isAlarmUpper = price > closePrice ? true : false
+        let isAlarmUpper = alarmPrice > closePrice ? true : false
         id = Int.random(in: 0...999999999)
         let idString = String(id)
         let currentDate = AlarmManager.convertCurrentDateToString()
         
         let newAlarm = AlarmModel(id: id, symbol: symbol, alarmPrice: alarmPrice, isAlarmUpper: isAlarmUpper, isActive: true, date: currentDate)
         storeAlarmInDB(newAlarm)
-        print("\(alarmPrice), \(idString)")
         setupAlarmLine(alarmPrice, id: idString)
     }
     

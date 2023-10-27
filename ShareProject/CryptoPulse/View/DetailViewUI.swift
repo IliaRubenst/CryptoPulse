@@ -37,18 +37,15 @@ final class DetailViewUI {
     }
     
     @objc func timeFrameButtonPressed(sender: UIButton) {
-        for manager in viewController.webSocketManagers {
-            manager.close()
-        }
+//        for manager in viewController.webSocketManagers {
+//            manager.close()
+//        }
         
         guard let label = sender.titleLabel?.text else { return }
         viewController.timeFrame = label
         ColorManager.setBackgroundForButton(buttonNames: [oneMinuteButton, fiveMinutesButton, fifteenMinutesButton, oneHourButton, fourHours, oneDay], timeFrame: viewController.timeFrame)
-        
-        for view in viewController.lightWeightChartView.subviews {
-            view.removeFromSuperview()
-        }
-        viewController.startChartManager()
+        viewController.changeTimeFrame()
+
     }
     
     private func setupLabel(_ label: UILabel, text: String, textAlign: NSTextAlignment = .center) {

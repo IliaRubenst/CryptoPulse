@@ -23,10 +23,12 @@
 		4979F2062AAC3905000E039C /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4979F2052AAC3905000E039C /* DetailViewController.swift */; };
 		4979F2082AACAFC0000E039C /* WebSocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4979F2072AACAFC0000E039C /* WebSocketManager.swift */; };
 		497FBFF02AD882640082BF04 /* DataBaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 497FBFEF2AD882640082BF04 /* DataBaseManager.swift */; };
+		498939222AEB935A0060A300 /* CandleStickDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 498939212AEB935A0060A300 /* CandleStickDataManager.swift */; };
 		498C3F642AE937E100F727D7 /* DetailViewUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 498C3F632AE937E100F727D7 /* DetailViewUI.swift */; };
 		4995E7A02AE642A500DAC777 /* AlarmManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4995E79F2AE642A500DAC777 /* AlarmManager.swift */; };
 		49AACC332AB70EA000101C46 /* SymbolsListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49AACC322AB70EA000101C46 /* SymbolsListController.swift */; };
 		49AACC572AB78C7500101C46 /* TooltipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49AACC562AB78C7500101C46 /* TooltipView.swift */; };
+		49F1A0AD2AEAFFE400A47A28 /* ChartManagerUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F1A0AC2AEAFFE400A47A28 /* ChartManagerUI.swift */; };
 		49F979DB2AE2A63A000DDD7E /* ColorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F979DA2AE2A63A000DDD7E /* ColorManager.swift */; };
 		D813653E2AB07E6D005930D2 /* UserSymbols.swift in Sources */ = {isa = PBXBuildFile; fileRef = D813653D2AB07E6D005930D2 /* UserSymbols.swift */; };
 		D81365402AB092B9005930D2 /* DataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D813653F2AB092B9005930D2 /* DataLoader.swift */; };
@@ -64,10 +66,12 @@
 		4979F2052AAC3905000E039C /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		4979F2072AACAFC0000E039C /* WebSocketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketManager.swift; sourceTree = "<group>"; };
 		497FBFEF2AD882640082BF04 /* DataBaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataBaseManager.swift; sourceTree = "<group>"; };
+		498939212AEB935A0060A300 /* CandleStickDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CandleStickDataManager.swift; sourceTree = "<group>"; };
 		498C3F632AE937E100F727D7 /* DetailViewUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewUI.swift; sourceTree = "<group>"; };
 		4995E79F2AE642A500DAC777 /* AlarmManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmManager.swift; sourceTree = "<group>"; };
 		49AACC322AB70EA000101C46 /* SymbolsListController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SymbolsListController.swift; sourceTree = "<group>"; };
 		49AACC562AB78C7500101C46 /* TooltipView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TooltipView.swift; sourceTree = "<group>"; };
+		49F1A0AC2AEAFFE400A47A28 /* ChartManagerUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartManagerUI.swift; sourceTree = "<group>"; };
 		49F979DA2AE2A63A000DDD7E /* ColorManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorManager.swift; sourceTree = "<group>"; };
 		B2556B97124E821A0BB49D7B /* Pods_CyptoPulse.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CyptoPulse.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D084E73463F482E2996F7D33 /* Pods-CyptoPulse.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CyptoPulse.debug.xcconfig"; path = "Target Support Files/Pods-CyptoPulse/Pods-CyptoPulse.debug.xcconfig"; sourceTree = "<group>"; };
@@ -122,6 +126,7 @@
 				D81366352AB4C577005930D2 /* Notifications.swift */,
 				49F979DA2AE2A63A000DDD7E /* ColorManager.swift */,
 				4995E79F2AE642A500DAC777 /* AlarmManager.swift */,
+				498939212AEB935A0060A300 /* CandleStickDataManager.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -137,6 +142,7 @@
 				49AACC562AB78C7500101C46 /* TooltipView.swift */,
 				497669F52AD49445000DDBA8 /* PercentChange.swift */,
 				498C3F632AE937E100F727D7 /* DetailViewUI.swift */,
+				49F1A0AC2AEAFFE400A47A28 /* ChartManagerUI.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -320,6 +326,7 @@
 				D87A64BA2AC5733100A29749 /* AlarmTableViewCell.swift in Sources */,
 				49F979DB2AE2A63A000DDD7E /* ColorManager.swift in Sources */,
 				49520E572AC4BCE2009B05BD /* SymbolsListCell.swift in Sources */,
+				498939222AEB935A0060A300 /* CandleStickDataManager.swift in Sources */,
 				494FF85D2ABB4B140041791B /* RightClickMenu.swift in Sources */,
 				49367CB02AAB33BE00827BE9 /* MarketManager.swift in Sources */,
 				D81365EC2AB207A1005930D2 /* ChartManager.swift in Sources */,
@@ -336,6 +343,7 @@
 				49367CAE2AAAFEB800827BE9 /* DataCodable.swift in Sources */,
 				4995E7A02AE642A500DAC777 /* AlarmManager.swift in Sources */,
 				49AACC572AB78C7500101C46 /* TooltipView.swift in Sources */,
+				49F1A0AD2AEAFFE400A47A28 /* ChartManagerUI.swift in Sources */,
 				D81365402AB092B9005930D2 /* DataLoader.swift in Sources */,
 				496BEFDC2AA9EFDF00B15E0F /* SceneDelegate.swift in Sources */,
 				4979F2062AAC3905000E039C /* DetailViewController.swift in Sources */,

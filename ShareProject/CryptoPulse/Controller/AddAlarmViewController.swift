@@ -28,6 +28,7 @@ class AddAlarmViewController: UIViewController, UITextFieldDelegate, WebSocketMa
     var dbManager: DataBaseManager! = nil
     var alarmManager: AlarmManager! = nil
     var chartManager: ChartManager! = nil
+    var candleStickDataManager: CandleStickDataManager! = nil
     
     let titleLabel: UILabel = {
         let label = UILabel()
@@ -108,7 +109,8 @@ class AddAlarmViewController: UIViewController, UITextFieldDelegate, WebSocketMa
     override func viewDidLoad() {
         super.viewDidLoad()
         dbManager = DataBaseManager()
-        chartManager = ChartManager(delegate: openedChart!, symbol: openedChart!.symbol, timeFrame: openedChart!.timeFrame)
+        candleStickDataManager = CandleStickDataManager()
+        chartManager = ChartManager(delegate: openedChart!, symbol: openedChart!.symbol, timeFrame: openedChart!.timeFrame, candleStickDataManager: candleStickDataManager)
         alarmManager = AlarmManager(detailViewController: openedChart!, chartManager: chartManager)
         setupUI()
         updateUI()

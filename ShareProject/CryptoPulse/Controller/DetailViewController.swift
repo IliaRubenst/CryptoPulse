@@ -83,7 +83,6 @@ class DetailViewController: UIViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-
         for view in self.lightWeightChartView.subviews {
             view.removeFromSuperview()
         }
@@ -91,6 +90,20 @@ class DetailViewController: UIViewController {
         terminateWebSocketsManagers()
         clearChartManager()
         clearAlarmManager()
+    }
+    
+    func changeTimeFrame() {
+        for view in self.lightWeightChartView.subviews {
+            view.removeFromSuperview()
+        }
+        
+        terminateWebSocketsManagers()
+        clearChartManager()
+        clearAlarmManager()
+        
+        setupChartManager()
+        alarmManager = AlarmManager(detailViewController: self, chartManager: chartManager)
+        setupButtonBackgrounds()
     }
     
     private func addObservers() {
@@ -125,7 +138,8 @@ class DetailViewController: UIViewController {
     }
     
     private func setupChartManager() {
-        chartManager = ChartManager(delegate: self, symbol: symbol, timeFrame: timeFrame)
+        candleStickDataManager = CandleStickDataManager() // потом перенести в отдельный метод
+        chartManager = ChartManager(delegate: self, symbol: symbol, timeFrame: timeFrame, candleStickDataManager: candleStickDataManager)
         startChartManager()
     }
     
@@ -133,12 +147,11 @@ class DetailViewController: UIViewController {
         ColorManager.setBackgroundForButton(buttonNames: [helper.oneMinuteButton, helper.fiveMinutesButton, helper.fifteenMinutesButton, helper.oneHourButton, helper.fourHours, helper.oneDay], timeFrame: timeFrame)
     }
     
-    func startChartManager() {
-//        chartManager = nil // Не уверен, что это необходимо, но есть сомнения насчет того, сколько инстансов чартменеджера мы создаем, поэтому перед инициализацией нового, я решил на всякий случай явно грохать старого.
+    private func startChartManager() {
         self.chartManager?.data.removeAll()
         self.chartManager = nil
-        self.chartManager = ChartManager(delegate: self, symbol: symbol, timeFrame: timeFrame)
-        chartManager.fetchRequest(symbol: symbol, timeFrame: timeFrame)
+        self.chartManager = ChartManager(delegate: self, symbol: symbol, timeFrame: timeFrame, candleStickDataManager: candleStickDataManager)
+        chartManager.fetchCandlesData()
         chartManager.setupChart()
         
         chartManager.setupSubscription()

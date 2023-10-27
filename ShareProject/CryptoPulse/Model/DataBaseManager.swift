@@ -15,8 +15,8 @@ enum HTTPMethod: String {
 }
 
 class DataBaseManager {
-        let baseURLString = "http://127.0.0.1:8000/api/account/"
-//    let baseURLString = "http://94.241.143.198:8000:8000/api/account/"
+//        let baseURLString = "http://127.0.0.1:8000/api/account/"
+    let baseURLString = "https://cryptopulseapp.ru/api/account/"
     let authorizationValue = "Basic aWxpYTpMSmtiOTkyMDA4MjIh"
     
     func performRequestDB(completion: @escaping (Data?, Error?) -> Void) {
