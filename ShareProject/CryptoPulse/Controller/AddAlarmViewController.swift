@@ -23,7 +23,7 @@ class AddAlarmViewController: UIViewController, UITextFieldDelegate, WebSocketMa
     
     
     var webSocketManager: WebSocketManager! = nil
-    var openedChart: DetailViewController? = nil
+    weak var openedChart: DetailViewController? = nil
     var openedAlarmsList: AlarmsListViewController? = nil
     var dbManager: DataBaseManager! = nil
     var alarmManager: AlarmManager! = nil

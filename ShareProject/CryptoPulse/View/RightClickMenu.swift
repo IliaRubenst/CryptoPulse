@@ -11,7 +11,7 @@ import UIKit
 class RightClickMenu: UIView {
     private let menuStackView = UIStackView()
     private let color: UIColor
-    var detailViewController: DetailViewController!
+    weak var detailViewController: DetailViewController!
     private let buttonSize: CGFloat = 30
     private let systemNames = ["bell", "bell.badge"]
     private let buttonSelectors = [#selector(button1Pressed), #selector(button2Pressed)]

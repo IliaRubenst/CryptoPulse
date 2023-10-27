@@ -18,9 +18,15 @@ class CandleStickDataManager {
     var delegate: DetailViewController!
 
     func fetchCandles(from symbol: String, timeFrame: String, completion: @escaping (Result<[[Any]], NetworkError>) -> Void) {
-        let path = "/fapi/v1/continuousKlines?pair=\(symbol)&contractType=PERPETUAL&interval=\(timeFrame)"
-        let urlString = binanceURL + path
-        guard let url = URL(string: urlString) else {
+        var urlComponents = URLComponents(string: binanceURL)
+        urlComponents?.path = "/fapi/v1/continuousKlines"
+        urlComponents?.queryItems = [
+            URLQueryItem(name: "pair", value: symbol),
+            URLQueryItem(name: "contractType", value: "PERPETUAL"),
+            URLQueryItem(name: "interval", value: timeFrame)
+        ]
+
+        guard let url = urlComponents?.url else {
             completion(.failure(.badUrl))
             return
         }

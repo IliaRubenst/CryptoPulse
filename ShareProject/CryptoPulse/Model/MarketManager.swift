@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import LightweightCharts
 
 struct MarketManager {
     let url = URL(string: "https://fapi.binance.com/fapi/v1/premiumIndex")
