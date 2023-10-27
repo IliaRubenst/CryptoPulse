@@ -8,7 +8,16 @@
 
 import UIKit
 
-class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout, WebSocketManagerDelegate {
+class ViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, WebSocketManagerDelegate {
+    
+    private let collectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .vertical
+        
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        return collectionView
+    }()
+    
     let amountCells = 2
     var marketManager = MarketManager()
     var dbManager = DataBaseManager()
@@ -22,6 +31,9 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        setupUI()
+        configureCollectionView()
         
         loadTickers()
         
@@ -41,6 +53,25 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
         NotificationCenter.default.addObserver(self, selector: #selector(loadList), name: NSNotification.Name(rawValue: "newSymbolAdded"), object: nil)
     }
     
+    private func setupUI() {
+        view.backgroundColor = .systemBackground
+        
+        view.addSubview(collectionView)
+        
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+                                     collectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10),
+                                     collectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10),
+                                     collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)])
+    }
+    
+    private func configureCollectionView() {
+        collectionView.register(CustomCollectionViewCell.self, forCellWithReuseIdentifier: CustomCollectionViewCell.identifier)
+        
+        collectionView.dataSource = self
+        collectionView.delegate = self
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         loadTickers()
     }
@@ -55,13 +86,13 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
     }
     
     @objc func showTableView() {
-        let detailVC = storyboard?.instantiateViewController(identifier: "SymbolList") as! SymbolsListController
+        let detailVC = SymbolsListController()
         detailVC.viewCtr = self
 
         present(detailVC, animated: true)
     }
     
-    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return UserSymbols.savedSymbols.count
     }
     
@@ -76,10 +107,11 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
         return CGSize(width: widthCell - spacing, height: heightCell - (offSet * 3))
     }
     
-    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Coin", for: indexPath) as? CoinCell else {
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CustomCollectionViewCell.identifier, for: indexPath) as? CustomCollectionViewCell else {
             fatalError("Unable to dequeue CoinCell.")
         }
+        
         cell.tickerLabel.text = UserSymbols.savedSymbols[indexPath.item].symbol
         cell.currentPriceLabel.text = UserSymbols.savedSymbols[indexPath.item].markPrice
         cell.volumeLabel.text = UserSymbols.savedSymbols[indexPath.item].volume
@@ -94,13 +126,13 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
         return cell
     }
     
-    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
 //        guard let cell = collectionView.cellForItem(at: indexPath) as? CoinCell else { return }
 
         openDetailView(indexPath: indexPath)
     }
     
-    override func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPaths: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+    func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPaths: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
         isSelected = true
         let config = UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { [self] _ in
             
@@ -139,7 +171,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
     }
     
     func contextMenuAction(_ indexPath: IndexPath, action: String) {
-        guard let currentCell = collectionView.cellForItem(at: indexPath) as? CoinCell else { return }
+        guard let currentCell = collectionView.cellForItem(at: indexPath) as? CustomCollectionViewCell else { return }
         if action == "change" {
             currentCell.changeColor()
         } else if action == "remove" {
@@ -147,17 +179,16 @@ class ViewController: UICollectionViewController, UICollectionViewDelegateFlowLa
         }
     }
     
-    override func collectionView(_ collectionView: UICollectionView, willEndContextMenuInteraction configuration: UIContextMenuConfiguration, animator: UIContextMenuInteractionAnimating?) {
+    func collectionView(_ collectionView: UICollectionView, willEndContextMenuInteraction configuration: UIContextMenuConfiguration, animator: UIContextMenuInteractionAnimating?) {
         isSelected = false
     }
     
     func openDetailView(indexPath: IndexPath) {
-        if let detailVC = storyboard?.instantiateViewController(identifier: "DetailData") as? DetailViewController {
-            detailVC.symbol = UserSymbols.savedSymbols[indexPath.item].symbol
-            detailVC.price = UserSymbols.savedSymbols[indexPath.item].markPrice
-
-            navigationController?.pushViewController(detailVC, animated: true)
-        }
+        let chartVC = DetailViewController()
+        chartVC.symbol = UserSymbols.savedSymbols[indexPath.item].symbol
+        chartVC.price = UserSymbols.savedSymbols[indexPath.item].markPrice
+        
+        navigationController?.pushViewController(chartVC, animated: true)
     }
     
     @objc func loadTickers() {

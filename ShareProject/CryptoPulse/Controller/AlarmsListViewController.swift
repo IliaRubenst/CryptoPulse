@@ -36,10 +36,12 @@ class AlarmsListViewController: UIViewController, UITableViewDelegate, UITableVi
     }
     
     func setupUI() {
+        view.backgroundColor = .systemBackground
+        
         configureNavButtons()
         configureSearchBar()
         configureTableView()
-        configureGestureRecogniser()
+//        configureGestureRecogniser()
         setupKeyboardDoneButton()
     }
     
@@ -189,10 +191,10 @@ class AlarmsListViewController: UIViewController, UITableViewDelegate, UITableVi
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if let detailVC = storyboard?.instantiateViewController(identifier: "DetailData") as? DetailViewController {
-            detailVC.symbol = filtredAlarms[indexPath.item].symbol
-            navigationController?.pushViewController(detailVC, animated: true)
-        }
+        let chartVC = DetailViewController()
+        chartVC.symbol = filtredAlarms[indexPath.item].symbol
+        
+        navigationController?.pushViewController(chartVC, animated: true)
     }
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {

@@ -7,6 +7,7 @@
 
 import UIKit
 
+/*
 class CoinCell: UICollectionViewCell {
     @IBOutlet weak var tickerLabel: UILabel!
     @IBOutlet weak var currentPriceLabel: UILabel!
@@ -26,3 +27,4 @@ class CoinCell: UICollectionViewCell {
         }
     }
 }
+*/
