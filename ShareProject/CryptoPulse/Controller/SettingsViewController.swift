@@ -77,6 +77,8 @@ class SettingsViewController: UIViewController, UIGestureRecognizerDelegate, UIT
     }
     
     func setupUI() {
+        view.backgroundColor = .systemBackground
+        
         view.addSubview(userIDTextField)
         view.addSubview(saveIDButton)
         view.addSubview(resetButton)

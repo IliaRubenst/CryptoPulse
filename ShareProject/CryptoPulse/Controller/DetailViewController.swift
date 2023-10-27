@@ -61,6 +61,8 @@ class DetailViewController: UIViewController {
     
     override func loadView() {
         super.loadView()
+        
+        view.backgroundColor = .systemBackground
 
         helper = DetailViewUI(viewController: self)
         helper.loadViewComponents()

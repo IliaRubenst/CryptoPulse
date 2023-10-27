@@ -23,7 +23,7 @@ class ColorManager {
         cell.percentChangeLabel.textColor = color
     }
     
-    static func changeCoinCell(indexPath: IndexPath, cell: CoinCell) {
+    static func changeCoinCell(indexPath: IndexPath, cell: CustomCollectionViewCell) {
         let color = percentValueToColor(UserSymbols.savedSymbols[indexPath.item].priceChangePercent)
         cell.percentChangeLabel.textColor = color
         cell.layer.borderColor = color.cgColor
