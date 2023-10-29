@@ -211,7 +211,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     }
     
     @objc func showList() {
-        print(SymbolsArray.symbols.count)
+        print(CurrentUser.userName)
     }
     
     func didUpdateCandle(_ websocketManager: WebSocketManager, candleModel: CurrentCandleModel) {

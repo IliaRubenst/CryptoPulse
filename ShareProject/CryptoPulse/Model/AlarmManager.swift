@@ -70,13 +70,14 @@ class AlarmManager {
         let idString = String(id)
         let currentDate = AlarmManager.convertCurrentDateToString()
         
-        let newAlarm = AlarmModel(id: id, symbol: symbol, alarmPrice: alarmPrice, isAlarmUpper: isAlarmUpper, isActive: true, date: currentDate)
+        let newAlarm = AlarmModel(id: id, userName: CurrentUser.userName, symbol: symbol, alarmPrice: alarmPrice, isAlarmUpper: isAlarmUpper, isActive: true, date: currentDate)
+//        let newAlarm = AlarmModel(id: id, symbol: symbol, alarmPrice: alarmPrice, isAlarmUpper: isAlarmUpper, isActive: true, date: currentDate)
         storeAlarmInDB(newAlarm)
-        print("\(alarmPrice), \(idString)")
+        print(newAlarm)
         setupAlarmLine(alarmPrice, id: idString)
     }
     
-    func addAlarmForSelectedPrice(alarmPrice: Double, closePrice: Double, symbol: String) {
+    func addAlarmForSelectedPrice(userName: String, alarmPrice: Double, closePrice: Double, symbol: String) {
 //        guard let price = chartManager.currentCursorPrice else {
 //            print("currentCursorPrice не задана")
 //            return
@@ -87,8 +88,10 @@ class AlarmManager {
         let idString = String(id)
         let currentDate = AlarmManager.convertCurrentDateToString()
         
-        let newAlarm = AlarmModel(id: id, symbol: symbol, alarmPrice: alarmPrice, isAlarmUpper: isAlarmUpper, isActive: true, date: currentDate)
+        let newAlarm = AlarmModel(id: id, userName: CurrentUser.userName, symbol: symbol, alarmPrice: alarmPrice, isAlarmUpper: isAlarmUpper, isActive: true, date: currentDate)
+//        let newAlarm = AlarmModel(id: id, symbol: symbol, alarmPrice: alarmPrice, isAlarmUpper: isAlarmUpper, isActive: true, date: currentDate)
         storeAlarmInDB(newAlarm)
+        print(newAlarm)
         setupAlarmLine(alarmPrice, id: idString)
     }
     

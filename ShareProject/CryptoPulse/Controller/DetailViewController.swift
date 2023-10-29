@@ -114,7 +114,7 @@ class DetailViewController: UIViewController {
     }
     
     @objc func addAlarmForSelectedPrice() {
-        alarmManager?.addAlarmForSelectedPrice(alarmPrice: chartManager.currentCursorPrice!, closePrice: closePrice, symbol: symbol)
+        alarmManager?.addAlarmForSelectedPrice(userName: CurrentUser.userName, alarmPrice: chartManager.currentCursorPrice!, closePrice: closePrice, symbol: symbol)
     }
     
     @objc func addAlarm() {

@@ -48,11 +48,16 @@ struct IndividualSymbolTickerStreamsModel {
 
 struct AlarmModel: Codable, Hashable {
     let id: Int
+    let userName: String
     let symbol: String
     var alarmPrice: Double
     let isAlarmUpper: Bool
     var isActive: Bool
     let date: String
+}
+
+struct CurrentUser {
+    static var userName = AuthToken.authToken
 }
 
 struct AlarmModelsArray {

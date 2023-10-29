@@ -66,6 +66,7 @@ class LoginViewController: UIViewController {
                 switch result {
                 case .success(let token):
                     AuthToken.authToken = token
+                    CurrentUser.userName = userRequest.username
                     
                     if let sceneDelegate = self.view.window?.windowScene?.delegate as? SceneDelegate {
                         sceneDelegate.checkAuthentication()

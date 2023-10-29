@@ -125,6 +125,7 @@ struct K: Codable {
 
 struct Account: Codable, Hashable {
     let id: Int
+    let userName: String
     let symbol: String
     let alarmPrice: Float
     let isAlarmUpper: Bool

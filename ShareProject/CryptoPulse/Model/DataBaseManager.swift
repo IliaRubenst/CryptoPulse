@@ -15,9 +15,10 @@ enum HTTPMethod: String {
 }
 
 class DataBaseManager {
-//        let baseURLString = "http://127.0.0.1:8000/api/account/"
-    let baseURLString = "https://cryptopulseapp.ru/api/account/"
-    let authorizationValue = "Basic aWxpYTpMSmtiOTkyMDA4MjIh"
+        let baseURLString = "http://127.0.0.1:8000/api/account"
+//    let baseURLString = "https://cryptopulseapp.ru/api/account"
+//    let authorizationValue = "Basic aWxpYTpMSmtiOTkyMDA4MjIh"
+    let authorizationValue = "Token \(AuthToken.authToken)"
     
     func performRequestDB(completion: @escaping (Data?, Error?) -> Void) {
         performTaskWithRequestType(.GET, urlString: baseURLString, body: nil, completion: completion)
@@ -32,7 +33,7 @@ class DataBaseManager {
     }
     
     func updateDBData(alarmModel: AlarmModel, change id: Int) {
-        let urlString = baseURLString.appending("\(id)/")
+        let urlString = baseURLString.appending("\(id)")
         guard let encoded = try? JSONEncoder().encode(alarmModel) else {
             print("Failed to encode new alarm")
             return
@@ -41,7 +42,8 @@ class DataBaseManager {
     }
     
     func removeDBData(remove id: Int) {
-        let urlString = baseURLString.appending("\(id)/")
+        let urlString = baseURLString.appending("/\(id)")
+        print(urlString)
         performTaskWithRequestType(.DELETE, urlString: urlString, body: nil, completion: { _, _ in })
     }
     
@@ -90,10 +92,11 @@ class DataBaseManager {
         
         do {
             let decodedData = try decoder.decode([Account].self, from: DBData)
-            for data in decodedData {
+            for data in decodedData where data.userName == CurrentUser.userName {
                 let currentDate = AlarmManager.convertCurrentDateToString()
                 
                 AlarmModelsArray.alarms.append(AlarmModel(id: data.id,
+                                                          userName: data.userName,
                                                           symbol: data.symbol,
                                                           alarmPrice: Double(data.alarmPrice),
                                                           isAlarmUpper: data.isAlarmUpper,

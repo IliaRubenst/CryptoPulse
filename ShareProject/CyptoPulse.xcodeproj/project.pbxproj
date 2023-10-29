@@ -193,13 +193,13 @@
 		49673F232AE183EC00014D05 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				496BEFDD2AA9EFDF00B15E0F /* ViewController.swift */,
+				4979F2052AAC3905000E039C /* DetailViewController.swift */,
 				D87A64B72AC5711C00A29749 /* AddAlarmViewController.swift */,
 				D87A63FC2ABC581100A29749 /* AlarmsListViewController.swift */,
-				4979F2052AAC3905000E039C /* DetailViewController.swift */,
 				D8047A5B2AEBEFF2001906CC /* MainTabBarController.swift */,
 				D868DEC92ACEE016003822BF /* SettingsViewController.swift */,
 				49AACC322AB70EA000101C46 /* SymbolsListController.swift */,
-				496BEFDD2AA9EFDF00B15E0F /* ViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -225,12 +225,12 @@
 		496BEFD82AA9EFDF00B15E0F /* CryptoPulse */ = {
 			isa = PBXGroup;
 			children = (
-				D8047A302AEBED0D001906CC /* BackAndUserAuthorization */,
-				49673F232AE183EC00014D05 /* Controller */,
-				496BEFE72AA9EFE100B15E0F /* Info.plist */,
 				49673F212AE1832B00014D05 /* Model */,
-				D8047A5D2AEBF15B001906CC /* Supporting */,
 				49673F222AE183C200014D05 /* View */,
+				49673F232AE183EC00014D05 /* Controller */,
+				D8047A302AEBED0D001906CC /* BackAndUserAuthorization */,
+				496BEFE72AA9EFE100B15E0F /* Info.plist */,
+				D8047A5D2AEBF15B001906CC /* Supporting */,
 			);
 			path = CryptoPulse;
 			sourceTree = "<group>";
