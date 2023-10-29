@@ -33,7 +33,7 @@ class DataBaseManager {
     }
     
     func updateDBData(alarmModel: AlarmModel, change id: Int) {
-        let urlString = baseURLString.appending("\(id)")
+        let urlString = baseURLString.appending("/\(id)")
         guard let encoded = try? JSONEncoder().encode(alarmModel) else {
             print("Failed to encode new alarm")
             return

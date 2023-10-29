@@ -54,7 +54,7 @@ class AlarmsListViewController: UIViewController, UITableViewDelegate, UITableVi
 //        let addAlarm = UIBarButtonItem(image: UIImage(systemName: "plus")?.withTintColor(.black, renderingMode: .alwaysOriginal), style: .plain, target: self, action: #selector(addAlarm))
         
         navigationItem.leftBarButtonItem = eraseList
-        navigationItem.rightBarButtonItem = addAlarm
+//        navigationItem.rightBarButtonItem = addAlarm
     }
     
     func configureSearchBar() {
