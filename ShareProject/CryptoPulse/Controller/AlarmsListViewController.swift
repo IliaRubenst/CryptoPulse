@@ -51,10 +51,10 @@ class AlarmsListViewController: UIViewController, UITableViewDelegate, UITableVi
     
     func configureNavButtons() {
         let eraseList = UIBarButtonItem(image: UIImage(systemName: "trash")?.withTintColor(.black, renderingMode: .alwaysOriginal), style: .plain, target: self, action: #selector(removeAlarmsFromList))
-//        let addAlarm = UIBarButtonItem(image: UIImage(systemName: "plus")?.withTintColor(.black, renderingMode: .alwaysOriginal), style: .plain, target: self, action: #selector(addAlarm))
+        let addAlarm = UIBarButtonItem(image: UIImage(systemName: "plus")?.withTintColor(.black, renderingMode: .alwaysOriginal), style: .plain, target: self, action: #selector(addAlarm))
         
         navigationItem.leftBarButtonItem = eraseList
-//        navigationItem.rightBarButtonItem = addAlarm
+        navigationItem.rightBarButtonItem = addAlarm
     }
     
     func configureSearchBar() {

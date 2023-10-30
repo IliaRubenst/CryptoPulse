@@ -10,9 +10,9 @@ import UIKit
 import LightweightCharts
 
 class AlarmManager {
-    weak var detailViewController: UIViewController?
+    weak var detailViewController: UIViewController? = nil
     private var alarmLine: PriceLine!
-    var chartManager: ChartManager!
+    var chartManager: ChartManager? = nil
     var dbManager = DataBaseManager()
     
     private var upToDown = "сверху вниз"
@@ -20,7 +20,7 @@ class AlarmManager {
     var id = 0
     var isAlertShowing: Bool = false
     
-    init(detailViewController: UIViewController, chartManager: ChartManager) {
+    init(detailViewController: UIViewController?, chartManager: ChartManager?) {
         self.detailViewController = detailViewController
         self.chartManager = chartManager
     }
@@ -41,11 +41,14 @@ class AlarmManager {
             lineWidth: .one,
             lineStyle: .solid
         )
+        
+        guard let chartManager else { return }
         alarmLine = chartManager.series?.createPriceLine(options: options)
     }
     
     // Removes an alarm line given an index (not currently in use)
     func removeAlarmLine(_ index: Int) {
+        guard let chartManager else { return }
         chartManager.series?.removePriceLine(line: AlarmModelsArray.alarmaLine[index])
     }
     

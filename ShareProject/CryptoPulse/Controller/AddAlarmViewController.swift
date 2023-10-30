@@ -25,10 +25,7 @@ class AddAlarmViewController: UIViewController, UITextFieldDelegate, WebSocketMa
     var webSocketManager: WebSocketManager! = nil
     weak var openedChart: DetailViewController? = nil
     var openedAlarmsList: AlarmsListViewController? = nil
-    var dbManager: DataBaseManager! = nil
-    var alarmManager: AlarmManager! = nil
-    var chartManager: ChartManager! = nil
-    var candleStickDataManager: CandleStickDataManager! = nil
+    
     
     let titleLabel: UILabel = {
         let label = UILabel()
@@ -108,10 +105,7 @@ class AddAlarmViewController: UIViewController, UITextFieldDelegate, WebSocketMa
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        dbManager = DataBaseManager()
-        candleStickDataManager = CandleStickDataManager()
-        chartManager = ChartManager(delegate: openedChart!, symbol: openedChart!.symbol, timeFrame: openedChart!.timeFrame, candleStickDataManager: candleStickDataManager)
-        alarmManager = AlarmManager(detailViewController: openedChart!, chartManager: chartManager)
+        
         setupUI()
         updateUI()
         setupKeyboardDoneButton()
@@ -268,9 +262,12 @@ class AddAlarmViewController: UIViewController, UITextFieldDelegate, WebSocketMa
         
         switch state {
         case .newAlarm:
+            let alarmManager = AlarmManager(detailViewController: nil, chartManager: nil)
             alarmManager.addAlarmForCurrentPrice(alarmPrice: alarmPrice, closePrice: doubleClosePrice, symbol: symbol)
+            
             let id = Int.random(in: 0...999999999)
             let idString = String(id)
+            
             if let openedChart {
                 openedChart.alarmManager?.setupAlarmLine(alarmPrice, id: idString)
             }
@@ -281,6 +278,8 @@ class AddAlarmViewController: UIViewController, UITextFieldDelegate, WebSocketMa
             
             guard let index = AlarmModelsArray.alarms.firstIndex(of: alarmToEdit) else { return }
             AlarmModelsArray.alarms[index].alarmPrice = alarmPrice
+            
+            let dbManager = DataBaseManager()
             dbManager.updateDBData(alarmModel: alarmToEdit, change: alarmID)
         }
         

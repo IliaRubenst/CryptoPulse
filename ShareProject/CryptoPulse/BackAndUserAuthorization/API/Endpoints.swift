@@ -11,7 +11,7 @@ enum Endpoint {
     
 //    case createAccount(path: String = "/auth/create-account", userRequest: RegisterUserRequest)
     case createAccount(path: String = "/auth/users/", userRequest: RegisterUserRequest)
-    case getData(path: String = "/api/account")
+    case getData(path: String = "/api/account/")
     case signIn(path: String = "/auth/token/login/", userRequest: SignInUserRequest)
     case forgotPassword(path: String = "/auth/forgot-password/", email: String)
     
