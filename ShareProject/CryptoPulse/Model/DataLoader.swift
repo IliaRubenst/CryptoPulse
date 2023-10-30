@@ -17,7 +17,7 @@ struct DataLoader {
         self.keys = keys
     }
     
-    func loadUserSymbols() {
+    func loadUserData() {
         if keys == "savedSymbols" {
             if let savedSymbols = userDefaults.object(forKey: keys) as? Data {
                 let jsonDecoder = JSONDecoder()
@@ -55,6 +55,15 @@ struct DataLoader {
              }
              }
              }*/
+        } else if keys == "AuthToken" {
+            if let savedAuthToken = userDefaults.object(forKey: keys) as? Data {
+                let jsonDecoder = JSONDecoder()
+                do {
+                    AuthToken.authToken = try jsonDecoder.decode(String.self, from: savedAuthToken)
+                } catch {
+                    print("Failed to load Auth Token")
+                }
+            }
         }
     }
     
@@ -77,6 +86,10 @@ struct DataLoader {
                 userDefaults.set(dataToSave, forKey: keys)
             } else {
                 print("Failed to save symbols")
+            }
+        } else if keys == "AuthToken" {
+            if let dataToSave = try? jsonEncoder.encode(AuthToken.authToken) {
+                userDefaults.set(dataToSave, forKey: keys)
             }
         }
         

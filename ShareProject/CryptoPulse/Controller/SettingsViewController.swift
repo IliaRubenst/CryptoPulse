@@ -47,6 +47,11 @@ class SettingsViewController: UIViewController, UIGestureRecognizerDelegate, UIT
         return button
     }()
     
+    let loguotButton: CustomButton = {
+        let button = CustomButton(title: "Выйти", hasBackGround: true, fontSize: FontSize.medium)
+        return button
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
@@ -55,7 +60,20 @@ class SettingsViewController: UIViewController, UIGestureRecognizerDelegate, UIT
         
     }
     
-    override func viewDidLayoutSubviews() {
+    func setupUI() {
+        view.backgroundColor = .systemBackground
+        
+        view.addSubview(userIDTextField)
+        view.addSubview(saveIDButton)
+        view.addSubview(resetButton)
+        view.addSubview(userIDLabel)
+        view.addSubview(loguotButton)
+        
+        setupConstraints()
+        
+    }
+    
+    func setupConstraints() {
         userIDLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([userIDLabel.topAnchor.constraint(equalToSystemSpacingBelow: view.safeAreaLayoutGuide.topAnchor, multiplier: 1),
                                      userIDLabel.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor)])
@@ -74,16 +92,13 @@ class SettingsViewController: UIViewController, UIGestureRecognizerDelegate, UIT
         NSLayoutConstraint.activate([resetButton.topAnchor.constraint(equalTo: userIDTextField.bottomAnchor, constant: 20),
                                      resetButton.trailingAnchor.constraint(equalTo: userIDTextField.trailingAnchor),
                                      resetButton.widthAnchor.constraint(equalTo: userIDTextField.widthAnchor, multiplier: 0.45)])
-    }
-    
-    func setupUI() {
-        view.backgroundColor = .systemBackground
         
-        view.addSubview(userIDTextField)
-        view.addSubview(saveIDButton)
-        view.addSubview(resetButton)
-        view.addSubview(userIDLabel)
-        
+        loguotButton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([loguotButton.topAnchor.constraint(equalTo: saveIDButton.bottomAnchor, constant: 20),
+                                     loguotButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+                                     loguotButton.heightAnchor.constraint(equalToConstant: 55),
+                                     loguotButton.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.85)])
+                                    
     }
     
     func configureGestureRecogniser() {
@@ -109,6 +124,7 @@ class SettingsViewController: UIViewController, UIGestureRecognizerDelegate, UIT
         userIDTextField.placeholder = "User ID"
         saveIDButton.addTarget(self, action: #selector(saveIDTapped), for: .touchUpInside)
         resetButton.addTarget(self, action: #selector(resetIDTapped), for: .touchUpInside)
+        loguotButton.addTarget(self, action: #selector(logout), for: .touchUpInside)
     }
     
     // На данный момент метод никакие данные не обновляет.
@@ -121,6 +137,33 @@ class SettingsViewController: UIViewController, UIGestureRecognizerDelegate, UIT
     @objc func resetIDTapped() {
         userIDTextField.isEnabled = true
         userIDTextField.becomeFirstResponder()
+    }
+    
+    @objc func logout() {
+        guard var request = Endpoint.signOut().request else { return }
+        request.addValue("Token \(AuthToken.authToken)", forHTTPHeaderField: "Authorization")
+        
+        AuthService.fetch(request: request) { [weak self] result in
+            DispatchQueue.main.async {
+                guard let self = self else { return }
+                
+                switch result {
+                case .success:
+                    AuthToken.authToken = String()
+                    
+                    let userDefaults = DataLoader(keys: "AuthToken")
+                    userDefaults.saveData()
+                    
+                    if let sceneDelegate = self.view.window?.windowScene?.delegate as? SceneDelegate {
+                        sceneDelegate.checkAuthentication()
+                    }
+                
+                case .failure:
+                    // Здесь как то обрабатывать ошибку.
+                    break
+                }
+            }
+        }
     }
     
 }

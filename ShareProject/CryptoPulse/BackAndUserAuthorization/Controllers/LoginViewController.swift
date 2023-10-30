@@ -68,6 +68,9 @@ class LoginViewController: UIViewController {
                     AuthToken.authToken = token
                     CurrentUser.userName = userRequest.username
                     
+                    let userDefaults = DataLoader(keys: "AuthToken")
+                    userDefaults.saveData()
+                    
                     if let sceneDelegate = self.view.window?.windowScene?.delegate as? SceneDelegate {
                         sceneDelegate.checkAuthentication()
                     }

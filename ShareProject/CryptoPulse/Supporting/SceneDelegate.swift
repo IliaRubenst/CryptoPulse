@@ -27,7 +27,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
     
     public func checkAuthentication() {
-        // Здесь будет проверка на авторизацию
+        // Здесь будет проверка на авторизацию       
         DataService.getData { [weak self] result in
             
             DispatchQueue.main.async { [weak self] in

@@ -35,7 +35,7 @@ class SymbolsListController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        defaults.loadUserSymbols()
+        defaults.loadUserData()
         setupUI()
         configureTableView()
         configureSearchBar()

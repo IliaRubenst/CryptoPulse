@@ -17,7 +17,13 @@ class AuthService {
     
     static func fetch(request: URLRequest, complition: @escaping (Result<String, Error>) -> Void) {
         
-        URLSession.shared.dataTask(with: request) { data, _, error in
+        URLSession.shared.dataTask(with: request) { data, urlResponse, error in
+            if let urlResponse = urlResponse as? HTTPURLResponse {
+                if urlResponse.statusCode == 204 {
+                    complition(.success("Успешный логаут."))
+                }
+            }
+            
             guard let data = data else {
                 
                 if let error = error {

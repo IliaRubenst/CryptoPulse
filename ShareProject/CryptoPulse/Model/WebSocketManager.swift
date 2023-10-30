@@ -155,7 +155,7 @@ class WebSocketManager: NSObject, URLSessionWebSocketDelegate {
                     }
                 }
                 let defaults = DataLoader(keys: "savedFullSymbolsData")
-                defaults.loadUserSymbols()
+                defaults.loadUserData()
                 
                 for model in array {
                     if let index = SymbolsArray.symbols.firstIndex(where: { $0.symbol == model.s }) {

@@ -38,7 +38,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         loadTickers()
         
         let defaults = DataLoader(keys: "savedSymbols")
-        defaults.loadUserSymbols()
+        defaults.loadUserData()
         
         getSymbolToWebSocket()
         dbManager.performRequestDB() { _,_ in }
