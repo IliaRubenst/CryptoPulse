@@ -49,7 +49,7 @@ class HomeViewController: UIViewController {
     }
     
     @objc private func didTapLogout() {
-        AuthService.sighOut()
+//        AuthService.logoutFetch(request: <#T##URLRequest#>, complition: <#T##(Result<String, Error>) -> Void#>)
         
         if let sceneDelegate = self.view.window?.windowScene?.delegate as? SceneDelegate {
             sceneDelegate.checkAuthentication()

@@ -125,6 +125,11 @@ class RegisterViewController: UIViewController {
             username: self.usernameField.text ?? "",
             password: self.passwordFiled.text ?? "")
         
+        
+        // Если мы не проходим проверку, будет очевиднее показывать конккретные алармы с причиной не соответствия.
+        // Сейчас на все беды один ответ.
+        // Касается всех 3х проверок.
+        
         // Username check
         if !Validator.isValidUsername(for: userRequest.username) {
             AlertManager.showInvalidUsernameAlert(on: self)
@@ -151,7 +156,11 @@ class RegisterViewController: UIViewController {
                 guard let self = self else { return }
                 
                 switch result {
-                case .success(_):
+                case .success:
+                    
+                    // Здесь можно чуть поддкорректить логику fetch вызова, чтобы после успешной регистрации сразу
+                    // пробрасывало на основной экран, минуя экран логина, позже сделаю.
+                    
                     if let sceneDelegate = self.view.window?.windowScene?.delegate as? SceneDelegate {
                         sceneDelegate.checkAuthentication()
                     }

@@ -66,7 +66,7 @@ class ForgotPasswordViewController: UIViewController {
         
         guard let request = Endpoint.forgotPassword(email: email).request else { return }
         
-        AuthService.fetch(request: request) { [weak self] result in
+        AuthService.forgotPasswordFetch(request: request) { [weak self] result in
             
             DispatchQueue.main.async { [weak self] in
                 guard let self = self else { return }

@@ -24,3 +24,15 @@ struct SuccessUserRegistrationResponse: Decodable {
 struct SuccessUserLoginResponse: Decodable {
     let auth_token: String
 }
+
+struct LogoutErrorServerResponse: Decodable {
+    let detail: String
+}
+
+struct UsernameAlreadyRegistredResponse: Decodable {
+    let username: [String]
+}
+
+struct LoginFailureResponse: Decodable {
+    let non_field_errors: [String]
+}
