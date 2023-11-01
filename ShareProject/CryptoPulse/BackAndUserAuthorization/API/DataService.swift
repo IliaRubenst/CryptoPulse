@@ -14,13 +14,7 @@ class DataService {
         guard var request = Endpoint.getData().request else { return }
         
         request.addValue("Token \(AuthToken.authToken)", forHTTPHeaderField: "Authorization")
-//        request.addValue("*/*", forHTTPHeaderField: "Accept")
-        
-        print(request.url)
-        
-        print(request.httpMethod)
-        print(request.allHTTPHeaderFields)
-        
+    
         URLSession.shared.dataTask(with: request) { data, _, error in
             guard let data = data else {
                 

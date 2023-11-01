@@ -42,7 +42,7 @@ extension AlertManager {
     }
     
     public static func showRegistrationErrorAlert(on vc: UIViewController, with error: String) {
-        showBasicAlert(on: vc, with: "Unknown Registration Error", message: "\(error)")
+        showBasicAlert(on: vc, with: "Registration Error", message: "\(error)")
     }
 }
 
@@ -60,8 +60,8 @@ extension AlertManager {
 
 // MARK: - Log Out Errors
 extension AlertManager {
-    public static func showLogOutErrorAlert(on vc: UIViewController, with error: Error) {
-        showBasicAlert(on: vc, with: "Log Out Error", message: "\(error.localizedDescription)")
+    public static func showLogOutErrorAlert(on vc: UIViewController, with error: String) {
+        showBasicAlert(on: vc, with: "Log Out Error", message: "\(error)")
     }
 }
 
@@ -69,7 +69,7 @@ extension AlertManager {
 extension AlertManager {
     
     public static func showPasswordResetSentAlert(on vc: UIViewController) {
-        showBasicAlert(on: vc, with: "Password Reset Sent", message: nil)
+        showBasicAlert(on: vc, with: "Password Reset Sent", message: "Успешно отправили ссылку для восстановления пароля на указанную почту.")
     }
     
     public static func showErrorSendingPasswordResetAlert(on vc: UIViewController, with error: String) {

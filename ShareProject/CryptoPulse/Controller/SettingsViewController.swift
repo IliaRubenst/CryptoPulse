@@ -129,9 +129,11 @@ class SettingsViewController: UIViewController, UIGestureRecognizerDelegate, UIT
     
     // На данный момент метод никакие данные не обновляет.
     @objc func saveIDTapped() {
+        /*
         guard let userID else { return }
-//        Key.userID = userID
+        Key.userID = userID
         userIDTextField.isEnabled = false
+         */
     }
     
     @objc func resetIDTapped() {
@@ -140,30 +142,43 @@ class SettingsViewController: UIViewController, UIGestureRecognizerDelegate, UIT
     }
     
     @objc func logout() {
-        guard var request = Endpoint.signOut().request else { return }
-        request.addValue("Token \(AuthToken.authToken)", forHTTPHeaderField: "Authorization")
-        
-        AuthService.fetch(request: request) { [weak self] result in
-            DispatchQueue.main.async {
-                guard let self = self else { return }
-                
-                switch result {
-                case .success:
-                    AuthToken.authToken = String()
+        let ac = UIAlertController(title: "Выход", message: "Выйти из вашего аккаунта?", preferredStyle: .alert)
+        ac.addAction(UIAlertAction(title: "Нет", style: .cancel))
+        ac.addAction(UIAlertAction(title: "Да, выйти", style: .default, handler: { [weak self] _ in
+            
+            guard var request = Endpoint.signOut().request else { return }
+            request.addValue("Token \(AuthToken.authToken)", forHTTPHeaderField: "Authorization")
+            
+            AuthService.logoutFetch(request: request) { [weak self] result in
+                DispatchQueue.main.async {
+                    guard let self = self else { return }
                     
-                    let userDefaults = DataLoader(keys: "AuthToken")
-                    userDefaults.saveData()
+                    switch result {
+                    case .success(let successString):
+                        print(successString)
+                        AuthToken.authToken = String()
+                        
+                        let userDefaults = DataLoader(keys: "AuthToken")
+                        userDefaults.saveData()
+                        
+                        if let sceneDelegate = self.view.window?.windowScene?.delegate as? SceneDelegate {
+                            sceneDelegate.checkAuthentication()
+                        }
                     
-                    if let sceneDelegate = self.view.window?.windowScene?.delegate as? SceneDelegate {
-                        sceneDelegate.checkAuthentication()
+                    case .failure(let error):
+                        guard let error = error as? ServiceError else { return }
+                        switch error {
+                        case .serverError(let string),
+                            .unknownError(let string),
+                            .decodingError(let string):
+                            AlertManager.showLogOutErrorAlert(on: self, with: string)
+                            
+                        }
                     }
-                
-                case .failure:
-                    // Здесь как то обрабатывать ошибку.
-                    break
                 }
             }
-        }
+        }))
+        present(ac, animated: true)
     }
     
 }
