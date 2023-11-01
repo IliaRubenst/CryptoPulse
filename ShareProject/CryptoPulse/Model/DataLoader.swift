@@ -6,10 +6,8 @@
 //
 
 import Foundation
-import LightweightCharts
 
 struct DataLoader {
-    
     var userDefaults = UserDefaults.standard
     var keys: String
     
@@ -18,88 +16,48 @@ struct DataLoader {
     }
     
     func loadUserData() {
-        if keys == "savedSymbols" {
-            if let savedSymbols = userDefaults.object(forKey: keys) as? Data {
-                let jsonDecoder = JSONDecoder()
-                do {
-                    UserSymbols.savedSymbols = try jsonDecoder.decode([Symbol].self, from: savedSymbols)
-                } catch {
-                    print("Failed to load symbols")
-                }
+        guard let savedData = userDefaults.object(forKey: keys) as? Data else {
+            print("Failed to load data for key: \(keys)")
+            return
             }
-//        } else if keys == "savedAlarms" {
-//            if let savedSymbols = userDefaults.object(forKey: keys) as? Data {
-//                let jsonDecoder = JSONDecoder()
-//                do {
-//                    AlarmModelsArray.alarms = try jsonDecoder.decode([AlarmModel].self, from: savedSymbols)
-//                } catch {
-//                    print("Failed to load symbols")
-//                }
-//            }
-        } else if keys == "savedFullSymbolsData" {
-            if let savedSymbols = userDefaults.object(forKey: keys) as? Data {
-                let jsonDecoder = JSONDecoder()
-                do {
-                    SymbolsArray.symbols = try jsonDecoder.decode([Symbol].self, from: savedSymbols)
-                } catch {
-                    print("Failed to load symbols")
-                }
+        let jsonDecoder = JSONDecoder()
+        do {
+            switch keys {
+            case "savedSymbols":
+                UserSymbols.savedSymbols = try jsonDecoder.decode([Symbol].self, from: savedData)
+            case "savedFullSymbolsData":
+                SymbolsArray.symbols = try jsonDecoder.decode([Symbol].self, from: savedData)
+            case "AuthToken":
+                AuthToken.authToken = try jsonDecoder.decode(String.self, from: savedData)
+            default:
+                print("Unknown key: \(keys)")
             }
-            /*else if keys == "savedLines" {
-             if let savedSymbols = userDefaults.object(forKey: keys) as? Data {
-             let jsonDecoder = JSONDecoder()
-             do {
-             AlarmModelsArray.alarmaLine = try jsonDecoder.decode([PriceLine].self, from: savedSymbols)
-             } catch {
-             print("Failed to load symbols")
-             }
-             }
-             }*/
-        } else if keys == "AuthToken" {
-            if let savedAuthToken = userDefaults.object(forKey: keys) as? Data {
-                let jsonDecoder = JSONDecoder()
-                do {
-                    AuthToken.authToken = try jsonDecoder.decode(String.self, from: savedAuthToken)
-                } catch {
-                    print("Failed to load Auth Token")
-                }
-            }
+        } catch {
+            print("Error decoding data for key: \(keys)")
         }
     }
     
     func saveData() {
         let jsonEncoder = JSONEncoder()
-        if keys == "savedSymbols" {
-            if let dataToSave = try? jsonEncoder.encode(UserSymbols.savedSymbols) {
-                userDefaults.set(dataToSave, forKey: keys)
-            } else {
-                print("Failed to save symbols")
-            }
-        } else if keys == "savedAlarms" {
-            if let dataToSave = try? jsonEncoder.encode(AlarmModelsArray.alarms) {
-                userDefaults.set(dataToSave, forKey: keys)
-            } else {
-                print("Failed to save symbols")
-            }
-        } else if keys == "savedFullSymbolsData" {
-            if let dataToSave = try? jsonEncoder.encode(SymbolsArray.symbols) {
-                userDefaults.set(dataToSave, forKey: keys)
-            } else {
-                print("Failed to save symbols")
-            }
-        } else if keys == "AuthToken" {
-            if let dataToSave = try? jsonEncoder.encode(AuthToken.authToken) {
-                userDefaults.set(dataToSave, forKey: keys)
+        var dataToSave: Data?
+        do {
+            switch keys {
+            case "savedSymbols":
+                dataToSave = try? jsonEncoder.encode(UserSymbols.savedSymbols)
+            case "savedAlarms":
+                dataToSave = try? jsonEncoder.encode(AlarmModelsArray.alarms)
+            case "savedFullSymbolsData":
+                dataToSave = try? jsonEncoder.encode(SymbolsArray.symbols)
+            case "AuthToken":
+                dataToSave = try? jsonEncoder.encode(AuthToken.authToken)
+            default:
+                print("Error encoding data for key: \(keys)")
             }
         }
-        
-        /*else if keys == "savedLines" {
-            if let dataToSave = try? jsonEncoder.encode(AlarmModelsArray.alarmaLine) {
-                userDefaults.set(dataToSave, forKey: keys)
-            } else {
-                print("Failed to save symbols")
-            }
-        }*/
-        
+        guard let data = dataToSave else {
+            print("Failed to save data for key: \(keys)")
+            return
+        }
+        userDefaults.set(data, forKey: keys)
     }
 }

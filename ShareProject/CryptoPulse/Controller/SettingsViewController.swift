@@ -166,5 +166,8 @@ class SettingsViewController: UIViewController, UIGestureRecognizerDelegate, UIT
         }
     }
     
+    deinit {
+        print("SettingsViewController деинициализрован")
+    }
 }
 

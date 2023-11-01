@@ -8,7 +8,7 @@
 import UIKit
 
 
-class PercentChange: UIView {
+final class PercentChange: UIView {
     private let percentLabel = UILabel()
     private let color: UIColor
     weak var detailViewController: DetailViewController!

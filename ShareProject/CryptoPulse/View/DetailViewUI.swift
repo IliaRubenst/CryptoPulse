@@ -11,18 +11,18 @@ import UIKit
 final class DetailViewUI {
     unowned var viewController: DetailViewController
     
-    let upperStackView = UIStackView()
+    private let upperStackView = UIStackView()
     let leftNavLabel = UILabel()
-    let rightNavLabelStack = UIStackView()
+    private let rightNavLabelStack = UIStackView()
     let rightUpperNavLabel = UILabel()
     let rightLowerNavLabel = UILabel()
     
-    let lowerStackView = UIStackView()
+    private let lowerStackView = UIStackView()
     let leftPartView = UILabel()
     let middlePartView = UILabel()
     let rightPartView = UILabel()
     
-    let timeFrameStackView = UIStackView()
+    private let timeFrameStackView = UIStackView()
     let oneMinuteButton = UIButton()
     let fiveMinutesButton = UIButton()
     let fifteenMinutesButton = UIButton()
@@ -30,29 +30,25 @@ final class DetailViewUI {
     let fourHours = UIButton()
     let oneDay = UIButton()
     
-    let buttonHeight = CGFloat(20)
+    private let buttonHeight = CGFloat(20)
 
     init(viewController: DetailViewController) {
         self.viewController = viewController
     }
     
     @objc func timeFrameButtonPressed(sender: UIButton) {
-//        for manager in viewController.webSocketManagers {
-//            manager.close()
-//        }
-        
         guard let label = sender.titleLabel?.text else { return }
         viewController.timeFrame = label
         ColorManager.setBackgroundForButton(buttonNames: [oneMinuteButton, fiveMinutesButton, fifteenMinutesButton, oneHourButton, fourHours, oneDay], timeFrame: viewController.timeFrame)
         viewController.changeTimeFrame()
-
     }
     
-    private func setupLabel(_ label: UILabel, text: String, textAlign: NSTextAlignment = .center) {
+    private func setupLabel(_ label: UILabel, text: String, textAlign: NSTextAlignment = .center, numberOfLines: Int) {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 13)
         label.text = text
         label.textAlignment = textAlign
+        label.numberOfLines = numberOfLines
     }
     
     private func setupStackView(_ stackView: UIStackView, axis: NSLayoutConstraint.Axis, spacing: CGFloat, distribution: UIStackView.Distribution = .fillEqually) {
@@ -63,7 +59,7 @@ final class DetailViewUI {
         stackView.backgroundColor = .clear
     }
     
-    func setupButton(_ button: UIButton, title: String) {
+    private func setupButton(_ button: UIButton, title: String) {
         button.setTitle(title, for: .normal)
         button.setTitleColor(.black, for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 13)
@@ -75,9 +71,9 @@ final class DetailViewUI {
     func loadViewComponents() {
         viewController.navigationItem.titleView = upperStackView
         
-        setupLabel(leftNavLabel, text: "\(viewController.symbol)", textAlign: .left)
-        setupLabel(rightUpperNavLabel, text: "\(viewController.closePrice)")
-        setupLabel(rightLowerNavLabel, text: "\(viewController.priceChangePercent)")
+        setupLabel(leftNavLabel, text: "\(viewController.symbol)", textAlign: .left, numberOfLines: 1)
+        setupLabel(rightUpperNavLabel, text: "\(viewController.closePrice)", numberOfLines: 1)
+        setupLabel(rightLowerNavLabel, text: "\(viewController.priceChangePercent)", numberOfLines: 1)
         
         rightNavLabelStack.addArrangedSubview(rightUpperNavLabel)
         rightNavLabelStack.addArrangedSubview(rightLowerNavLabel)
@@ -85,29 +81,20 @@ final class DetailViewUI {
         setupStackView(rightNavLabelStack, axis: .vertical, spacing: 1.0)
         setupStackView(upperStackView, axis: .horizontal, spacing: 5.0)
         upperStackView.translatesAutoresizingMaskIntoConstraints = false
-
         upperStackView.addArrangedSubview(leftNavLabel)
         upperStackView.addArrangedSubview(rightNavLabelStack)
 
-        setupLabel(leftPartView, text: "24h volume\n\(viewController.volume24h)")
-        leftPartView.numberOfLines = 2
-        
-        setupLabel(middlePartView, text: "max: \(viewController.maxPrice)\nmin: \(viewController.minPrice)")
-        middlePartView.numberOfLines = 2
-
-        setupLabel(rightPartView, text: "funding: \(viewController.fundingRate)%\nnext:\(viewController.nextFundingTime)")
-        rightPartView.numberOfLines = 2
-
+        setupLabel(leftPartView, text: "24h volume\n\(viewController.volume24h)", numberOfLines: 2)
+        setupLabel(middlePartView, text: "max: \(viewController.maxPrice)\nmin: \(viewController.minPrice)", numberOfLines: 2)
+        setupLabel(rightPartView, text: "funding: \(viewController.fundingRate)%\nnext:\(viewController.nextFundingTime)", numberOfLines: 2)
         
         setupStackView(lowerStackView, axis: .horizontal, spacing: 5.0)
         lowerStackView.translatesAutoresizingMaskIntoConstraints = false
-        
         lowerStackView.addArrangedSubview(leftPartView)
         lowerStackView.addArrangedSubview(middlePartView)
         lowerStackView.addArrangedSubview(rightPartView)
         
         viewController.view.addSubview(lowerStackView)
-        
 
         lowerStackView.leadingAnchor.constraint(equalTo: viewController.view.leadingAnchor, constant: 3).isActive = true
         lowerStackView.trailingAnchor.constraint(equalTo: viewController.view.trailingAnchor, constant: -3).isActive = true

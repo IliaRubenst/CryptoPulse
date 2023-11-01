@@ -297,4 +297,8 @@ class AlarmsListViewController: UIViewController, UITableViewDelegate, UITableVi
         
         return action
     }
+    
+    deinit {
+        print("AddAlarmViewController деинициализрован")
+    }
 }

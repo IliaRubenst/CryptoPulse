@@ -76,6 +76,11 @@ class SymbolsListController: UIViewController {
         
         definesPresentationContext = true
     }
+    
+    
+    deinit {
+        print("SymbolsListController деинициализрован")
+    }
 }
 
 // MARK: - UITableViewDataSource Methods

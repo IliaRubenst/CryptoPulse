@@ -10,7 +10,7 @@ import UIKit
 import LightweightCharts
 
 
-class ChartManagerUI {
+final class ChartManagerUI {
     weak var delegate: DetailViewController!
     
     let accentColor = UIColor(red: 0, green: 150/255.0, blue: 136/255.0, alpha: 1)

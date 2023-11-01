@@ -8,7 +8,7 @@
 import UIKit
 
 
-class RightClickMenu: UIView {
+final class RightClickMenu: UIView {
     private let menuStackView = UIStackView()
     private let color: UIColor
     weak var detailViewController: DetailViewController!

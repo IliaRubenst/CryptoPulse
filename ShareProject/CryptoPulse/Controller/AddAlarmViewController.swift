@@ -293,4 +293,8 @@ class AddAlarmViewController: UIViewController, UITextFieldDelegate, WebSocketMa
         
         dismissSelf()
     }
+    
+    deinit {
+        print("AddAlarmViewController деинициализрован")
+    }
 }

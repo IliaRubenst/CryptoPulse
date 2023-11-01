@@ -8,7 +8,7 @@
 import UIKit
 
 
-class ColorManager {
+final class ColorManager {
     static let positiveColor = UIColor(red: 0.008301745169, green: 0.5873891115, blue: 0.5336645246, alpha: 1)
     static let negativeColor = UIColor(red: 1, green: 0, blue: 0, alpha: 1)
     

@@ -15,7 +15,7 @@ enum HTTPMethod: String {
 }
 
 class DataBaseManager {
-        let baseURLString = "http://127.0.0.1:8000/api/account/"
+        let baseURLString = "http://127.0.0.1:8000/api/account"
 //    let baseURLString = "https://cryptopulseapp.ru/api/account"
 //    let authorizationValue = "Basic aWxpYTpMSmtiOTkyMDA4MjIh"
     let authorizationValue = "Token \(AuthToken.authToken)"

@@ -74,9 +74,7 @@ class AlarmManager {
         let currentDate = AlarmManager.convertCurrentDateToString()
         
         let newAlarm = AlarmModel(id: id, userName: CurrentUser.userName, symbol: symbol, alarmPrice: alarmPrice, isAlarmUpper: isAlarmUpper, isActive: true, date: currentDate)
-//        let newAlarm = AlarmModel(id: id, symbol: symbol, alarmPrice: alarmPrice, isAlarmUpper: isAlarmUpper, isActive: true, date: currentDate)
         storeAlarmInDB(newAlarm)
-        print(newAlarm)
         setupAlarmLine(alarmPrice, id: idString)
     }
     
@@ -92,7 +90,6 @@ class AlarmManager {
         let currentDate = AlarmManager.convertCurrentDateToString()
         
         let newAlarm = AlarmModel(id: id, userName: CurrentUser.userName, symbol: symbol, alarmPrice: alarmPrice, isAlarmUpper: isAlarmUpper, isActive: true, date: currentDate)
-//        let newAlarm = AlarmModel(id: id, symbol: symbol, alarmPrice: alarmPrice, isAlarmUpper: isAlarmUpper, isActive: true, date: currentDate)
         storeAlarmInDB(newAlarm)
         print(newAlarm)
         setupAlarmLine(alarmPrice, id: idString)

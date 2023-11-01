@@ -7,7 +7,7 @@
 
 import UIKit
 
-class TooltipView: UIView {
+final class TooltipView: UIView {
     private let accentColor: UIColor
     
     private lazy var titleLabel: UILabel = {
@@ -47,7 +47,7 @@ class TooltipView: UIView {
     private func setupConstraints() {
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         
-        //сюда нужно будет добавить констрейты и убрать их из чарт менеджера
+        //сюда можно будет добавить констрейты и убрать их из чарт менеджера
     }
 }
 
