@@ -7,7 +7,7 @@
 
 import UIKit
 
-class Symbol: Codable {
+struct Symbol: Codable {
     var symbol: String
     var markPrice: String
     var volume: String?
@@ -18,16 +18,22 @@ class Symbol: Codable {
         self.markPrice = markPrice
         self.volume = volume
         self.priceChangePercent = priceChangePercent
+        
+        if let formattedVolume = volume24Format() {
+            self.volume = formattedVolume
+        }
     }
     
-    func volume24Format() -> String {
-        let volumeDouble = (volume as? NSString)?.doubleValue
-        volume = String(format: "%.2fm$", (volumeDouble ?? 0) / 1_000_000)
-        return volume!
+    func volume24Format() -> String? {
+        guard let volumeDouble = Double(volume ?? "") else {
+            return nil
+        }
+        let formattedVolume = String(format: "%.2fm$", volumeDouble / 1_000_000)
+        return formattedVolume
     }
 }
 
-class FullSymbolData: Codable {
+struct FullSymbolData: Codable {
     var s: String
     var P: String
     var c: String
@@ -39,6 +45,7 @@ class FullSymbolData: Codable {
         self.c = markPrice
         self.q = volume
     }
+    
     func volume24Format() -> String {
         let volume24h = String(format: "%.2fm$", (Double(q)! / 1_000_000))
         return volume24h
@@ -130,6 +137,7 @@ struct Account: Codable, Hashable {
     let alarmPrice: Float
     let isAlarmUpper: Bool
     let isActive: Bool
+    let creationDate: String
 }
 
 struct AccountModel {

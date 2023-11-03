@@ -53,7 +53,7 @@ struct AlarmModel: Codable, Hashable {
     var alarmPrice: Double
     let isAlarmUpper: Bool
     var isActive: Bool
-    let date: String
+    let creationDate: String
 }
 
 struct CurrentUser {

@@ -7,7 +7,7 @@
 
 import UIKit
 
-class SymbolsListCell: UITableViewCell {
+final class SymbolsListCell: UITableViewCell {
     static let identifier = "CustomCell"
     
     private let cellStackView = UIStackView()

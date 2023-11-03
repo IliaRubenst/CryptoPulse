@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 import LightweightCharts
 
-class AlarmManager {
+final class AlarmManager {
     weak var detailViewController: UIViewController? = nil
     private var alarmLine: PriceLine!
     var chartManager: ChartManager? = nil
@@ -67,31 +67,25 @@ class AlarmManager {
         openedChart.present(addAlarmVC, animated: true)
     }
     
-    func addAlarmForCurrentPrice(alarmPrice: Double, closePrice: Double, symbol: String) {
+    func addAlarmAtSetPrice(alarmPrice: Double, closePrice: Double, symbol: String) {
         let isAlarmUpper = alarmPrice > closePrice ? true : false
         id = Int.random(in: 0...999999999)
         let idString = String(id)
         let currentDate = AlarmManager.convertCurrentDateToString()
         
-        let newAlarm = AlarmModel(id: id, userName: CurrentUser.userName, symbol: symbol, alarmPrice: alarmPrice, isAlarmUpper: isAlarmUpper, isActive: true, date: currentDate)
+        let newAlarm = AlarmModel(id: id, userName: CurrentUser.userName, symbol: symbol, alarmPrice: alarmPrice, isAlarmUpper: isAlarmUpper, isActive: true, creationDate: currentDate)
         storeAlarmInDB(newAlarm)
         setupAlarmLine(alarmPrice, id: idString)
     }
     
     func addAlarmForSelectedPrice(userName: String, alarmPrice: Double, closePrice: Double, symbol: String) {
-//        guard let price = chartManager.currentCursorPrice else {
-//            print("currentCursorPrice не задана")
-//            return
-//        }
-
         let isAlarmUpper = alarmPrice > closePrice ? true : false
         id = Int.random(in: 0...999999999)
         let idString = String(id)
         let currentDate = AlarmManager.convertCurrentDateToString()
         
-        let newAlarm = AlarmModel(id: id, userName: CurrentUser.userName, symbol: symbol, alarmPrice: alarmPrice, isAlarmUpper: isAlarmUpper, isActive: true, date: currentDate)
+        let newAlarm = AlarmModel(id: id, userName: CurrentUser.userName, symbol: symbol, alarmPrice: alarmPrice, isAlarmUpper: isAlarmUpper, isActive: true, creationDate: currentDate)
         storeAlarmInDB(newAlarm)
-        print(newAlarm)
         setupAlarmLine(alarmPrice, id: idString)
     }
     

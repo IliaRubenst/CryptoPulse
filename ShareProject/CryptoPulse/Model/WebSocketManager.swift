@@ -58,8 +58,8 @@ class WebSocketManager: NSObject, URLSessionWebSocketDelegate {
         webSocket?.cancel(with: .goingAway, reason: "Demo ended".data(using: .utf8))
     }
     
-    func recieve() {
-        webSocket?.receive(completionHandler: { [weak self] result in
+    func receive() {
+        webSocket?.receive{ [weak self] result in
             switch result {
             case .success(let message):
                 switch message {
@@ -75,21 +75,21 @@ class WebSocketManager: NSObject, URLSessionWebSocketDelegate {
             case .failure(let error):
                 print("Receive error: \(error)")
             }
-            self?.recieve()
-        })
+            self?.receive()
+        }
     }
     
     func urlSession(_ session: URLSession, webSocketTask: URLSessionWebSocketTask, didOpenWithProtocol protocol: String?) {
         print("Did connect to socket")
         ping()
-        recieve()
+        receive()
     }
     
     func urlSession(_ session: URLSession, webSocketTask: URLSessionWebSocketTask, didCloseWith closeCode: URLSessionWebSocketTask.CloseCode, reason: Data?) {
         print("Did close connection with reason")
     }
     
-    func parseJSONWeb(socketString: String, state: State) {
+    private func parseJSONWeb(socketString: String, state: State) {
         guard let socketData = socketString.data(using: String.Encoding.utf8) else { return }
         let decoder = JSONDecoder()
         switch state {

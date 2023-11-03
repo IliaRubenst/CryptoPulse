@@ -8,15 +8,15 @@
 import Foundation
 import LightweightCharts
 
-class ChartManager {
+final class ChartManager {
     weak var delegate: DetailViewController!
     var alarmManager: AlarmManager!
     var candleStickDataManager: CandleStickDataManager
+    var chartManagerUI: ChartManagerUI?
     
     var symbol: String
     var timeFrame: String
     var isFirstKline = true
-    let binanceURL = "https://fapi.binance.com"
     var numberAfterDecimalPoint: String = "2" {
         didSet {
             updateFormat()
@@ -24,12 +24,8 @@ class ChartManager {
     }
     
     private var chart: LightweightCharts?
-    var chartManagerUI: ChartManagerUI?
     var series: CandlestickSeries?
-
     var isWasShown = true
-    var horizontalLine: CrosshairLineOptions?
-    var options: PriceLineOptions!
     var currentCursorPrice: Double?
     
     var data = [CandlestickData]()
@@ -44,7 +40,13 @@ class ChartManager {
         self.candleStickDataManager = candleStickDataManager
     }
     
-    func fetchCandlesData() {
+    func setup() {
+        setupChart()
+        setupSubscription()
+        fetchCandlesData()
+    }
+    
+    private func fetchCandlesData() {
         candleStickDataManager.fetchCandles(from: symbol, timeFrame: timeFrame) { [weak self] result in
             switch result {
             case .failure(let error):
@@ -53,28 +55,17 @@ class ChartManager {
                 self?.data = (self?.candleStickDataManager.parseJSON(marketData: data))!
                 DispatchQueue.main.async {
                     self?.setupSeries()
-                    if self?.data[0].close == nil {
-                        print("Не удалось загрузить данные data[0].close.")
-                    } else {
-                        if (self?.data[0].close)! < 1 {
-                            self?.numberAfterDecimalPoint = "4"
-                        }
+                    if let firstCandle = self?.data.first?.close, firstCandle < 1 {
+                        self?.numberAfterDecimalPoint = "4"
                     }
                 }
                 
-                self?.delegate.startWebSocketManagers()
+                self?.delegate?.startWebSocketManagers()
             }
         }
     }
     
- 
-    
-    func updateFormat() {
-        chart?.applyOptions(options: ChartOptions(localization: LocalizationOptions(priceFormatter: .javaScript("function(price) { return '$' + price.toFixed(\(numberAfterDecimalPoint)); }"))))
-    }
-    
-    
-    func setupChart() {
+    private func setupChart() {
         let options = ChartOptions(timeScale: TimeScaleOptions(borderVisible: true,
                                                                timeVisible: true,
                                                                secondsVisible: true,
@@ -95,6 +86,69 @@ class ChartManager {
         NotificationCenter.default.addObserver(self, selector: #selector(hideMenu), name: NSNotification.Name(rawValue: "anyBtnPressed"), object: nil)
     }
     
+    private func setupSeries() {
+        series = chart?.addCandlestickSeries(options: nil)
+        data.removeLast()
+        series?.setData(data: data)
+        alarmManager.setupAlarmLines()
+    }
+    
+    func tick() {
+        if isFirstKline {
+            guard let open = Double(delegate.currentCandelModel.openPrice),
+                  let high = Double(delegate.currentCandelModel.highPrice),
+                  let low = Double(delegate.currentCandelModel.lowPrice),
+                  let close = Double(delegate.currentCandelModel.openPrice) else { return }
+            currentBar = CandlestickData(time: .utc(timestamp: currentBusinessDay), open: open, high: high, low: low, close: close)
+            
+            isFirstKline = false
+        }
+        
+        if delegate.isKlineClose {
+            if let nextMinute = nextCandle(currentBusinessDay) {
+                currentBusinessDay = nextMinute
+                currentBar = CandlestickData(time: .utc(timestamp: currentBusinessDay), open: nil, high: nil, low: nil, close: nil)
+            }
+        }
+        mergeTickToBar(delegate.closePrice) //Вот этот момент я бы поправил, беря данные из обновляемой модели, а не из конкретной переменной, которая загружается из didUpdateCandle.
+    }
+    
+    private func mergeTickToBar(_ price: BarPrice) {
+        if currentBar.open == nil {
+            currentBar.open = price
+            currentBar.high = price
+            currentBar.low = price
+            currentBar.close = price
+        } else {
+            currentBar.close = price
+            currentBar.high = max(currentBar.high ?? price, price)
+            currentBar.low = min(currentBar.low ?? price, price)
+        }
+        series?.update(bar: currentBar)
+    }
+    
+    private func nextCandle(_ time: TimeInterval) -> TimeInterval? {
+        let date = Date(timeIntervalSince1970: time)
+        var dateComponents = Calendar.current.dateComponents(in: Calendar.current.timeZone, from: date)
+        dateComponents.minute! += 1
+        guard let timeInterval = Calendar.current.date(from: dateComponents)?.timeIntervalSince1970 else {
+            print("Error in nextMinute methode, can't get TimeInterval")
+            return nil
+        }
+        
+        return timeInterval
+    }
+    
+    private func updateFormat() {
+        chart?.applyOptions(options: ChartOptions(localization: LocalizationOptions(priceFormatter: .javaScript("function(price) { return '$' + price.toFixed(\(numberAfterDecimalPoint)); }"))))
+    }
+    
+    private func setupSubscription() {
+        chart?.delegate = self
+        chart?.subscribeCrosshairMove()
+    }
+}
+    
 //    @objc func dragTheView(recognizer: UIPanGestureRecognizer) {
 //        if recognizer.state == .began {
 //
@@ -111,69 +165,8 @@ class ChartManager {
 //
 //        }
 //    }
-    
-    func setupSeries() {
-        let series = chart?.addCandlestickSeries(options: nil)
-        self.series = series
-        data.removeLast()
-        series?.setData(data: data)
-        alarmManager.setupAlarmLines()
-    }
-    
-    func tick() {
-        if isFirstKline {
-            guard let open = Double(delegate.currentCandelModel.openPrice),
-                  let high = Double(delegate.currentCandelModel.highPrice),
-                  let low = Double(delegate.currentCandelModel.lowPrice),
-                  let close = Double(delegate.currentCandelModel.openPrice) else { return }
-            
-            currentBar = CandlestickData(time: .utc(timestamp: currentBusinessDay), open: open, high: high, low: low, close: close)
-            
-            isFirstKline = false
-        }
-        
-        if delegate.isKlineClose {
-            if let nextMinute = nextCandle(currentBusinessDay) {
-                currentBusinessDay = nextMinute
-                currentBar = CandlestickData(time: .utc(timestamp: currentBusinessDay), open: nil, high: nil, low: nil, close: nil)
-            }
-        }
-        
-        mergeTickToBar(delegate.closePrice) //Вот этот момент я бы поправил, беря данные из обновляемой модели, а не из конкретной переменной, которая загружается из didUpdateCandle.
-    }
-    
-    func mergeTickToBar(_ price: BarPrice) {
-        if currentBar.open == nil {
-            currentBar.open = price
-            currentBar.high = price
-            currentBar.low = price
-            currentBar.close = price
-        } else {
-            currentBar.close = price
-            currentBar.high = max(currentBar.high ?? price, price)
-            currentBar.low = min(currentBar.low ?? price, price)
-        }
-        series?.update(bar: currentBar)
-    }
-    
-    func nextCandle(_ time: TimeInterval) -> TimeInterval? {
-        let date = Date(timeIntervalSince1970: time)
-        var dateComponents = Calendar.current.dateComponents(in: Calendar.current.timeZone, from: date)
-        dateComponents.minute! += 1
-        guard let timeInterval = Calendar.current.date(from: dateComponents)?.timeIntervalSince1970 else {
-            print("Error in nextMinute methode, can't get TimeInterval")
-            return nil
-        }
-        return timeInterval
-        
-    }
-    
-    func setupSubscription() {
-        chart?.delegate = self
-        chart?.subscribeCrosshairMove()
-    }
-}
 
+// MARK: - ChartDelegate Methods
 extension ChartManager: ChartDelegate {
     func didCrosshairMove(onChart chart: ChartApi, parameters: MouseEventParams) {
         guard case .utc(timestamp: _) = parameters.time,
@@ -205,7 +198,7 @@ extension ChartManager: ChartDelegate {
         series?.coordinateToPrice(coordinate: coordinate) { [self] price in
             guard let price = price else { return }
             currentCursorPrice = price
-            let percentChange = ((price * 100) / delegate.closePrice - 100)
+            let percentChange = ((price * 100) / (delegate?.closePrice ?? 0) - 100)
             chartManagerUI?.percentChange.update(title: String(format: "%.2f%", percentChange))
         }
         chartManagerUI?.rightClickMenu.isHidden = true
@@ -230,7 +223,7 @@ extension ChartManager: ChartDelegate {
         
         isWasShown = true
     }
-
+    
     @objc func hideMenu(notification: NSNotification) {
         chartManagerUI?.rightClickMenu.isHidden = true
     }

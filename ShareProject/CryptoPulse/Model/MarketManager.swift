@@ -32,7 +32,7 @@ struct MarketManager {
         task.resume()
     }
     
-    func parseJSON(marketData: Data) -> Result<[Symbol], Error> {
+    private func parseJSON(marketData: Data) -> Result<[Symbol], Error> {
         let decoder = JSONDecoder()
         
         do {

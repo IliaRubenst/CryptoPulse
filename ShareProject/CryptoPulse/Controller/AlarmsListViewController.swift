@@ -168,7 +168,7 @@ class AlarmsListViewController: UIViewController, UITableViewDelegate, UITableVi
         let item = filtredAlarms[indexPath.item]
         
         cell.tickerLabel.text = "\(item.symbol)"
-        cell.dateLabel.text = "\(item.date)"
+        cell.dateLabel.text = "\(item.creationDate)"
         cell.priceLabel.text = numberAfterDecimalPoint(alarmPrice: item.alarmPrice)
         cell.statusLabel.text = item.isActive ? "Активен" : "Не активен"
         

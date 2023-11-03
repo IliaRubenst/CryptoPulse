@@ -153,10 +153,7 @@ class DetailViewController: UIViewController {
         self.chartManager?.data.removeAll()
         self.chartManager = nil
         self.chartManager = ChartManager(delegate: self, symbol: symbol, timeFrame: timeFrame, candleStickDataManager: candleStickDataManager)
-        chartManager.fetchCandlesData()
-        chartManager.setupChart()
-        
-        chartManager.setupSubscription()
+        chartManager.setup()
     }
     
     func startWebSocketManagers() {

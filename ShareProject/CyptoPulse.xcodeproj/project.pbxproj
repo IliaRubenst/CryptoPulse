@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		49367CAC2AAAFE7100827BE9 /* CoinCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49367CAB2AAAFE7100827BE9 /* CoinCell.swift */; };
 		49367CAE2AAAFEB800827BE9 /* DataCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49367CAD2AAAFEB800827BE9 /* DataCodable.swift */; };
 		49367CB02AAB33BE00827BE9 /* MarketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49367CAF2AAB33BE00827BE9 /* MarketManager.swift */; };
 		494FF85D2ABB4B140041791B /* RightClickMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 494FF85C2ABB4B140041791B /* RightClickMenu.swift */; };
@@ -69,7 +68,6 @@
 		035FB156A67A7395BA1B2111 /* Pods-ShareProject.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ShareProject.debug.xcconfig"; path = "Target Support Files/Pods-ShareProject/Pods-ShareProject.debug.xcconfig"; sourceTree = "<group>"; };
 		1C45C2A8B2185C3AC151D8D8 /* Pods-ShareProject.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ShareProject.release.xcconfig"; path = "Target Support Files/Pods-ShareProject/Pods-ShareProject.release.xcconfig"; sourceTree = "<group>"; };
 		448C58D82A36683C2A7213BA /* Pods-CyptoPulse.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CyptoPulse.release.xcconfig"; path = "Target Support Files/Pods-CyptoPulse/Pods-CyptoPulse.release.xcconfig"; sourceTree = "<group>"; };
-		49367CAB2AAAFE7100827BE9 /* CoinCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoinCell.swift; sourceTree = "<group>"; };
 		49367CAD2AAAFEB800827BE9 /* DataCodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataCodable.swift; sourceTree = "<group>"; };
 		49367CAF2AAB33BE00827BE9 /* MarketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarketManager.swift; sourceTree = "<group>"; };
 		494FF85C2ABB4B140041791B /* RightClickMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RightClickMenu.swift; sourceTree = "<group>"; };
@@ -177,7 +175,6 @@
 			isa = PBXGroup;
 			children = (
 				D87A64B92AC5733100A29749 /* AlarmTableViewCell.swift */,
-				49367CAB2AAAFE7100827BE9 /* CoinCell.swift */,
 				49520E562AC4BCE2009B05BD /* SymbolsListCell.swift */,
 				494FF85C2ABB4B140041791B /* RightClickMenu.swift */,
 				D87A64BF2ACB0C2F00A29749 /* CustomButtons.swift */,
@@ -462,7 +459,6 @@
 				D8047A4F2AEBEE45001906CC /* DataArray.swift in Sources */,
 				D8047A4E2AEBEE45001906CC /* SignInUserRequest.swift in Sources */,
 				D8047A592AEBEE5D001906CC /* Endpoints.swift in Sources */,
-				49367CAC2AAAFE7100827BE9 /* CoinCell.swift in Sources */,
 				D8047A442AEBEDA8001906CC /* ForgotPasswordViewController.swift in Sources */,
 				D87A63FB2ABC294A00A29749 /* Key.swift in Sources */,
 				D8047A5A2AEBEE5D001906CC /* HTTP.swift in Sources */,

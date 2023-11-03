@@ -178,7 +178,7 @@ extension ViewController: WebSocketManagerDelegate {
             UserSymbols.savedSymbols[index].markPrice = currentPrice
             
             if !isSelected {
-                reloadCurrentCellData(index)
+                reloadCellData(index)
             }
         }
     }
@@ -252,13 +252,13 @@ extension ViewController {
         }
     }
     
-    private func reloadCurrentCellData(_ index: Int) {
-        if !isReload {
-            collectionView.reloadItems(at: [IndexPath(row: index, section: 0)])
-            isReload = true
-            DispatchQueue.global().asyncAfter(deadline: .now() + 0.5, qos: .default) { [weak self] in
-                self?.isReload = false
-            }
+    private func reloadCellData(_ index: Int) {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            
+            let indexPath = IndexPath(row: index, section: 0)
+            guard let cell = self.collectionView.cellForItem(at: indexPath) as? CustomCollectionViewCell else { return }
+            cell.configure(with: UserSymbols.savedSymbols[index])
         }
     }
     

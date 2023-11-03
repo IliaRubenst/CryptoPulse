@@ -14,11 +14,10 @@ enum HTTPMethod: String {
     case DELETE
 }
 
-class DataBaseManager {
-        let baseURLString = "http://127.0.0.1:8000/api/account"
+final class DataBaseManager {
+    private let baseURLString = "http://127.0.0.1:8000/api/account"
 //    let baseURLString = "https://cryptopulseapp.ru/api/account"
-//    let authorizationValue = "Basic aWxpYTpMSmtiOTkyMDA4MjIh"
-    let authorizationValue = "Token \(AuthToken.authToken)"
+    private let authorizationValue = "Token \(AuthToken.authToken)"
     
     func performRequestDB(completion: @escaping (Data?, Error?) -> Void) {
         performTaskWithRequestType(.GET, urlString: baseURLString, body: nil, completion: completion)
@@ -33,7 +32,7 @@ class DataBaseManager {
     }
     
     func updateDBData(alarmModel: AlarmModel, change id: Int) {
-        let urlString = baseURLString.appending("\(id)")
+        let urlString = baseURLString.appending("/\(id)")
         guard let encoded = try? JSONEncoder().encode(alarmModel) else {
             print("Failed to encode new alarm")
             return
@@ -47,7 +46,7 @@ class DataBaseManager {
         performTaskWithRequestType(.DELETE, urlString: urlString, body: nil, completion: { _, _ in })
     }
     
-    func performTaskWithRequestType(_ type: HTTPMethod,
+    private func performTaskWithRequestType(_ type: HTTPMethod,
                                     urlString: String,
                                     body: Data?,
                                     completion: @escaping (Data?, Error?) -> Void) {
@@ -75,7 +74,7 @@ class DataBaseManager {
         }
     }
     
-    func createRequest(with url: URL, type: String, body: Data?) -> URLRequest {
+    private func createRequest(with url: URL, type: String, body: Data?) -> URLRequest {
         var request = URLRequest(url: url)
         request.httpMethod = type
         request.addValue("application/json", forHTTPHeaderField: "Accept")
@@ -87,21 +86,19 @@ class DataBaseManager {
         return request
     }
     
-    func parseJSONDB(DBData: Data) {
+    private func parseJSONDB(DBData: Data) {
         let decoder = JSONDecoder()
         
         do {
             let decodedData = try decoder.decode([Account].self, from: DBData)
             for data in decodedData where data.userName == CurrentUser.userName {
-                let currentDate = AlarmManager.convertCurrentDateToString()
-                
                 AlarmModelsArray.alarms.append(AlarmModel(id: data.id,
                                                           userName: data.userName,
                                                           symbol: data.symbol,
                                                           alarmPrice: Double(data.alarmPrice),
                                                           isAlarmUpper: data.isAlarmUpper,
                                                           isActive: data.isActive,
-                                                          date: currentDate)
+                                                          creationDate: data.creationDate)
                 )}
             let defaults = DataLoader(keys: "savedAlarms")
             defaults.saveData()

@@ -96,9 +96,10 @@ extension SymbolsListController: UITableViewDataSource {
         
         let symbol = displayedSymbols[indexPath.item]
         let symbolLabel = symbol.symbol
-        let priceLabel = ("Price: \(symbol.markPrice)")
-        let percentLabel = ("\(symbol.priceChangePercent ?? "0") %")
-        let volumeLabel = ("Volume 24h: \(symbol.volume24Format())")
+        let priceLabel = "Price: \(symbol.markPrice)"
+        let percentLabel = "\(symbol.priceChangePercent ?? "0") %"
+        let volumeFormat = symbol.volume24Format() ?? "00.00"
+        let volumeLabel = "Volume 24h: \(volumeFormat)"
         
         cell.configure(symbol: symbolLabel, price: priceLabel, volume: volumeLabel, percentChange: percentLabel)
         
