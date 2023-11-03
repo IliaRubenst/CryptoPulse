@@ -25,7 +25,7 @@ struct SuccessUserLoginResponse: Decodable {
     let auth_token: String
 }
 
-struct LogoutErrorServerResponse: Decodable {
+struct TokenErrorServerResponse: Decodable {
     let detail: String
 }
 
@@ -35,4 +35,10 @@ struct UsernameAlreadyRegistredResponse: Decodable {
 
 struct LoginFailureResponse: Decodable {
     let non_field_errors: [String]
+}
+
+struct CurrentUserResponse: Decodable {
+    let email: String
+    let id: Int
+    let username: String
 }

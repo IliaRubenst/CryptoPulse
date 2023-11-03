@@ -71,7 +71,9 @@ final class AlarmManager {
         let idString = String(id)
         let currentDate = AlarmManager.convertCurrentDateToString()
         
-        let newAlarm = AlarmModel(id: id, userName: CurrentUser.userName, symbol: symbol, alarmPrice: alarmPrice, isAlarmUpper: isAlarmUpper, isActive: true, creationDate: currentDate)
+        guard let username = SavedCurrentUser.user.userName else { return }
+        
+        let newAlarm = AlarmModel(id: id, userName: username, symbol: symbol, alarmPrice: alarmPrice, isAlarmUpper: isAlarmUpper, isActive: true, creationDate: currentDate)
         storeAlarmInDB(newAlarm)
         setupAlarmLine(alarmPrice, id: idString)
     }
@@ -82,7 +84,9 @@ final class AlarmManager {
         let idString = String(id)
         let currentDate = AlarmManager.convertCurrentDateToString()
         
-        let newAlarm = AlarmModel(id: id, userName: CurrentUser.userName, symbol: symbol, alarmPrice: alarmPrice, isAlarmUpper: isAlarmUpper, isActive: true, creationDate: currentDate)
+        guard let username = SavedCurrentUser.user.userName else { return }
+        
+        let newAlarm = AlarmModel(id: id, userName: username, symbol: symbol, alarmPrice: alarmPrice, isAlarmUpper: isAlarmUpper, isActive: true, creationDate: currentDate)
         storeAlarmInDB(newAlarm)
         setupAlarmLine(alarmPrice, id: idString)
     }

@@ -74,8 +74,8 @@ class ViewController: UIViewController {
     
     private func setupRightButtonItems() {
         let showTableViewButton = UIBarButtonItem(image: UIImage(systemName: "list.bullet.rectangle.portrait")?.withTintColor(.black, renderingMode: .alwaysOriginal), style: .plain, target: self, action: #selector(showTableView))
-        let showArray = UIBarButtonItem(image: UIImage(systemName: "bell")?.withTintColor(.black, renderingMode: .alwaysOriginal), style: .plain, target: self, action: #selector(showList))
-        navigationItem.rightBarButtonItems = [showTableViewButton, showArray]
+        
+        navigationItem.rightBarButtonItems = [showTableViewButton]
     }
     
     deinit {
@@ -298,10 +298,6 @@ extension ViewController {
                 }
             }
         }
-    }
-    
-    @objc func showList() {
-        print(CurrentUser.userName)
     }
 }
 

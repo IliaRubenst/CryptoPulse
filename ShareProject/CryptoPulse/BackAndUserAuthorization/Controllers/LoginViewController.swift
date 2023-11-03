@@ -34,11 +34,55 @@ class LoginViewController: UIViewController {
         
     }
     
+    func loginFetch(_ request: URLRequest) {
+        AuthService.fetch(request: request) { [weak self] result in
+            
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                
+                switch result {
+                case .success(let token):
+                    AuthToken.authToken = token
+                    
+                    let userDefaults = DataLoader(keys: "AuthToken")
+                    userDefaults.saveData()
+                    
+                    DataService.getUser { result in
+                        DispatchQueue.main.async {
+                            
+                            switch result {
+                            case .success(let user):
+                                let currentUser = CurrentUser(email: user.email, id: user.id, userName: user.username)
+                                SavedCurrentUser.user = currentUser
+                                
+                                let userDefaults = DataLoader(keys: "CurrentUser")
+                                userDefaults.saveData()
+                                
+                            case .failure(let failure):
+                                print(failure)
+                            }
+                        }
+                    }
+                    
+                    if let sceneDelegate = self.view.window?.windowScene?.delegate as? SceneDelegate {
+                        sceneDelegate.checkAuthentication()
+                    }
+                    
+                case .failure(let error):
+                    guard let error = error as? ServiceError else { return }
+                    switch error {
+                    case .serverError(let string),
+                            .unknownError(let string),
+                            .decodingError(let string):
+                        AlertManager.showSignInErrorAlert(on: self, with: string)
+                        
+                    }
+                }
+            }
+        }
+    }
+    
     @objc private func didTapSignIn() {
-        /*let tabBarController = MainTabBarController()
-        tabBarController.modalPresentationStyle = .fullScreen
-        
-        present(tabBarController, animated:  true)*/
         
         let userRequest = SignInUserRequest(
             username: self.usernameField.text ?? "",
@@ -58,35 +102,7 @@ class LoginViewController: UIViewController {
         
         guard let request = Endpoint.signIn(userRequest: userRequest).request else { return }
         
-        AuthService.fetch(request: request) { [weak self] result in
-            
-            DispatchQueue.main.async { [weak self] in
-                guard let self = self else { return }
-                
-                switch result {
-                case .success(let token):
-                    AuthToken.authToken = token
-                    CurrentUser.userName = userRequest.username
-                    
-                    let userDefaults = DataLoader(keys: "AuthToken")
-                    userDefaults.saveData()
-                    
-                    if let sceneDelegate = self.view.window?.windowScene?.delegate as? SceneDelegate {
-                        sceneDelegate.checkAuthentication()
-                    }
-                    
-                case .failure(let error):
-                    guard let error = error as? ServiceError else { return }
-                    switch error {
-                    case .serverError(let string),
-                        .unknownError(let string),
-                        .decodingError(let string):
-                        AlertManager.showSignInErrorAlert(on: self, with: string)
-                        
-                    }
-                }
-            }
-        }
+        loginFetch(request)
     }
     
     @objc private func didTapNewUser() {

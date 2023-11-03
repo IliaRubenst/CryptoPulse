@@ -91,7 +91,10 @@ final class DataBaseManager {
         
         do {
             let decodedData = try decoder.decode([Account].self, from: DBData)
-            for data in decodedData where data.userName == CurrentUser.userName {
+            
+            guard let username = SavedCurrentUser.user.userName else { return }
+            
+            for data in decodedData where data.userName == username {
                 AlarmModelsArray.alarms.append(AlarmModel(id: data.id,
                                                           userName: data.userName,
                                                           symbol: data.symbol,

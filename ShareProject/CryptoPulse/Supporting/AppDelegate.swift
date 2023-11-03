@@ -14,8 +14,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        let userDefaults = DataLoader(keys: "AuthToken")
+        
+        var userDefaults = DataLoader(keys: "AuthToken")
         userDefaults.loadUserData()
+        
+        userDefaults = DataLoader(keys: "CurrentUser")
+        userDefaults.loadUserData()
+        
         return true
     }
 
