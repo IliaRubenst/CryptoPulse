@@ -15,6 +15,7 @@ enum Endpoint {
     case signIn(path: String = "/auth/token/login/", userRequest: SignInUserRequest)
     case forgotPassword(path: String = "/auth/users/reset_password/", email: String)
     case signOut(path: String = "/auth/token/logout")
+    case currentUser(path: String = "/auth/users/me/")
     
     var request: URLRequest? {
         guard let url = self.url else { return nil }
@@ -42,6 +43,7 @@ enum Endpoint {
             .signOut(let path),
             .forgotPassword(let path, _),
             .createAccount(let path, _),
+            .currentUser(let path),
             .getData(let path):
             return path
         }
@@ -54,7 +56,8 @@ enum Endpoint {
             .signOut,
             .forgotPassword:
             return HTTP.Method.post.rawValue
-        case .getData:
+        case .getData,
+            .currentUser:
             return HTTP.Method.get.rawValue
             
         }
@@ -72,6 +75,7 @@ enum Endpoint {
             return try? JSONSerialization.data(withJSONObject: ["email": email], options: [])
             
         case .getData,
+            .currentUser,
             .signOut:
             return nil
             
@@ -87,6 +91,7 @@ extension URLRequest {
             .signIn,
             .getData,
             .signOut,
+            .currentUser,
             .forgotPassword:
             self.setValue(HTTP.Headers.Value.applicationJson.rawValue, forHTTPHeaderField: HTTP.Headers.Key.contentType.rawValue)
         }

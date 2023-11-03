@@ -56,8 +56,19 @@ struct AlarmModel: Codable, Hashable {
     let creationDate: String
 }
 
-struct CurrentUser {
-    static var userName = AuthToken.authToken
+
+struct CurrentUser: Codable, CustomStringConvertible {
+    var email: String?
+    var id: Int?
+    var userName: String?
+    
+    var description: String {
+        return "Current User Description:\nEmail: \(String(describing: self.email))\nID: \(String(describing: self.id))\nUsername: \(String(describing: self.userName))"
+    }
+}
+
+struct SavedCurrentUser {
+    static var user = CurrentUser()
 }
 
 struct AlarmModelsArray {

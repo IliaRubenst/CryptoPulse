@@ -12,6 +12,8 @@ class MainTabBarController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         generateTabBars()
+        
+        print(SavedCurrentUser.user.description)
     }
     
     private func generateTabBars() {

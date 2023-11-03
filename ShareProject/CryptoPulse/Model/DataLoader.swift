@@ -21,6 +21,7 @@ struct DataLoader {
             return
             }
         let jsonDecoder = JSONDecoder()
+        
         do {
             switch keys {
             case "savedSymbols":
@@ -29,6 +30,8 @@ struct DataLoader {
                 SymbolsArray.symbols = try jsonDecoder.decode([Symbol].self, from: savedData)
             case "AuthToken":
                 AuthToken.authToken = try jsonDecoder.decode(String.self, from: savedData)
+            case "CurrentUser":
+                SavedCurrentUser.user = try jsonDecoder.decode(CurrentUser.self, from: savedData)
             default:
                 print("Unknown key: \(keys)")
             }
@@ -50,10 +53,13 @@ struct DataLoader {
                 dataToSave = try? jsonEncoder.encode(SymbolsArray.symbols)
             case "AuthToken":
                 dataToSave = try? jsonEncoder.encode(AuthToken.authToken)
+            case "CurrentUser":
+                dataToSave = try? jsonEncoder.encode(SavedCurrentUser.user)
             default:
                 print("Error encoding data for key: \(keys)")
             }
         }
+        
         guard let data = dataToSave else {
             print("Failed to save data for key: \(keys)")
             return

@@ -83,7 +83,7 @@ class AuthService {
             
             let decoder = JSONDecoder()
             
-            if let invalidTokenServerMessage = try? decoder.decode(LogoutErrorServerResponse.self, from: data) {
+            if let invalidTokenServerMessage = try? decoder.decode(TokenErrorServerResponse.self, from: data) {
                 complition(.failure(ServiceError.serverError(invalidTokenServerMessage.detail)))
                 return
             } else {
