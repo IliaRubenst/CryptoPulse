@@ -190,8 +190,9 @@ extension ViewController: WebSocketManagerDelegate {
                     UserSymbols.savedSymbols[index].priceChangePercent = symbol.priceChangePercent
                     
                     if !isSelected {
-                        let indexPath = IndexPath(item: index, section: 0)
-                        collectionView.reloadItems(at: [indexPath])
+//                        let indexPath = IndexPath(item: index, section: 0)
+//                        collectionView.reloadItems(at: [indexPath])
+                        reloadCellData(index)
                     }
                 }
             }

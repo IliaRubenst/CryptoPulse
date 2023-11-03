@@ -262,7 +262,7 @@ class AddAlarmViewController: UIViewController, UITextFieldDelegate, WebSocketMa
         
         switch state {
         case .newAlarm:
-            let alarmManager = AlarmManager(detailViewController: nil, chartManager: nil)
+            let alarmManager = AlarmManager(chartManager: nil)
             alarmManager.addAlarmAtSetPrice(alarmPrice: alarmPrice, closePrice: doubleClosePrice, symbol: symbol)
             
             let id = Int.random(in: 0...999999999)

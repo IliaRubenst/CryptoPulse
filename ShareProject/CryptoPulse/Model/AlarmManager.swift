@@ -10,7 +10,6 @@ import UIKit
 import LightweightCharts
 
 final class AlarmManager {
-    weak var detailViewController: UIViewController? = nil
     private var alarmLine: PriceLine!
     var chartManager: ChartManager? = nil
     var dbManager = DataBaseManager()
@@ -20,8 +19,7 @@ final class AlarmManager {
     var id = 0
     var isAlertShowing: Bool = false
     
-    init(detailViewController: UIViewController?, chartManager: ChartManager?) {
-        self.detailViewController = detailViewController
+    init(chartManager: ChartManager?) {
         self.chartManager = chartManager
     }
     
@@ -78,7 +76,7 @@ final class AlarmManager {
         setupAlarmLine(alarmPrice, id: idString)
     }
     
-    func addAlarmForSelectedPrice(userName: String, alarmPrice: Double, closePrice: Double, symbol: String) {
+    func addAlarmForSelectedPrice(alarmPrice: Double, closePrice: Double, symbol: String) {
         let isAlarmUpper = alarmPrice > closePrice ? true : false
         id = Int.random(in: 0...999999999)
         let idString = String(id)
@@ -91,12 +89,12 @@ final class AlarmManager {
     
     // Store alarm in the database
     private func storeAlarmInDB(_ alarm: AlarmModel) {
-        dbManager.addAlarmtoModelDB(alarmModel: alarm) { [self] data, error in
+        dbManager.addAlarmtoModelDB(alarmModel: alarm) { [unowned self] data, error in
             if let error = error {
                 DispatchQueue.main.async { [self] in
                     let alert = UIAlertController(title: "Ошибка", message: error.localizedDescription, preferredStyle: .alert)
                     alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-                    detailViewController?.present(alert, animated: true)
+                    chartManager?.delegate.present(alert, animated: true)
                 }
                 print("Не удалось создать аларм в БД: \(error.localizedDescription)")
             } else {
@@ -149,7 +147,7 @@ final class AlarmManager {
         ac.addAction(UIAlertAction(title: "OK", style: .default) { [weak self] _ in
             self?.isAlertShowing = false
         })
-        detailViewController?.present(ac, animated: true)
+        chartManager?.delegate.present(ac, animated: true)
     }
     
     

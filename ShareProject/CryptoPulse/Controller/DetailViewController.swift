@@ -33,7 +33,6 @@ class DetailViewController: UIViewController {
     var helper: DetailViewUI!
     var webSocketManagers = [WebSocketManager]()
     var chartManager: ChartManager!
-    var dbManager = DataBaseManager()
     var data = [CandlestickData]()
     var currentCandelModel: CurrentCandleModel!
     var alarmManager: AlarmManager?
@@ -79,7 +78,7 @@ class DetailViewController: UIViewController {
         super.viewWillAppear(animated)
 
         setupChartManager()
-        alarmManager = AlarmManager(detailViewController: self, chartManager: chartManager)
+        alarmManager = AlarmManager(chartManager: chartManager)
         setupButtonBackgrounds()
     }
     
@@ -104,7 +103,7 @@ class DetailViewController: UIViewController {
         clearAlarmManager()
         
         setupChartManager()
-        alarmManager = AlarmManager(detailViewController: self, chartManager: chartManager)
+        alarmManager = AlarmManager(chartManager: chartManager)
         setupButtonBackgrounds()
     }
     
@@ -114,7 +113,7 @@ class DetailViewController: UIViewController {
     }
     
     @objc func addAlarmForSelectedPrice() {
-        alarmManager?.addAlarmForSelectedPrice(userName: CurrentUser.userName, alarmPrice: chartManager.currentCursorPrice!, closePrice: closePrice, symbol: symbol)
+        alarmManager?.addAlarmForSelectedPrice(alarmPrice: chartManager.currentCursorPrice!, closePrice: closePrice, symbol: symbol)
     }
     
     @objc func addAlarm() {
