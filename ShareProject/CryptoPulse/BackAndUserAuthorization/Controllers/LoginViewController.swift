@@ -73,8 +73,10 @@ class LoginViewController: UIViewController {
             if let authToken = try await AuthService.loginFetch(request: request) {
                 AuthToken.authToken = authToken
                 
-                let userDefaults = DataLoader(keys: "AuthToken")
-                userDefaults.saveData()
+                DataLoader.saveData(for: "AuthToken")
+                
+//                let userDefaults = DataLoader(keys: "AuthToken")
+//                userDefaults.saveData()
             }
         } catch ServerErrorResponse.invalidResponse(let message), ServerErrorResponse.detailError(let message), ServerErrorResponse.decodingError(let message) {
             AlertManager.showSignInErrorAlert(on: self, with: message)
@@ -88,8 +90,10 @@ class LoginViewController: UIViewController {
             if let user = try await DataService.getUser() {
                 SavedCurrentUser.user = user
                 
-                let userDefaults = DataLoader(keys: "CurrentUser")
-                userDefaults.saveData()
+                DataLoader.saveData(for: "CurrentUser")
+                
+//                let userDefaults = DataLoader(keys: "CurrentUser")
+//                userDefaults.saveData()
                 
             }
         } catch ServerErrorResponse.invalidResponse(let message), ServerErrorResponse.detailError(let message), ServerErrorResponse.decodingError(let message) {
