@@ -27,21 +27,21 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
     
     public func checkAuthentication() {
-        // Здесь будет проверка на авторизацию       
-        DataService.getData { [weak self] result in
-            
-            DispatchQueue.main.async { [weak self] in
-                switch result {
-                case .success(let dataArray):
-                    print("DEBUG PRINT: ", dataArray)
-                    
-                    self?.goToController(main: true)
-                    
-                case .failure(_):
-                    self?.goToController(main: false)
+        // Здесь будет проверка на авторизацию
+        Task {
+            do {
+                if let AlarmsArray = try await DataService.getData() {
+                    print("DEBUG PRINT: ", AlarmsArray)
+                    goToController(main: true)
                 }
+                
+            } catch ServerErrorResponse.invalidResponse(let message), ServerErrorResponse.detailError(let message), ServerErrorResponse.decodingError(let message) {
+                print("DEBUG: \(message)")
+            } catch {
+                print(error.localizedDescription)
             }
             
+            goToController(main: false)
         }
     }
     

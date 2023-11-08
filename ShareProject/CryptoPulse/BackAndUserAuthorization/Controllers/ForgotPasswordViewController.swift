@@ -55,7 +55,10 @@ class ForgotPasswordViewController: UIViewController {
     }
     
     @objc private func didTapForgotPassword() {
-        guard let email = self.emailField.text, !email.isEmpty else { return }
+        guard let email = self.emailField.text, !email.isEmpty else {
+            AlertManager.showInvalidEmailAlert(on: self)
+            return
+        }
         // TODO: - Email validation
         
         // Email check
@@ -66,26 +69,13 @@ class ForgotPasswordViewController: UIViewController {
         
         guard let request = Endpoint.forgotPassword(email: email).request else { return }
         
-        AuthService.forgotPasswordFetch(request: request) { [weak self] result in
-            
-            DispatchQueue.main.async { [weak self] in
-                guard let self = self else { return }
+        Task {
+            do {
+                try await AuthService.forgotPasswordFetch(request: request)
+                AlertManager.showPasswordResetSentAlert(on: self)
                 
-                switch result {
-                case .success(_):
-                    
-                    AlertManager.showPasswordResetSentAlert(on: self)
-                    
-                case .failure(let error):
-                    guard let error = error as? ServiceError else { return }
-                    switch error {
-                    case .serverError(let string),
-                        .unknownError(let string),
-                        .decodingError(let string):
-                        AlertManager.showErrorSendingPasswordResetAlert(on: self, with: string)
-                        
-                    }
-                }
+            } catch ServerErrorResponse.invalidResponse(let message), ServerErrorResponse.detailError(let message), ServerErrorResponse.emptyFieldError(let message), ServerErrorResponse.decodingError(let message) {
+                AlertManager.showErrorSendingPasswordResetAlert(on: self, with: message)
             }
         }
     }

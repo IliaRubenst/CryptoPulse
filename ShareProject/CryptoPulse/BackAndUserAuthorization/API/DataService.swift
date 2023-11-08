@@ -9,7 +9,60 @@ import Foundation
 
 class DataService {
     
-    static func getData(complition: @escaping (Result<[Account], Error>) -> Void) {
+    static func getData() async throws -> [Account]? {
+        
+        guard var request = Endpoint.getData().request else { return nil }
+        request.addValue("Token \(AuthToken.authToken)", forHTTPHeaderField: "Authorization")
+        
+        let (data, response) = try await URLSession.shared.data(for: request)
+        
+        guard let response = response as? HTTPURLResponse, response.statusCode == 200 || response.statusCode == 401 else {
+            throw ServerErrorResponse.invalidResponse(response.debugDescription)
+        }
+        
+        do {
+            let decoder = JSONDecoder()
+            
+            if let AlarmsArray = try? decoder.decode([Account].self, from: data) {
+                return AlarmsArray
+            } else if let tokenError = try? decoder.decode(DetailError.self, from: data) {
+                throw ServerErrorResponse.detailError(tokenError.detail)
+            } else {
+                throw ServerErrorResponse.decodingError()
+            }
+        } catch {
+            throw error
+        }
+    }
+    
+    static func getUser() async throws -> CurrentUser? {
+        
+        guard var request = Endpoint.currentUser().request else { return nil }
+        request.addValue("Token \(AuthToken.authToken)", forHTTPHeaderField: "Authorization")
+        
+        let (data, response) = try await URLSession.shared.data(for: request)
+        
+        guard let response = response as? HTTPURLResponse, response.statusCode == 200 || response.statusCode == 401 else {
+            throw ServerErrorResponse.invalidResponse(response.debugDescription)
+        }
+        
+        do {
+            let decoder = JSONDecoder()
+            
+            if let userResponse = try? decoder.decode(CurrentUserResponse.self, from: data) {
+                let currentUser = CurrentUser(email: userResponse.email, id: userResponse.id, userName: userResponse.username)
+                return currentUser
+            } else if let tokenError = try? decoder.decode(DetailError.self, from: data) {
+                throw ServerErrorResponse.detailError(tokenError.detail)
+            } else {
+                throw ServerErrorResponse.decodingError()
+            }
+        } catch {
+            throw error
+        }
+    }
+    
+    /*static func getData(complition: @escaping (Result<[Account], Error>) -> Void) {
         
         guard var request = Endpoint.getData().request else { return }
         
@@ -41,9 +94,9 @@ class DataService {
                 return
             }
         }.resume()
-    }
+    }*/
     
-    static func getUser(complition: @escaping (Result<CurrentUserResponse, Error>) -> Void) {
+    /*static func getUser(complition: @escaping (Result<CurrentUserResponse, Error>) -> Void) {
         
         guard var request = Endpoint.currentUser().request else { return }
         request.addValue("Token \(AuthToken.authToken)", forHTTPHeaderField: "Authorization")
@@ -74,6 +127,8 @@ class DataService {
                 return
             }
         }.resume()
-    }
+    }*/
+    
+    
     
 }

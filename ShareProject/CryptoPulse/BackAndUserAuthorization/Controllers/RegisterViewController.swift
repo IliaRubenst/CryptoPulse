@@ -150,35 +150,35 @@ class RegisterViewController: UIViewController {
         
         guard let request = Endpoint.createAccount(userRequest: userRequest).request else { return }
         
-        AuthService.fetch(request: request) { [weak self] result in
-            
-            DispatchQueue.main.async { [weak self] in
-                guard let self = self else { return }
+        Task {
+            if await registrationFetch(request: request) {
                 
-                switch result {
-                case .success:
-                    print("Успешная регистрация")
-                    
-                    // Пока не получается реализовать логику проброса на основной экран минуя логин
-                    // сразу после регистрации, так как идет несколько подряд сетевых запросов и надо их как
-                    // синхронизировать, чтобы оно последовательно все вызывалось. Придется почитать что-то.
-                    
-                    if let sceneDelegate = self.view.window?.windowScene?.delegate as? SceneDelegate {
-                        sceneDelegate.checkAuthentication()
-                    }
-                    
-                case .failure(let error):
-                    guard let error = error as? ServiceError else { return }
-                    switch error {
-                    case .serverError(let string),
-                        .unknownError(let string),
-                        .decodingError(let string):
-                        AlertManager.showRegistrationErrorAlert(on: self, with: string)
-                        
-                    }
+                let loginRequest = SignInUserRequest(username: userRequest.username, password: userRequest.password)
+                guard let request = Endpoint.signIn(userRequest: loginRequest).request else { return }
+                
+                let loginVC = LoginViewController()
+                await loginVC.loginFetch(request: request)
+                await loginVC.userFetch()
+                
+                if let sceneDelegate = self.view.window?.windowScene?.delegate as? SceneDelegate {
+                    sceneDelegate.checkAuthentication()
                 }
             }
         }
+    }
+    
+    private func registrationFetch(request: URLRequest) async -> Bool {
+        do {
+            try await AuthService.registerFetchTest(request: request)
+            print("Успешная регистрация")
+            return true
+            
+        } catch ServerErrorResponse.invalidResponse(let message), ServerErrorResponse.detailError(let message), ServerErrorResponse.decodingError(let message) {
+            AlertManager.showRegistrationErrorAlert(on: self, with: message)
+        } catch {
+            print("DEBUG PRINT: \(error.localizedDescription)")
+        }
+        return false
     }
     
     @objc private func didTapSignIn() {
