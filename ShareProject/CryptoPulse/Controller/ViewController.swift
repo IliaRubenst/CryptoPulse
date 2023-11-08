@@ -207,13 +207,17 @@ extension ViewController: WebSocketManagerDelegate {
 
 extension ViewController {
     private func loadUserData() {
-        let defaults = DataLoader(keys: "savedSymbols")
-        defaults.loadUserData()
+        DataLoader.loadUserData(for: "savedSymbols")
+        
+//        let defaults = DataLoader(keys: "savedSymbols")
+//        defaults.loadUserData()
     }
     
     private func saveFullSymbolsData() {
-        let defaults = DataLoader(keys: "savedFullSymbolsData")
-        defaults.saveData()
+        DataLoader.saveData(for: "savedFullSymbolsData")
+        
+//        let defaults = DataLoader(keys: "savedFullSymbolsData")
+//        defaults.saveData()
     }
     
     private func performRequestDB() {
@@ -237,8 +241,10 @@ extension ViewController {
         return UIAction(title: title, image: UIImage(systemName: iconName)) { [weak self] _ in
             action()
             if title == "Remove" {
-                let defaults = DataLoader(keys: "savedSymbols")
-                defaults.saveData()
+                DataLoader.saveData(for: "savedSymbols")
+                
+//                let defaults = DataLoader(keys: "savedSymbols")
+//                defaults.saveData()
                 self?.collectionView.reloadData()
             }
         }

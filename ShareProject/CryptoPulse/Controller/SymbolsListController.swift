@@ -18,7 +18,7 @@ class SymbolsListController: UIViewController {
     var viewCtr: ViewController!
     var addAlarmVC: AddAlarmViewController!
     var senderState: SymbolsListSender = .mainView
-    let defaults = DataLoader(keys: "savedFullSymbolsData")
+//    let defaults = DataLoader(keys: "savedFullSymbolsData")
     let tableView = UITableView()
     var marketManager = MarketManager()
     
@@ -35,7 +35,8 @@ class SymbolsListController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        defaults.loadUserData()
+        DataLoader.loadUserData(for: "savedFullSymbolsData")
+//        defaults.loadUserData()
         setupUI()
         configureTableView()
         configureSearchBar()
@@ -171,7 +172,8 @@ extension SymbolsListController {
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        defaults.saveData()
+        DataLoader.saveData(for: "savedFullSymbolsData")
+//        defaults.saveData()
     }
     
     private func handleMainViewSelection(with symbol: Symbol) {
@@ -179,8 +181,11 @@ extension SymbolsListController {
         viewCtr.closeConnection()
         viewCtr.getSymbolToWebSocket()
         
-        let defaults = DataLoader(keys: "savedSymbols")
-        defaults.saveData()
+        DataLoader.saveData(for: "savedSymbols")
+        
+//        let defaults = DataLoader(keys: "savedSymbols")
+//        defaults.saveData()
+        
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "newSymbolAdded"), object: nil)
         
         searchController.isActive = false

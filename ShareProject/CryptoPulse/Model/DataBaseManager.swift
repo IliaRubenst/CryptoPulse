@@ -103,8 +103,10 @@ final class DataBaseManager {
                                                           isActive: data.isActive,
                                                           creationDate: data.creationDate)
                 )}
-            let defaults = DataLoader(keys: "savedAlarms")
-            defaults.saveData()
+            DataLoader.saveData(for: "savedAlarms")
+            
+//            let defaults = DataLoader(keys: "savedAlarms")
+//            defaults.saveData()
         } catch {
             print(error)
         }

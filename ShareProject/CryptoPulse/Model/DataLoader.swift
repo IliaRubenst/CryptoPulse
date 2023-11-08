@@ -8,14 +8,15 @@
 import Foundation
 
 struct DataLoader {
-    var userDefaults = UserDefaults.standard
-    var keys: String
+    static private var userDefaults = UserDefaults.standard
+    
+    /*var keys: String
     
     init(keys: String) {
         self.keys = keys
-    }
+    }*/
     
-    func loadUserData() {
+    static func loadUserData(for keys: String) {
         guard let savedData = userDefaults.object(forKey: keys) as? Data else {
             print("Failed to load data for key: \(keys)")
             return
@@ -40,7 +41,7 @@ struct DataLoader {
         }
     }
     
-    func saveData() {
+    static func saveData(for keys: String) {
         let jsonEncoder = JSONEncoder()
         var dataToSave: Data?
         do {

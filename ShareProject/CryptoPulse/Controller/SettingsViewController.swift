@@ -155,11 +155,14 @@ class SettingsViewController: UIViewController, UIGestureRecognizerDelegate, UIT
                     AuthToken.authToken = String()
                     SavedCurrentUser.user = CurrentUser()
                     
-                    var userDefaults = DataLoader(keys: "AuthToken")
-                    userDefaults.saveData()
+                    DataLoader.saveData(for: "AuthToken")
+                    DataLoader.saveData(for: "CurrentUser")
                     
-                    userDefaults = DataLoader(keys: "CurrentUser")
-                    userDefaults.saveData()
+//                    var userDefaults = DataLoader(keys: "AuthToken")
+//                    userDefaults.saveData()
+//
+//                    userDefaults = DataLoader(keys: "CurrentUser")
+//                    userDefaults.saveData()
                     
                     print("DEBUG: \(AuthToken.authToken)")
                     print(SavedCurrentUser.user.description)
