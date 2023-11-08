@@ -47,19 +47,19 @@ final class ChartManager {
     }
     
     private func fetchCandlesData() {
-        candleStickDataManager.fetchCandles(from: symbol, timeFrame: timeFrame) { [weak self] result in
+        delegate.candleStickDataManager.fetchCandles(from: symbol, timeFrame: timeFrame) { [weak self] result in
             switch result {
             case .failure(let error):
                 print(error)
             case .success(let data):
-                self?.data = (self?.candleStickDataManager.parseJSON(marketData: data))!
+                self?.data = (self?.delegate.candleStickDataManager.parseJSON(marketData: data))!
                 DispatchQueue.main.async {
                     self?.setupSeries()
                     if let firstCandle = self?.data.first?.close, firstCandle < 1 {
                         self?.numberAfterDecimalPoint = "4"
                     }
                 }
-                
+
                 self?.delegate?.startWebSocketManagers()
             }
         }
@@ -76,7 +76,7 @@ final class ChartManager {
 
         
         let chart = LightweightCharts(options: options)
-        alarmManager = AlarmManager(detailViewController: delegate, chartManager: self)
+        alarmManager = AlarmManager(chartManager: self)
         alarmManager?.setupAlarmLines()
         
         chartManagerUI = ChartManagerUI(delegate: delegate)
@@ -90,27 +90,27 @@ final class ChartManager {
         series = chart?.addCandlestickSeries(options: nil)
         data.removeLast()
         series?.setData(data: data)
-        alarmManager.setupAlarmLines()
+        delegate.alarmManager?.setupAlarmLines()
     }
     
     func tick() {
         if isFirstKline {
-            guard let open = Double(delegate.currentCandelModel.openPrice),
-                  let high = Double(delegate.currentCandelModel.highPrice),
-                  let low = Double(delegate.currentCandelModel.lowPrice),
-                  let close = Double(delegate.currentCandelModel.openPrice) else { return }
-            currentBar = CandlestickData(time: .utc(timestamp: currentBusinessDay), open: open, high: high, low: low, close: close)
-            
-            isFirstKline = false
+            if let open = Double(delegate.currentCandelModel.openPrice),
+               let high = Double(delegate.currentCandelModel.highPrice),
+               let low = Double(delegate.currentCandelModel.lowPrice),
+               let close = Double(delegate.currentCandelModel.openPrice) {
+                currentBar = CandlestickData(time: .utc(timestamp: currentBusinessDay), open: open, high: high, low: low, close: close)
+                isFirstKline = false
+            }
         }
-        
+
         if delegate.isKlineClose {
             if let nextMinute = nextCandle(currentBusinessDay) {
                 currentBusinessDay = nextMinute
                 currentBar = CandlestickData(time: .utc(timestamp: currentBusinessDay), open: nil, high: nil, low: nil, close: nil)
             }
         }
-        mergeTickToBar(delegate.closePrice) //Вот этот момент я бы поправил, беря данные из обновляемой модели, а не из конкретной переменной, которая загружается из didUpdateCandle.
+        mergeTickToBar(delegate.closePrice)
     }
     
     private func mergeTickToBar(_ price: BarPrice) {

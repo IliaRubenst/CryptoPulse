@@ -25,7 +25,7 @@ final class CandleStickDataManager {
             URLQueryItem(name: "contractType", value: "PERPETUAL"),
             URLQueryItem(name: "interval", value: timeFrame)
         ]
-
+        
         guard let url = urlComponents?.url else {
             completion(.failure(.badUrl))
             return
