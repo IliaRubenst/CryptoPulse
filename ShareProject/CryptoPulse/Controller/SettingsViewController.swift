@@ -146,35 +146,32 @@ class SettingsViewController: UIViewController, UIGestureRecognizerDelegate, UIT
         ac.addAction(UIAlertAction(title: "Нет", style: .cancel))
         ac.addAction(UIAlertAction(title: "Да, выйти", style: .default, handler: { [weak self] _ in
             
-            guard var request = Endpoint.signOut().request else { return }
-            request.addValue("Token \(AuthToken.authToken)", forHTTPHeaderField: "Authorization")
-            
-            AuthService.logoutFetch(request: request) { [weak self] result in
-                DispatchQueue.main.async {
-                    guard let self = self else { return }
+            Task {
+                guard let self = self else { return }
+                
+                do {
+                    try await AuthService.logoutFetch()
                     
-                    switch result {
-                    case .success(let successString):
-                        print(successString)
-                        AuthToken.authToken = String()
-                        
-                        let userDefaults = DataLoader(keys: "AuthToken")
-                        userDefaults.saveData()
-                        
-                        if let sceneDelegate = self.view.window?.windowScene?.delegate as? SceneDelegate {
-                            sceneDelegate.checkAuthentication()
-                        }
+                    AuthToken.authToken = String()
+                    SavedCurrentUser.user = CurrentUser()
                     
-                    case .failure(let error):
-                        guard let error = error as? ServiceError else { return }
-                        switch error {
-                        case .serverError(let string),
-                            .unknownError(let string),
-                            .decodingError(let string):
-                            AlertManager.showLogOutErrorAlert(on: self, with: string)
-                            
-                        }
+                    var userDefaults = DataLoader(keys: "AuthToken")
+                    userDefaults.saveData()
+                    
+                    userDefaults = DataLoader(keys: "CurrentUser")
+                    userDefaults.saveData()
+                    
+                    print("DEBUG: \(AuthToken.authToken)")
+                    print(SavedCurrentUser.user.description)
+                    
+                    if let sceneDelegate = self.view.window?.windowScene?.delegate as? SceneDelegate {
+                        sceneDelegate.checkAuthentication()
                     }
+                    
+                } catch ServerErrorResponse.invalidResponse(let message), ServerErrorResponse.detailError(let message), ServerErrorResponse.decodingError(let message) {
+                    AlertManager.showLogOutErrorAlert(on: self, with: message)
+                } catch {
+                    print(error.localizedDescription)
                 }
             }
         }))

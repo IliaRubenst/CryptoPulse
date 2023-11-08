@@ -37,13 +37,11 @@
 		D8047A3D2AEBED68001906CC /* CustomButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8047A3A2AEBED68001906CC /* CustomButton.swift */; };
 		D8047A442AEBEDA8001906CC /* ForgotPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8047A3F2AEBEDA8001906CC /* ForgotPasswordViewController.swift */; };
 		D8047A452AEBEDA8001906CC /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8047A402AEBEDA8001906CC /* RegisterViewController.swift */; };
-		D8047A462AEBEDA8001906CC /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8047A412AEBEDA8001906CC /* HomeViewController.swift */; };
 		D8047A472AEBEDA8001906CC /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8047A422AEBEDA8001906CC /* LoginViewController.swift */; };
 		D8047A482AEBEDA8001906CC /* WebViewerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8047A432AEBEDA8001906CC /* WebViewerViewController.swift */; };
-		D8047A4E2AEBEE45001906CC /* SignInUserRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8047A4A2AEBEE45001906CC /* SignInUserRequest.swift */; };
-		D8047A4F2AEBEE45001906CC /* DataArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8047A4B2AEBEE45001906CC /* DataArray.swift */; };
-		D8047A502AEBEE45001906CC /* RegisterUserRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8047A4C2AEBEE45001906CC /* RegisterUserRequest.swift */; };
-		D8047A512AEBEE45001906CC /* ServerResponses.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8047A4D2AEBEE45001906CC /* ServerResponses.swift */; };
+		D8047A4F2AEBEE45001906CC /* DataModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8047A4B2AEBEE45001906CC /* DataModels.swift */; };
+		D8047A502AEBEE45001906CC /* UserRequests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8047A4C2AEBEE45001906CC /* UserRequests.swift */; };
+		D8047A512AEBEE45001906CC /* ErrorsServerResponses.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8047A4D2AEBEE45001906CC /* ErrorsServerResponses.swift */; };
 		D8047A572AEBEE5D001906CC /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8047A532AEBEE5D001906CC /* AuthService.swift */; };
 		D8047A582AEBEE5D001906CC /* DataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8047A542AEBEE5D001906CC /* DataService.swift */; };
 		D8047A592AEBEE5D001906CC /* Endpoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8047A552AEBEE5D001906CC /* Endpoints.swift */; };
@@ -61,6 +59,7 @@
 		D87A64B82AC5711C00A29749 /* AddAlarmViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D87A64B72AC5711C00A29749 /* AddAlarmViewController.swift */; };
 		D87A64BA2AC5733100A29749 /* AlarmTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D87A64B92AC5733100A29749 /* AlarmTableViewCell.swift */; };
 		D87A64C02ACB0C2F00A29749 /* CustomButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = D87A64BF2ACB0C2F00A29749 /* CustomButtons.swift */; };
+		D8F088EC2AFB8E8100E6AB5E /* SuccessServerResponses.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8F088EB2AFB8E8100E6AB5E /* SuccessServerResponses.swift */; };
 		FCAB03960FC52A8A35A09D2B /* Pods_CyptoPulse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2556B97124E821A0BB49D7B /* Pods_CyptoPulse.framework */; };
 /* End PBXBuildFile section */
 
@@ -102,13 +101,11 @@
 		D8047A3A2AEBED68001906CC /* CustomButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomButton.swift; sourceTree = "<group>"; };
 		D8047A3F2AEBEDA8001906CC /* ForgotPasswordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ForgotPasswordViewController.swift; sourceTree = "<group>"; };
 		D8047A402AEBEDA8001906CC /* RegisterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
-		D8047A412AEBEDA8001906CC /* HomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		D8047A422AEBEDA8001906CC /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		D8047A432AEBEDA8001906CC /* WebViewerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebViewerViewController.swift; sourceTree = "<group>"; };
-		D8047A4A2AEBEE45001906CC /* SignInUserRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignInUserRequest.swift; sourceTree = "<group>"; };
-		D8047A4B2AEBEE45001906CC /* DataArray.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataArray.swift; sourceTree = "<group>"; };
-		D8047A4C2AEBEE45001906CC /* RegisterUserRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegisterUserRequest.swift; sourceTree = "<group>"; };
-		D8047A4D2AEBEE45001906CC /* ServerResponses.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ServerResponses.swift; sourceTree = "<group>"; };
+		D8047A4B2AEBEE45001906CC /* DataModels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataModels.swift; sourceTree = "<group>"; };
+		D8047A4C2AEBEE45001906CC /* UserRequests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserRequests.swift; sourceTree = "<group>"; };
+		D8047A4D2AEBEE45001906CC /* ErrorsServerResponses.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ErrorsServerResponses.swift; sourceTree = "<group>"; };
 		D8047A532AEBEE5D001906CC /* AuthService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 		D8047A542AEBEE5D001906CC /* DataService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataService.swift; sourceTree = "<group>"; };
 		D8047A552AEBEE5D001906CC /* Endpoints.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Endpoints.swift; sourceTree = "<group>"; };
@@ -126,6 +123,7 @@
 		D87A64B72AC5711C00A29749 /* AddAlarmViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddAlarmViewController.swift; sourceTree = "<group>"; };
 		D87A64B92AC5733100A29749 /* AlarmTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlarmTableViewCell.swift; sourceTree = "<group>"; };
 		D87A64BF2ACB0C2F00A29749 /* CustomButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomButtons.swift; sourceTree = "<group>"; };
+		D8F088EB2AFB8E8100E6AB5E /* SuccessServerResponses.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuccessServerResponses.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -268,7 +266,6 @@
 			isa = PBXGroup;
 			children = (
 				D8047A3F2AEBEDA8001906CC /* ForgotPasswordViewController.swift */,
-				D8047A412AEBEDA8001906CC /* HomeViewController.swift */,
 				D8047A422AEBEDA8001906CC /* LoginViewController.swift */,
 				D8047A402AEBEDA8001906CC /* RegisterViewController.swift */,
 				D8047A432AEBEDA8001906CC /* WebViewerViewController.swift */,
@@ -279,10 +276,10 @@
 		D8047A492AEBEE34001906CC /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				D8047A4B2AEBEE45001906CC /* DataArray.swift */,
-				D8047A4C2AEBEE45001906CC /* RegisterUserRequest.swift */,
-				D8047A4D2AEBEE45001906CC /* ServerResponses.swift */,
-				D8047A4A2AEBEE45001906CC /* SignInUserRequest.swift */,
+				D8047A4B2AEBEE45001906CC /* DataModels.swift */,
+				D8047A4C2AEBEE45001906CC /* UserRequests.swift */,
+				D8047A4D2AEBEE45001906CC /* ErrorsServerResponses.swift */,
+				D8F088EB2AFB8E8100E6AB5E /* SuccessServerResponses.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -432,7 +429,7 @@
 				D8047A5F2AEBF70E001906CC /* CustomCollectionViewCell.swift in Sources */,
 				D8047A472AEBEDA8001906CC /* LoginViewController.swift in Sources */,
 				D8047A3B2AEBED68001906CC /* AuthHeader.swift in Sources */,
-				D8047A512AEBEE45001906CC /* ServerResponses.swift in Sources */,
+				D8047A512AEBEE45001906CC /* ErrorsServerResponses.swift in Sources */,
 				4974BE882AB030580070240F /* DataModel.swift in Sources */,
 				496BEFDE2AA9EFDF00B15E0F /* ViewController.swift in Sources */,
 				49AACC332AB70EA000101C46 /* SymbolsListController.swift in Sources */,
@@ -456,22 +453,21 @@
 				D81366362AB4C577005930D2 /* Notifications.swift in Sources */,
 				D87A64B82AC5711C00A29749 /* AddAlarmViewController.swift in Sources */,
 				498C3F642AE937E100F727D7 /* DetailViewUI.swift in Sources */,
-				D8047A4F2AEBEE45001906CC /* DataArray.swift in Sources */,
-				D8047A4E2AEBEE45001906CC /* SignInUserRequest.swift in Sources */,
+				D8047A4F2AEBEE45001906CC /* DataModels.swift in Sources */,
 				D8047A592AEBEE5D001906CC /* Endpoints.swift in Sources */,
 				D8047A442AEBEDA8001906CC /* ForgotPasswordViewController.swift in Sources */,
 				D87A63FB2ABC294A00A29749 /* Key.swift in Sources */,
 				D8047A5A2AEBEE5D001906CC /* HTTP.swift in Sources */,
 				D8047A352AEBED3C001906CC /* HttpConstants.swift in Sources */,
-				D8047A502AEBEE45001906CC /* RegisterUserRequest.swift in Sources */,
+				D8047A502AEBEE45001906CC /* UserRequests.swift in Sources */,
 				49367CAE2AAAFEB800827BE9 /* DataCodable.swift in Sources */,
 				4995E7A02AE642A500DAC777 /* AlarmManager.swift in Sources */,
 				49AACC572AB78C7500101C46 /* TooltipView.swift in Sources */,
 				D8047A582AEBEE5D001906CC /* DataService.swift in Sources */,
 				49F1A0AD2AEAFFE400A47A28 /* ChartManagerUI.swift in Sources */,
 				D81365402AB092B9005930D2 /* DataLoader.swift in Sources */,
+				D8F088EC2AFB8E8100E6AB5E /* SuccessServerResponses.swift in Sources */,
 				496BEFDC2AA9EFDF00B15E0F /* SceneDelegate.swift in Sources */,
-				D8047A462AEBEDA8001906CC /* HomeViewController.swift in Sources */,
 				4979F2062AAC3905000E039C /* DetailViewController.swift in Sources */,
 				D8047A452AEBEDA8001906CC /* RegisterViewController.swift in Sources */,
 				D868DEC82ACDBC01003822BF /* WebSocketProtocol.swift in Sources */,

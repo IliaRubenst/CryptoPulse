@@ -34,53 +34,7 @@ class LoginViewController: UIViewController {
         
     }
     
-    func loginFetch(_ request: URLRequest) {
-        AuthService.fetch(request: request) { [weak self] result in
-            
-            DispatchQueue.main.async { [weak self] in
-                guard let self = self else { return }
-                
-                switch result {
-                case .success(let token):
-                    AuthToken.authToken = token
-                    
-                    let userDefaults = DataLoader(keys: "AuthToken")
-                    userDefaults.saveData()
-                    
-                    DataService.getUser { result in
-                        DispatchQueue.main.async {
-                            
-                            switch result {
-                            case .success(let user):
-                                let currentUser = CurrentUser(email: user.email, id: user.id, userName: user.username)
-                                SavedCurrentUser.user = currentUser
-                                
-                                let userDefaults = DataLoader(keys: "CurrentUser")
-                                userDefaults.saveData()
-                                
-                            case .failure(let failure):
-                                print(failure)
-                            }
-                        }
-                    }
-                    
-                    if let sceneDelegate = self.view.window?.windowScene?.delegate as? SceneDelegate {
-                        sceneDelegate.checkAuthentication()
-                    }
-                    
-                case .failure(let error):
-                    guard let error = error as? ServiceError else { return }
-                    switch error {
-                    case .serverError(let string),
-                            .unknownError(let string),
-                            .decodingError(let string):
-                        AlertManager.showSignInErrorAlert(on: self, with: string)
-                        
-                    }
-                }
-            }
-        }
-    }
+    
     
     @objc private func didTapSignIn() {
         
@@ -100,9 +54,49 @@ class LoginViewController: UIViewController {
             return
         }
         
-        guard let request = Endpoint.signIn(userRequest: userRequest).request else { return }
         
-        loginFetch(request)
+        
+        Task {
+            guard let request = Endpoint.signIn(userRequest: userRequest).request else { return }
+            
+            await loginFetch(request: request)
+            await userFetch()
+                    
+            if let sceneDelegate = self.view.window?.windowScene?.delegate as? SceneDelegate {
+                sceneDelegate.checkAuthentication()
+            }
+        }
+    }
+    
+    func loginFetch(request: URLRequest) async {
+        do {
+            if let authToken = try await AuthService.loginFetch(request: request) {
+                AuthToken.authToken = authToken
+                
+                let userDefaults = DataLoader(keys: "AuthToken")
+                userDefaults.saveData()
+            }
+        } catch ServerErrorResponse.invalidResponse(let message), ServerErrorResponse.detailError(let message), ServerErrorResponse.decodingError(let message) {
+            AlertManager.showSignInErrorAlert(on: self, with: message)
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
+    
+    func userFetch() async {
+        do {
+            if let user = try await DataService.getUser() {
+                SavedCurrentUser.user = user
+                
+                let userDefaults = DataLoader(keys: "CurrentUser")
+                userDefaults.saveData()
+                
+            }
+        } catch ServerErrorResponse.invalidResponse(let message), ServerErrorResponse.detailError(let message), ServerErrorResponse.decodingError(let message) {
+            print("DEBUG: \(message)")
+        } catch {
+            print(error.localizedDescription)
+        }
     }
     
     @objc private func didTapNewUser() {
