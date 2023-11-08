@@ -93,7 +93,7 @@ final class AlarmManager {
     
     // Store alarm in the database
     private func storeAlarmInDB(_ alarm: AlarmModel) {
-        dbManager.addAlarmtoModelDB(alarmModel: alarm) { [unowned self] data, error in
+        dbManager.addAlarmtoModelDB(alarmModel: alarm) { [self] data, error in
             if let error = error {
                 DispatchQueue.main.async { [self] in
                     let alert = UIAlertController(title: "Ошибка", message: error.localizedDescription, preferredStyle: .alert)
