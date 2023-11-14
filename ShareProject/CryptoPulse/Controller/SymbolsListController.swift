@@ -177,17 +177,23 @@ extension SymbolsListController {
     }
     
     private func handleMainViewSelection(with symbol: Symbol) {
+        let symbolName = symbol.symbol
+
+        if UserSymbols.savedSymbols.contains(where: { $0.symbol == symbolName }) {
+            dismiss(animated: true)
+            return
+        }
+
         UserSymbols.savedSymbols.append(symbol)
         viewCtr.closeConnection()
         viewCtr.getSymbolToWebSocket()
-        
         DataLoader.saveData(for: "savedSymbols")
         
-//        let defaults = DataLoader(keys: "savedSymbols")
-//        defaults.saveData()
-        
+        //        let defaults = DataLoader(keys: "savedSymbols")
+        //        defaults.saveData()
+
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "newSymbolAdded"), object: nil)
-        
+
         searchController.isActive = false
     }
     
