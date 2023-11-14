@@ -11,11 +11,12 @@ enum Endpoint {
     
 //    case createAccount(path: String = "/auth/create-account", userRequest: RegisterUserRequest)
     case createAccount(path: String = "/auth/users/", userRequest: RegisterUserRequest)
-    case getData(path: String = "/api/account")
+    case getAlarms(path: String = "/get_alarms/", userID: Int)
     case signIn(path: String = "/auth/token/login/", userRequest: SignInUserRequest)
     case forgotPassword(path: String = "/auth/users/reset_password/", email: String)
     case signOut(path: String = "/auth/token/logout")
     case currentUser(path: String = "/auth/users/me/")
+    case submitTelegramChatID(path: String = "/telegram_user_chatid/", submitForm: SubmitTelegramChatIDRequest)
     
     var request: URLRequest? {
         guard let url = self.url else { return nil }
@@ -44,7 +45,8 @@ enum Endpoint {
             .forgotPassword(let path, _),
             .createAccount(let path, _),
             .currentUser(let path),
-            .getData(let path):
+            .submitTelegramChatID(let path, _),
+            .getAlarms(let path, _):
             return path
         }
     }
@@ -54,10 +56,11 @@ enum Endpoint {
         case .createAccount,
             .signIn,
             .signOut,
+            .submitTelegramChatID,
+            .getAlarms,
             .forgotPassword:
             return HTTP.Method.post.rawValue
-        case .getData,
-            .currentUser:
+        case .currentUser:
             return HTTP.Method.get.rawValue
             
         }
@@ -74,8 +77,13 @@ enum Endpoint {
         case .forgotPassword(_, let email):
             return try? JSONSerialization.data(withJSONObject: ["email": email], options: [])
             
-        case .getData,
-            .currentUser,
+        case .submitTelegramChatID(_, let submitRequest):
+            return try? JSONEncoder().encode(submitRequest)
+            
+        case .getAlarms(_, let userID):
+            return try? JSONSerialization.data(withJSONObject: ["userID": userID], options: [])
+            
+        case .currentUser,
             .signOut:
             return nil
             
@@ -89,9 +97,10 @@ extension URLRequest {
         switch endpoint {
         case .createAccount,
             .signIn,
-            .getData,
+            .getAlarms,
             .signOut,
             .currentUser,
+            .submitTelegramChatID,
             .forgotPassword:
             self.setValue(HTTP.Headers.Value.applicationJson.rawValue, forHTTPHeaderField: HTTP.Headers.Key.contentType.rawValue)
         }

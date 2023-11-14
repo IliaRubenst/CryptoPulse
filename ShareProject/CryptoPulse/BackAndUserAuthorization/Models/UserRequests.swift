@@ -17,3 +17,9 @@ struct SignInUserRequest: Codable {
     let username: String
     let password: String
 }
+
+struct SubmitTelegramChatIDRequest: Codable {
+    let userID: Int
+    let userChatID: String
+}
+

@@ -32,4 +32,8 @@ struct BlankFieldError: Decodable {
     let email: [String]
 }
 
+struct TelegramSubmitError: Decodable {
+    let message: String
+}
+
 

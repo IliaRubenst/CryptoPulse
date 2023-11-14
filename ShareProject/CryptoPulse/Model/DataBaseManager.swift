@@ -14,9 +14,11 @@ enum HTTPMethod: String {
     case DELETE
 }
 
+// В запросах не обрабатываются ошибки с сервера.
+
 final class DataBaseManager {
-//    private let baseURLString = "http://127.0.0.1:8000/api/account"
-    let baseURLString = "https://cryptopulseapp.ru/api/account"
+    private let baseURLString = "http://127.0.0.1:8000/api/account"
+//    let baseURLString = "https://cryptopulseapp.ru/api/account"
     private let authorizationValue = "Token \(AuthToken.authToken)"
     
     func performRequestDB(completion: @escaping (Data?, Error?) -> Void) {
@@ -28,22 +30,34 @@ final class DataBaseManager {
             print("Failed to encode new alarm")
             return
         }
-        performTaskWithRequestType(.POST, urlString: baseURLString, body: encoded, completion: completion)
+//        performTaskWithRequestType(.POST, urlString: baseURLString, body: encoded, completion: completion)
+        
+        // Testing request
+        performTaskWithRequestType(.POST, urlString: "http://127.0.0.1:8000/alarms_db/", body: encoded, completion: completion)
     }
     
-    func updateDBData(alarmModel: AlarmModel, change id: Int) {
-        let urlString = baseURLString.appending("/\(id)")
+    func updateDBData(alarmModel: AlarmModel, change id: String) {
+//        let urlString = baseURLString.appending("/\(id)")
         guard let encoded = try? JSONEncoder().encode(alarmModel) else {
             print("Failed to encode new alarm")
             return
         }
-        performTaskWithRequestType(.PUT, urlString: urlString, body: encoded, completion: { _, _ in })
+//        performTaskWithRequestType(.PUT, urlString: urlString, body: encoded, completion: { _, _ in })
+        
+        
+        // Test Request
+        performTaskWithRequestType(.PUT, urlString: "http://127.0.0.1:8000/alarms_db/", body: encoded, completion: { _, _ in })
     }
     
-    func removeDBData(remove id: Int) {
-        let urlString = baseURLString.appending("/\(id)")
-        print(urlString)
-        performTaskWithRequestType(.DELETE, urlString: urlString, body: nil, completion: { _, _ in })
+    func removeDBData(remove alarmID: String) {
+//        let urlString = baseURLString.appending("/\(id)")
+//        print(urlString)
+//        performTaskWithRequestType(.DELETE, urlString: urlString, body: nil, completion: { _, _ in })
+        
+        // Testing request
+        guard let encodedID = try? JSONEncoder().encode(["alarmID": alarmID]) else { return }
+        performTaskWithRequestType(.DELETE, urlString: "http://127.0.0.1:8000/alarms_db/", body: encodedID, completion: { _, _ in })
+        
     }
     
     private func performTaskWithRequestType(_ type: HTTPMethod,
@@ -90,10 +104,12 @@ final class DataBaseManager {
         let decoder = JSONDecoder()
         
         do {
-            let decodedData = try decoder.decode([Account].self, from: DBData)
+            let decodedData = try decoder.decode([AlarmModel].self, from: DBData)
             
-            guard let username = SavedCurrentUser.user.userName else { return }
+//            guard let username = SavedCurrentUser.user.userName else { return }
             
+            AlarmModelsArray.alarms = decodedData
+            /*
             for data in decodedData where data.userName == username {
                 AlarmModelsArray.alarms.append(AlarmModel(id: data.id,
                                                           userName: data.userName,
@@ -102,13 +118,14 @@ final class DataBaseManager {
                                                           isAlarmUpper: data.isAlarmUpper,
                                                           isActive: data.isActive,
                                                           creationDate: data.creationDate)
-                )}
+            )}
+            */
             DataLoader.saveData(for: "savedAlarms")
-            
+
 //            let defaults = DataLoader(keys: "savedAlarms")
 //            defaults.saveData()
         } catch {
-            print(error)
+            print(error.localizedDescription)
         }
     }
 }

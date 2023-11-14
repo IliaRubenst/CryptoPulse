@@ -22,3 +22,10 @@ struct CurrentUserResponse: Decodable {
     let id: Int
     let username: String
 }
+
+struct SuccessTelegramChatIDSumbit: Decodable {
+    let message: String
+    let id: Int
+    let userID: Int
+    let userChatID: String
+}

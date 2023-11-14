@@ -9,9 +9,9 @@ import Foundation
 
 class DataService {
     
-    static func getData() async throws -> [Account]? {
+    static func getAlarms(for userID: Int) async throws -> [AlarmModel]? {
         
-        guard var request = Endpoint.getData().request else { return nil }
+        guard var request = Endpoint.getAlarms(userID: userID).request else { return nil }
         request.addValue("Token \(AuthToken.authToken)", forHTTPHeaderField: "Authorization")
         
         let (data, response) = try await URLSession.shared.data(for: request)
@@ -23,8 +23,8 @@ class DataService {
         do {
             let decoder = JSONDecoder()
             
-            if let AlarmsArray = try? decoder.decode([Account].self, from: data) {
-                return AlarmsArray
+            if let alarmsArray = try? decoder.decode([AlarmModel].self, from: data) {
+                return alarmsArray
             } else if let tokenError = try? decoder.decode(DetailError.self, from: data) {
                 throw ServerErrorResponse.detailError(tokenError.detail)
             } else {
@@ -54,6 +54,30 @@ class DataService {
                 return currentUser
             } else if let tokenError = try? decoder.decode(DetailError.self, from: data) {
                 throw ServerErrorResponse.detailError(tokenError.detail)
+            } else {
+                throw ServerErrorResponse.decodingError()
+            }
+        } catch {
+            throw error
+        }
+    }
+    
+    static func submitTelegramUserChatID(request: URLRequest) async throws {
+        let (data, response) = try await URLSession.shared.data(for: request)
+        
+        guard let response = response as? HTTPURLResponse, response.statusCode == 200 || response.statusCode == 400 else {
+            throw ServerErrorResponse.invalidResponse(response.debugDescription)
+        }
+        
+        do {
+            let decoder = JSONDecoder()
+            
+            if let _ = try? decoder.decode(SuccessTelegramChatIDSumbit.self, from: data) {
+                return
+            }
+            
+            if let error = try? decoder.decode(TelegramSubmitError.self, from: data) {
+                throw ServerErrorResponse.detailError(error.message)
             } else {
                 throw ServerErrorResponse.decodingError()
             }

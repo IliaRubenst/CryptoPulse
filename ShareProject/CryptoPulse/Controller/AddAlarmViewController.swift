@@ -16,7 +16,7 @@ class AddAlarmViewController: UIViewController, UITextFieldDelegate, WebSocketMa
     
     var state: AddAlarmState = .newAlarm
     
-    var alarmID: Int?
+    var alarmID: String?
     var symbol: String?
     var closePrice: String?
     var alarmPrice: Double?
@@ -274,13 +274,16 @@ class AddAlarmViewController: UIViewController, UITextFieldDelegate, WebSocketMa
             
         case .editAlarm:
             guard let alarmID else { return }
-            guard let alarmToEdit = AlarmModelsArray.alarms.filter({ $0.id == alarmID }).first else { return }
+            guard let alarmToEdit = AlarmModelsArray.alarms.filter({ $0.alarmID == alarmID }).first else { return }
             
             guard let index = AlarmModelsArray.alarms.firstIndex(of: alarmToEdit) else { return }
             AlarmModelsArray.alarms[index].alarmPrice = alarmPrice
+            AlarmModelsArray.alarms[index].isAlarmUpper = AlarmManager.isAlarmUpper(alarmPrice: alarmPrice, closePrice: doubleClosePrice)
+            
+            let editedAlarm = AlarmModelsArray.alarms[index]
             
             let dbManager = DataBaseManager()
-            dbManager.updateDBData(alarmModel: alarmToEdit, change: alarmID)
+            dbManager.updateDBData(alarmModel: editedAlarm, change: alarmID)
         }
         
 //        let defaults = DataLoader(keys: "savedAlarms")

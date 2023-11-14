@@ -10,7 +10,7 @@ import UIKit
 
 class SettingsViewController: UIViewController, UIGestureRecognizerDelegate, UITextFieldDelegate {
     
-    var userID: String?
+    var userChatID: String?
     
     let userIDLabel: UILabel = {
         let label = UILabel()
@@ -116,24 +116,42 @@ class SettingsViewController: UIViewController, UIGestureRecognizerDelegate, UIT
         // Тут надо доделать проверку на пробелы и прочее говно.
         
         guard let id = textField.text else { return }
-        userID = id
+        userChatID = id
     }
     
     func configureButtons() {
         userIDTextField.delegate = self
         userIDTextField.placeholder = "User ID"
-        saveIDButton.addTarget(self, action: #selector(saveIDTapped), for: .touchUpInside)
+        saveIDButton.addTarget(self, action: #selector(didTapSaveID), for: .touchUpInside)
         resetButton.addTarget(self, action: #selector(resetIDTapped), for: .touchUpInside)
         loguotButton.addTarget(self, action: #selector(logout), for: .touchUpInside)
     }
     
     // На данный момент метод никакие данные не обновляет.
-    @objc func saveIDTapped() {
+    @objc func didTapSaveID() {
         /*
-        guard let userID else { return }
+        
         Key.userID = userID
         userIDTextField.isEnabled = false
          */
+        
+        guard let userChatID,
+              let id = SavedCurrentUser.user.id else { return }
+        
+        let submitForm = SubmitTelegramChatIDRequest(userID: id, userChatID: userChatID)
+        
+        Task {
+            guard let request = Endpoint.submitTelegramChatID(submitForm: submitForm).request else { return }
+            
+            do {
+                try await DataService.submitTelegramUserChatID(request: request)
+                
+            } catch ServerErrorResponse.invalidResponse(let message), ServerErrorResponse.detailError(let message), ServerErrorResponse.decodingError(let message) {
+                print("DEBUG PRINT: \(message)")
+            } catch {
+                print(error.localizedDescription)
+            }
+        }
     }
     
     @objc func resetIDTapped() {
