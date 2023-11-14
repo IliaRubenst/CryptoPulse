@@ -38,7 +38,7 @@ class ViewController: UIViewController {
         loadTickers()
         loadUserData()
         getSymbolToWebSocket()
-        performRequestDB()
+//        performRequestDB()
         navigationItem.title = ""
         setupRightButtonItems()
         
@@ -160,7 +160,7 @@ extension ViewController: WebSocketManagerDelegate {
     }
 
     func setConnectForSymbols(_ symbol: String) {
-        if let manager = socketManagers[symbol] {
+        if socketManagers[symbol] != nil {
             return
         }
         

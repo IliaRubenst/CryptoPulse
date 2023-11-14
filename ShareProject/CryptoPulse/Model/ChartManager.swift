@@ -52,7 +52,8 @@ final class ChartManager {
             case .failure(let error):
                 print(error)
             case .success(let data):
-                self?.data = (self?.delegate.candleStickDataManager.parseJSON(marketData: data))!
+                guard let delegate = self?.delegate else { return }
+                self?.data = (delegate.candleStickDataManager.parseJSON(marketData: data))
                 DispatchQueue.main.async {
                     self?.setupSeries()
                     if let firstCandle = self?.data.first?.close, firstCandle < 1 {

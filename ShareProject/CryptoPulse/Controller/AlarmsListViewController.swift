@@ -11,7 +11,7 @@ class AlarmsListViewController: UIViewController, UITableViewDelegate, UITableVi
     var tableView = UITableView()
     var searchBar = UISearchBar()
     var filtredAlarms: [AlarmModel] = []
-    var accounts = [Account]()
+//    var accounts = [AlarmModel]()
     var dbManager = DataBaseManager()
     
     override func viewDidLoad() {
@@ -129,7 +129,7 @@ class AlarmsListViewController: UIViewController, UITableViewDelegate, UITableVi
         
         ac.addAction(UIAlertAction(title: "Все", style: .destructive) { [weak self] _ in
             for alarm in AlarmModelsArray.alarms {
-                self?.dbManager.removeDBData(remove: alarm.id)
+                self?.dbManager.removeDBData(remove: alarm.alarmID)
             }
             AlarmModelsArray.alarms.removeAll()
 
@@ -142,7 +142,7 @@ class AlarmsListViewController: UIViewController, UITableViewDelegate, UITableVi
         ac.addAction(UIAlertAction(title: "Не активные", style: .default, handler: { [weak self] _ in
             let activeAlarms = AlarmModelsArray.alarms.filter({ $0.isActive })
             for alarm in AlarmModelsArray.alarms where !alarm.isActive {
-                self?.dbManager.removeDBData(remove: alarm.id)
+                self?.dbManager.removeDBData(remove: alarm.alarmID)
             }
             AlarmModelsArray.alarms = activeAlarms
             self?.updateData()
@@ -211,7 +211,7 @@ class AlarmsListViewController: UIViewController, UITableViewDelegate, UITableVi
         let action = UIContextualAction(style: .destructive, title: nil) { [weak self] _, _, _ in
             guard let self = self else { return }
             
-            let itemToRemoveID = filtredAlarms[indexPath.item].id
+            let itemToRemoveID = filtredAlarms[indexPath.item].alarmID
             filtredAlarms.remove(at: indexPath.item)
             deleteItemFromStaticAlarms(id: itemToRemoveID)
             dbManager.removeDBData(remove: itemToRemoveID)
@@ -231,9 +231,9 @@ class AlarmsListViewController: UIViewController, UITableViewDelegate, UITableVi
         return action
     }
     
-    func deleteItemFromStaticAlarms(id: Int) {
+    func deleteItemFromStaticAlarms(id: String) {
         for (index, item) in AlarmModelsArray.alarms.enumerated() {
-            if item.id == id {
+            if item.alarmID == id {
                 AlarmModelsArray.alarms.remove(at: index)
             }
         }
@@ -248,7 +248,7 @@ class AlarmsListViewController: UIViewController, UITableViewDelegate, UITableVi
 //            let defaults = DataLoader(keys: "savedAlarms")
 //            defaults.saveData()
             for alarm in AlarmModelsArray.alarms {
-                self?.dbManager.updateDBData(alarmModel: alarm, change: alarm.id)
+                self?.dbManager.updateDBData(alarmModel: alarm, change: alarm.alarmID)
             }
             
             self?.tableView.reloadData()
@@ -272,7 +272,7 @@ class AlarmsListViewController: UIViewController, UITableViewDelegate, UITableVi
             
             let alarm = filtredAlarms[indexPath.item]
             
-            let alarmID = alarm.id
+            let alarmID = alarm.alarmID
             let alarmSymbol = alarm.symbol
             let alarmPrice = alarm.alarmPrice
             

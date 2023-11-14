@@ -13,7 +13,7 @@ class MainTabBarController: UITabBarController {
         super.viewDidLoad()
         generateTabBars()
         
-//        print(SavedCurrentUser.user.description)
+        print(SavedCurrentUser.user.description)
     }
     
     private func generateTabBars() {

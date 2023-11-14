@@ -26,7 +26,7 @@ final class AlarmManager {
     // Setup alarm lines from model data
     func setupAlarmLines() {
         for alarm in AlarmModelsArray.alarms {
-            setupAlarmLine(alarm.alarmPrice, id: String(alarm.id))
+            setupAlarmLine(alarm.alarmPrice, id: String(alarm.alarmID))
         }
     }
     
@@ -65,30 +65,39 @@ final class AlarmManager {
         openedChart.present(addAlarmVC, animated: true)
     }
     
+    static func isAlarmUpper(alarmPrice: Double, closePrice: Double) -> Bool {
+        alarmPrice > closePrice ? true : false
+    }
+    
     func addAlarmAtSetPrice(alarmPrice: Double, closePrice: Double, symbol: String) {
-        let isAlarmUpper = alarmPrice > closePrice ? true : false
-        id = Int.random(in: 0...999999999)
-        let idString = String(id)
+
+        let isAlarmUpper = AlarmManager.isAlarmUpper(alarmPrice: alarmPrice, closePrice: closePrice)
+        
+        let alarmID = UUID().uuidString
+        print(alarmID)
+        
         let currentDate = AlarmManager.convertCurrentDateToString()
         
-        guard let username = SavedCurrentUser.user.userName else { return }
+        guard let currentUserUserID = SavedCurrentUser.user.id else { return }
         
-        let newAlarm = AlarmModel(id: id, userName: username, symbol: symbol, alarmPrice: alarmPrice, isAlarmUpper: isAlarmUpper, isActive: true, creationDate: currentDate)
+        let newAlarm = AlarmModel(userID: currentUserUserID, alarmID: alarmID, symbol: symbol, alarmPrice: alarmPrice, isAlarmUpper: isAlarmUpper, isActive: true, creationDate: currentDate)
+        
         storeAlarmInDB(newAlarm)
-        setupAlarmLine(alarmPrice, id: idString)
+        setupAlarmLine(alarmPrice, id: alarmID)
     }
     
     func addAlarmForSelectedPrice(alarmPrice: Double, closePrice: Double, symbol: String) {
-        let isAlarmUpper = alarmPrice > closePrice ? true : false
-        id = Int.random(in: 0...999999999)
-        let idString = String(id)
+
+        let isAlarmUpper = AlarmManager.isAlarmUpper(alarmPrice: alarmPrice, closePrice: closePrice)
+        let alarmID = UUID().uuidString
         let currentDate = AlarmManager.convertCurrentDateToString()
         
-        guard let username = SavedCurrentUser.user.userName else { return }
+        guard let currentUserUserID = SavedCurrentUser.user.id else { return }
         
-        let newAlarm = AlarmModel(id: id, userName: username, symbol: symbol, alarmPrice: alarmPrice, isAlarmUpper: isAlarmUpper, isActive: true, creationDate: currentDate)
+        let newAlarm = AlarmModel(userID: currentUserUserID, alarmID: alarmID, symbol: symbol, alarmPrice: alarmPrice, isAlarmUpper: isAlarmUpper, isActive: true, creationDate: currentDate)
+        
         storeAlarmInDB(newAlarm)
-        setupAlarmLine(alarmPrice, id: idString)
+        setupAlarmLine(alarmPrice, id: alarmID)
     }
     
     // Store alarm in the database

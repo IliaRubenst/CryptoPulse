@@ -30,8 +30,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Здесь будет проверка на авторизацию
         Task {
             do {
-                if let AlarmsArray = try await DataService.getData() {
-                    print("DEBUG PRINT: ", AlarmsArray)
+                if let currentUserUserID = SavedCurrentUser.user.id,
+                   let alarmsArray = try await DataService.getAlarms(for: currentUserUserID) {
+                    AlarmModelsArray.alarms = alarmsArray
+                    print("DEBUG PRINT: AlarmModelsArray - ", AlarmModelsArray.alarms)
                     goToController(main: true)
                 }
                 

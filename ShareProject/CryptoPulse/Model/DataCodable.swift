@@ -130,6 +130,7 @@ struct K: Codable {
     let x: Bool
 }
 
+/*
 struct Account: Codable, Hashable {
     let id: Int
     let userName: String
@@ -143,4 +144,5 @@ struct Account: Codable, Hashable {
 struct AccountModel {
     static var accounts = [Account]()
 }
+*/
 
