@@ -170,18 +170,20 @@ class AlarmsListViewController: UIViewController, UITableViewDelegate, UITableVi
         cell.tickerLabel.text = "\(item.symbol)"
         cell.dateLabel.text = "\(item.creationDate)"
         cell.priceLabel.text = numberAfterDecimalPoint(alarmPrice: item.alarmPrice)
-        cell.statusLabel.text = item.isActive ? "Активен" : "Не активен"
+        cell.statusLabel.text = item.isActive ? "Active" : "Not active"
+        
+        cell.labelColor.backgroundColor = UIColor(hex: item.alarmColor)
         
        return cell
     }
     
     func numberAfterDecimalPoint(alarmPrice: Double) -> String {
         if alarmPrice < 1 {
-            return String(format: "Цена: %.6f", alarmPrice)
+            return String(format: "Price: %.6f", alarmPrice)
         } else if alarmPrice < 10 {
-            return String(format: "Цена: %.4f", alarmPrice)
+            return String(format: "Price: %.4f", alarmPrice)
         } else {
-            return String(format: "Цена: %.2f", alarmPrice)
+            return String(format: "Price: %.2f", alarmPrice)
         }
     }
     

@@ -42,6 +42,10 @@ final class ColorManager {
              }
          }
      }
+    
+    static func setAlarmColor(alarmID: String) -> String? {
+        return AlarmModelsArray.alarms.first(where: { $0.alarmID == alarmID })?.alarmColor
+    }
 }
 
 extension UIColor {
@@ -69,3 +73,17 @@ extension UIColor {
         self.init(red: CGFloat(r) / 255, green: CGFloat(g) / 255, blue: CGFloat(b) / 255, alpha: CGFloat(a) / 255)
     }
 }
+
+extension UIColor {
+    var hexString: String? {
+        if let components = cgColor.components, components.count >= 3 {
+            let r = Float(components[0])
+            let g = Float(components[1])
+            let b = Float(components[2])
+            return String(format: "#%02lX%02lX%02lX", lroundf(r * 255), lroundf(g * 255), lroundf(b * 255))
+        }
+        return nil
+    }
+}
+
+

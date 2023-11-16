@@ -22,7 +22,6 @@ class AddAlarmViewController: UIViewController, UITextFieldDelegate, WebSocketMa
     var closePrice: String?
     var alarmPrice: Double?
     
-    
     var webSocketManager: WebSocketManager! = nil
     weak var openedChart: DetailViewController? = nil
     var openedAlarmsList: AlarmsListViewController? = nil
@@ -30,7 +29,7 @@ class AddAlarmViewController: UIViewController, UITextFieldDelegate, WebSocketMa
     
     let titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Уведомление"
+        label.text = "Create alarm"
         label.font = UIFont.systemFont(ofSize: 22)
         
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -39,7 +38,7 @@ class AddAlarmViewController: UIViewController, UITextFieldDelegate, WebSocketMa
 
     let dismissButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Отмена", for: .normal)
+        button.setTitle("Cancel", for: .normal)
         button.setTitleColor(.black, for: .normal)
         
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -48,7 +47,7 @@ class AddAlarmViewController: UIViewController, UITextFieldDelegate, WebSocketMa
     
     let saveButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Сохранить", for: .normal)
+        button.setTitle("Save", for: .normal)
         button.setTitleColor(.black, for: .normal)
         
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -93,19 +92,17 @@ class AddAlarmViewController: UIViewController, UITextFieldDelegate, WebSocketMa
         return button
     }()
     
-    var colorButton: LabelColorButton = {
-        let button = LabelColorButton()
-        
-        button.layer.cornerRadius = 10
-        button.backgroundColor = .systemBlue
-        
-        button.leftLabel.textColor = .white
-        
-        return button
-    }()
+    var colorButton: LabelColorButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        colorButton = LabelColorButton(alarmColor: ColorManager.setAlarmColor(alarmID: alarmID ?? "BTCUSDT") ?? "#ffff00")
+        colorButton.layer.cornerRadius = 10
+        colorButton.backgroundColor = .systemBlue
+        colorButton.leftLabel.textColor = .white
+
+        mainStack.addArrangedSubview(colorButton)
         
         setupUI()
         updateUI()
@@ -170,8 +167,6 @@ class AddAlarmViewController: UIViewController, UITextFieldDelegate, WebSocketMa
         updateTwoLabelButtonUI()
     }
     
-    
-    
     func setupKeyboardDoneButton() {
         let toolBar = UIToolbar(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 50))
         let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
@@ -217,9 +212,9 @@ class AddAlarmViewController: UIViewController, UITextFieldDelegate, WebSocketMa
             rightLabel = closePrice
         } else if let symbol {
             leftLabel = symbol
-            rightLabel = "Подключение..."
+            rightLabel = "Connecting..."
         } else {
-            leftLabel = "Инструмент"
+            leftLabel = "Symbol"
             rightLabel = ">"
         }
         
@@ -277,11 +272,14 @@ class AddAlarmViewController: UIViewController, UITextFieldDelegate, WebSocketMa
         case .editAlarm:
             guard let alarmID else { return }
             guard let alarmToEdit = AlarmModelsArray.alarms.filter({ $0.alarmID == alarmID }).first else { return }
-            
+            let color = colorButton.colorWell.selectedColor
+            print(color)
+            guard let colorHex = color?.hexString else { return }
+            print(colorHex)
             guard let index = AlarmModelsArray.alarms.firstIndex(of: alarmToEdit) else { return }
             AlarmModelsArray.alarms[index].alarmPrice = alarmPrice
             AlarmModelsArray.alarms[index].isAlarmUpper = AlarmManager.isAlarmUpper(alarmPrice: alarmPrice, closePrice: doubleClosePrice)
-            
+            AlarmModelsArray.alarms[index].alarmColor = colorHex
             let editedAlarm = AlarmModelsArray.alarms[index]
             
             let dbManager = DataBaseManager()

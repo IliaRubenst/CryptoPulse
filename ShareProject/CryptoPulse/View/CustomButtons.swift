@@ -82,7 +82,7 @@ class LabelTextFiledButton: UIButton, UITextFieldDelegate {
         super.init(frame: frame)
         
         addSubview(leftLabel)
-        leftLabel.text = "Цена"
+        leftLabel.text = "Price"
         
         addSubview(textField)
         configureTextField()
@@ -117,16 +117,17 @@ class LabelColorButton: UIButton {
         
         colorWell.supportsAlpha = false
         colorWell.selectedColor = .systemRed
-        colorWell.title = "Выберите цвет"
+        colorWell.title = "Choose color"
         return colorWell
     }()
     
-    override init(frame: CGRect) {
+    init(alarmColor: String, frame: CGRect = .zero) {
         super.init(frame: frame)
-        
+
         addSubview(leftLabel)
-        leftLabel.text = "Цвет"
+        leftLabel.text = "Color"
         
+        colorWell.selectedColor = UIColor(hex: alarmColor)
         addSubview(colorWell)
     }
     

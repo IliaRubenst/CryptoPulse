@@ -26,7 +26,7 @@ final class AlarmTableViewCell: UITableViewCell {
          return label
      }
      
-     private let labelColor: UIView = {
+    let labelColor: UIView = {
          let view = UIView()
          view.backgroundColor = UIColor(hex: "f00")
          view.translatesAutoresizingMaskIntoConstraints = false

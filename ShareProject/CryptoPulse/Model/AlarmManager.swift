@@ -27,10 +27,6 @@ final class AlarmManager {
     func setupAlarmLines() {
         for alarm in AlarmModelsArray.alarms {
             setupAlarmLine(alarm.alarmPrice, id: String(alarm.alarmID), color: ChartColor(rawValue: alarm.alarmColor))
-//            func stringToChartColor(_ string: String) -> ChartColor {
-//                let color = string
-//                return ChartColor(rawValue: color)
-//            }
         }
     }
     
