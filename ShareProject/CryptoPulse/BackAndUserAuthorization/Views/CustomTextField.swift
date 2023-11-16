@@ -11,6 +11,7 @@ enum CustomTextFieldType {
     case userName
     case email
     case password
+    case telegramChatID
 }
 
 class CustomTextField: UITextField {
@@ -42,6 +43,9 @@ class CustomTextField: UITextField {
             self.placeholder = "Password"
             self.textContentType = .oneTimeCode
             self.isSecureTextEntry = true
+        case .telegramChatID:
+            self.placeholder = "Введите ваш Telegram Chat ID"
+            
         }
     }
     

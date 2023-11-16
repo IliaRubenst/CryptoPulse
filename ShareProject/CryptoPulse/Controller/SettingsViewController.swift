@@ -12,40 +12,20 @@ class SettingsViewController: UIViewController, UIGestureRecognizerDelegate, UIT
     
     var userChatID: String?
     
+    let userView = UserView(username: SavedCurrentUser.user.userName, email: SavedCurrentUser.user.email)
+    let userIDTextField = CustomTextField(fieldType: .telegramChatID)
+    
     let userIDLabel: UILabel = {
         let label = UILabel()
-        label.text = "Введите ваш Telegram User ID"
+        label.text = "Telegram Chat ID"
         label.textColor = .black
         
         return label
     }()
     
-    let userIDTextField: UITextField = {
-        let textField = UITextField()
-        textField.borderStyle = .line
-        
-        return textField
-    }()
+    let saveIDButton = CustomButton(title: "Save ID", hasBackGround: true, fontSize: .medium)
     
-    let saveIDButton: UIButton = {
-        let button = UIButton()
-        button.setTitleColor(.black, for: .normal)
-        button.setTitle("Save ID", for: .normal)
-        button.layer.borderWidth = 1
-        button.layer.borderColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
-        
-        return button
-    }()
-    
-    let resetButton: UIButton = {
-        let button = UIButton()
-        button.setTitleColor(.black, for: .normal)
-        button.setTitle("Reset ID", for: .normal)
-        button.layer.borderWidth = 1
-        button.layer.borderColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
+    let resetButton = CustomButton(title: "Reset ID", hasBackGround: true, fontSize: .medium)
     
     let loguotButton: CustomButton = {
         let button = CustomButton(title: "Выйти", hasBackGround: true, fontSize: FontSize.medium)
@@ -68,38 +48,50 @@ class SettingsViewController: UIViewController, UIGestureRecognizerDelegate, UIT
         view.addSubview(resetButton)
         view.addSubview(userIDLabel)
         view.addSubview(loguotButton)
+        view.addSubview(userView)
         
         setupConstraints()
         
     }
     
     func setupConstraints() {
+        userView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([userView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 30),
+                                     userView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+                                     userView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+                                     userView.heightAnchor.constraint(equalToConstant: 60)])
+        
+        
+        
+        
         userIDLabel.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([userIDLabel.topAnchor.constraint(equalToSystemSpacingBelow: view.safeAreaLayoutGuide.topAnchor, multiplier: 1),
-                                     userIDLabel.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor)])
+        NSLayoutConstraint.activate([userIDLabel.topAnchor.constraint(equalTo: userView.bottomAnchor, constant: 20),
+                                     userIDLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10)])
         
         userIDTextField.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([userIDTextField.topAnchor.constraint(equalToSystemSpacingBelow: userIDLabel.bottomAnchor, multiplier: 1),
+                                     userIDTextField.heightAnchor.constraint(equalToConstant: 55),
                                      userIDTextField.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10),
                                      userIDTextField.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10)])
         
         saveIDButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([saveIDButton.topAnchor.constraint(equalTo: userIDTextField.bottomAnchor, constant: 20),
                                      saveIDButton.leadingAnchor.constraint(equalTo: userIDTextField.leadingAnchor),
-                                     saveIDButton.widthAnchor.constraint(equalTo: userIDTextField.widthAnchor, multiplier: 0.45)])
+                                     saveIDButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor, constant: -5),
+                                     saveIDButton.heightAnchor.constraint(equalToConstant: 40)])
         
         resetButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([resetButton.topAnchor.constraint(equalTo: userIDTextField.bottomAnchor, constant: 20),
+                                     resetButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor, constant: 5),
                                      resetButton.trailingAnchor.constraint(equalTo: userIDTextField.trailingAnchor),
-                                     resetButton.widthAnchor.constraint(equalTo: userIDTextField.widthAnchor, multiplier: 0.45)])
+                                     resetButton.heightAnchor.constraint(equalToConstant: 40)])
         
         loguotButton.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([loguotButton.topAnchor.constraint(equalTo: saveIDButton.bottomAnchor, constant: 20),
-                                     loguotButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-                                     loguotButton.heightAnchor.constraint(equalToConstant: 55),
-                                     loguotButton.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.85)])
-                                    
-    }
+        NSLayoutConstraint.activate([loguotButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -30),
+                                     loguotButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10),
+                                     loguotButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10),
+                                     loguotButton.heightAnchor.constraint(equalToConstant: 55)])
+        }
     
     func configureGestureRecogniser() {
         let gestureRecogniser = UITapGestureRecognizer(target: self, action: #selector(handleTap))
@@ -121,7 +113,6 @@ class SettingsViewController: UIViewController, UIGestureRecognizerDelegate, UIT
     
     func configureButtons() {
         userIDTextField.delegate = self
-        userIDTextField.placeholder = "User ID"
         saveIDButton.addTarget(self, action: #selector(didTapSaveID), for: .touchUpInside)
         resetButton.addTarget(self, action: #selector(resetIDTapped), for: .touchUpInside)
         loguotButton.addTarget(self, action: #selector(logout), for: .touchUpInside)

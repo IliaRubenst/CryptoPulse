@@ -54,6 +54,7 @@
 		D81366362AB4C577005930D2 /* Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = D81366352AB4C577005930D2 /* Notifications.swift */; };
 		D868DEC82ACDBC01003822BF /* WebSocketProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = D868DEC72ACDBC01003822BF /* WebSocketProtocol.swift */; };
 		D868DECA2ACEE016003822BF /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D868DEC92ACEE016003822BF /* SettingsViewController.swift */; };
+		D879C1882B04C863002BBD6D /* UserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D879C1872B04C863002BBD6D /* UserView.swift */; };
 		D87A63FB2ABC294A00A29749 /* Key.swift in Sources */ = {isa = PBXBuildFile; fileRef = D87A63FA2ABC294900A29749 /* Key.swift */; };
 		D87A63FD2ABC581100A29749 /* AlarmsListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D87A63FC2ABC581100A29749 /* AlarmsListViewController.swift */; };
 		D87A64B82AC5711C00A29749 /* AddAlarmViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D87A64B72AC5711C00A29749 /* AddAlarmViewController.swift */; };
@@ -118,6 +119,7 @@
 		D81366352AB4C577005930D2 /* Notifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notifications.swift; sourceTree = "<group>"; };
 		D868DEC72ACDBC01003822BF /* WebSocketProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketProtocol.swift; sourceTree = "<group>"; };
 		D868DEC92ACEE016003822BF /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		D879C1872B04C863002BBD6D /* UserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserView.swift; sourceTree = "<group>"; };
 		D87A63FA2ABC294900A29749 /* Key.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Key.swift; sourceTree = "<group>"; };
 		D87A63FC2ABC581100A29749 /* AlarmsListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmsListViewController.swift; sourceTree = "<group>"; };
 		D87A64B72AC5711C00A29749 /* AddAlarmViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddAlarmViewController.swift; sourceTree = "<group>"; };
@@ -181,6 +183,7 @@
 				498C3F632AE937E100F727D7 /* DetailViewUI.swift */,
 				49F1A0AC2AEAFFE400A47A28 /* ChartManagerUI.swift */,
 				D8047A5E2AEBF70E001906CC /* CustomCollectionViewCell.swift */,
+				D879C1872B04C863002BBD6D /* UserView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -436,6 +439,7 @@
 				D87A63FD2ABC581100A29749 /* AlarmsListViewController.swift in Sources */,
 				D87A64BA2AC5733100A29749 /* AlarmTableViewCell.swift in Sources */,
 				D8047A3D2AEBED68001906CC /* CustomButton.swift in Sources */,
+				D879C1882B04C863002BBD6D /* UserView.swift in Sources */,
 				D8047A3C2AEBED68001906CC /* CustomTextField.swift in Sources */,
 				49F979DB2AE2A63A000DDD7E /* ColorManager.swift in Sources */,
 				49520E572AC4BCE2009B05BD /* SymbolsListCell.swift in Sources */,

@@ -221,7 +221,8 @@ extension ViewController {
     }
     
     private func performRequestDB() {
-        dbManager.performRequestDB() { data, error in
+        guard let userID = SavedCurrentUser.user.id else { return }
+        dbManager.performRequestDB(userID: userID) /* { (data, error) in
             if let error = error {
                 DispatchQueue.main.async {
                     let alertController = UIAlertController(title: "Ошибка",
@@ -234,7 +235,7 @@ extension ViewController {
                 
                 return
             }
-        }
+        }*/
     }
     
     private func createContextAction(title: String, iconName: String, action: @escaping () -> Void) -> UIAction {
