@@ -10,7 +10,7 @@ import UIKit
 
 class SettingsViewController: UIViewController, UIGestureRecognizerDelegate, UITextFieldDelegate {
     
-    var userChatID: String?
+//    var userChatID: String?
     
     let userView = UserView(username: SavedCurrentUser.user.userName, email: SavedCurrentUser.user.email)
     let userIDTextField = CustomTextField(fieldType: .telegramChatID)
@@ -37,10 +37,12 @@ class SettingsViewController: UIViewController, UIGestureRecognizerDelegate, UIT
         setupUI()
         configureGestureRecogniser()
         configureButtons()
-        
+        checkForUserChatID()
     }
     
-    func setupUI() {
+    
+    
+    private func setupUI() {
         view.backgroundColor = .systemBackground
         
         view.addSubview(userIDTextField)
@@ -54,7 +56,7 @@ class SettingsViewController: UIViewController, UIGestureRecognizerDelegate, UIT
         
     }
     
-    func setupConstraints() {
+    private func setupConstraints() {
         userView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([userView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 30),
                                      userView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
@@ -93,49 +95,62 @@ class SettingsViewController: UIViewController, UIGestureRecognizerDelegate, UIT
                                      loguotButton.heightAnchor.constraint(equalToConstant: 55)])
         }
     
-    func configureGestureRecogniser() {
+    private func configureGestureRecogniser() {
         let gestureRecogniser = UITapGestureRecognizer(target: self, action: #selector(handleTap))
         gestureRecogniser.delegate = self
         view.addGestureRecognizer(gestureRecogniser)
     }
     
     
-    @objc func handleTap(sender: UIGestureRecognizer) {
+    @objc private func handleTap(sender: UIGestureRecognizer) {
         view.endEditing(true)
+        userIDTextField.text = SavedCurrentUser.user.telegramChatId ?? ""
+        userIDTextField.isEnabled = false
     }
     
-    func textFieldDidEndEditing(_ textField: UITextField) {
+    /*func textFieldDidEndEditing(_ textField: UITextField) {
         // Тут надо доделать проверку на пробелы и прочее говно.
         
         guard let id = textField.text else { return }
         userChatID = id
-    }
+    }*/
     
-    func configureButtons() {
+    private func configureButtons() {
         userIDTextField.delegate = self
         saveIDButton.addTarget(self, action: #selector(didTapSaveID), for: .touchUpInside)
-        resetButton.addTarget(self, action: #selector(resetIDTapped), for: .touchUpInside)
+        resetButton.addTarget(self, action: #selector(didTapReset), for: .touchUpInside)
         loguotButton.addTarget(self, action: #selector(logout), for: .touchUpInside)
+    }
+    
+    private func checkForUserChatID() {
+        if let userChatID = SavedCurrentUser.user.telegramChatId {
+            self.userIDTextField.text = userChatID
+            self.userIDTextField.isEnabled = false
+            self.saveIDButton.isEnabled = false
+        }
     }
     
     // На данный момент метод никакие данные не обновляет.
     @objc func didTapSaveID() {
-        /*
-        
-        Key.userID = userID
-        userIDTextField.isEnabled = false
-         */
-        
-        guard let userChatID,
+        guard let chatID = userIDTextField.text,
               let id = SavedCurrentUser.user.id else { return }
         
-        let submitForm = SubmitTelegramChatIDRequest(userID: id, userChatID: userChatID)
+        let submitForm = SubmitTelegramChatIDRequest(userID: id, userChatID: chatID)
         
         Task {
-            guard let request = Endpoint.submitTelegramChatID(submitForm: submitForm).request else { return }
+            guard var request = Endpoint.submitTelegramChatID(submitForm: submitForm).request else { return }
+            request.addValue("Token \(AuthToken.authToken)", forHTTPHeaderField: "Authorization")
             
             do {
                 try await DataService.submitTelegramUserChatID(request: request)
+                SavedCurrentUser.user.telegramChatId = chatID
+                
+                checkForUserChatID()
+                
+                DataLoader.saveData(for: "CurrentUser")
+                
+                saveIDButton.isEnabled = false
+                userIDTextField.isEnabled = false
                 
             } catch ServerErrorResponse.invalidResponse(let message), ServerErrorResponse.detailError(let message), ServerErrorResponse.decodingError(let message) {
                 print("DEBUG PRINT: \(message)")
@@ -145,7 +160,8 @@ class SettingsViewController: UIViewController, UIGestureRecognizerDelegate, UIT
         }
     }
     
-    @objc func resetIDTapped() {
+    @objc func didTapReset() {
+        saveIDButton.isEnabled = true
         userIDTextField.isEnabled = true
         userIDTextField.becomeFirstResponder()
     }
@@ -166,12 +182,6 @@ class SettingsViewController: UIViewController, UIGestureRecognizerDelegate, UIT
                     
                     DataLoader.saveData(for: "AuthToken")
                     DataLoader.saveData(for: "CurrentUser")
-                    
-//                    var userDefaults = DataLoader(keys: "AuthToken")
-//                    userDefaults.saveData()
-//
-//                    userDefaults = DataLoader(keys: "CurrentUser")
-//                    userDefaults.saveData()
                     
                     print("DEBUG: \(AuthToken.authToken)")
                     print(SavedCurrentUser.user.description)

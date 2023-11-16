@@ -33,7 +33,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 if let currentUserUserID = SavedCurrentUser.user.id,
                    let alarmsArray = try await DataService.getAlarms(for: currentUserUserID) {
                     AlarmModelsArray.alarms = alarmsArray
-                    print("DEBUG PRINT: AlarmModelsArray - ", AlarmModelsArray.alarms)
                     goToController(main: true)
                 }
                 

@@ -17,6 +17,7 @@ enum Endpoint {
     case signOut(path: String = "/auth/token/logout")
     case currentUser(path: String = "/auth/users/me/")
     case submitTelegramChatID(path: String = "/telegram_user_chatid/", submitForm: SubmitTelegramChatIDRequest)
+    case getTelegramChatID(path: String = "/get_telegram_chatid/", userID: Int)
     
     var request: URLRequest? {
         guard let url = self.url else { return nil }
@@ -46,6 +47,7 @@ enum Endpoint {
             .createAccount(let path, _),
             .currentUser(let path),
             .submitTelegramChatID(let path, _),
+            .getTelegramChatID(let path, _),
             .getAlarms(let path, _):
             return path
         }
@@ -58,6 +60,7 @@ enum Endpoint {
             .signOut,
             .submitTelegramChatID,
             .getAlarms,
+            .getTelegramChatID,
             .forgotPassword:
             return HTTP.Method.post.rawValue
         case .currentUser:
@@ -83,6 +86,9 @@ enum Endpoint {
         case .getAlarms(_, let userID):
             return try? JSONSerialization.data(withJSONObject: ["userID": userID], options: [])
             
+        case .getTelegramChatID(_, let userID):
+            return try? JSONSerialization.data(withJSONObject: ["userID": userID], options: [])
+            
         case .currentUser,
             .signOut:
             return nil
@@ -101,6 +107,7 @@ extension URLRequest {
             .signOut,
             .currentUser,
             .submitTelegramChatID,
+            .getTelegramChatID,
             .forgotPassword:
             self.setValue(HTTP.Headers.Value.applicationJson.rawValue, forHTTPHeaderField: HTTP.Headers.Key.contentType.rawValue)
         }

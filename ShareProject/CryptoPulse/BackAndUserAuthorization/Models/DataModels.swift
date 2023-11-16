@@ -15,9 +15,10 @@ struct CurrentUser: Codable, CustomStringConvertible {
     var email: String?
     var id: Int?
     var userName: String?
+    var telegramChatId: String?
     
     var description: String {
-        return "Current User Description:\nEmail: \(String(describing: self.email))\nID: \(String(describing: self.id))\nUsername: \(String(describing: self.userName))"
+        return "Current User Description:\nEmail: \(String(describing: self.email))\nID: \(String(describing: self.id))\nUsername: \(String(describing: self.userName))\nTelegramChatId: \(String(describing: self.telegramChatId))"
     }
 }
 

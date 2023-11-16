@@ -72,7 +72,7 @@ class DataService {
         do {
             let decoder = JSONDecoder()
             
-            if let _ = try? decoder.decode(SuccessTelegramChatIDSumbit.self, from: data) {
+            if let _ = try? decoder.decode(SuccessTelegramChatIDResponse.self, from: data) {
                 return
             }
             
@@ -86,10 +86,32 @@ class DataService {
         }
     }
     
-    static func getUserChatID(request: URLRequest) async throws {
+    static func getUserChatID(for userID: Int) async throws -> String? {
+        guard var request = Endpoint.getTelegramChatID(userID: userID).request else { return nil }
+        request.addValue("Token \(AuthToken.authToken)", forHTTPHeaderField: "Authorization")
+        
         let (data, response) = try await URLSession.shared.data(for: request)
         
+        guard let response = response as? HTTPURLResponse, response.statusCode == 200 || response.statusCode == 400 else {
+            throw ServerErrorResponse.invalidResponse(response.debugDescription)
+        }
         
+        do {
+            let decoder = JSONDecoder()
+            
+            if let data = try? decoder.decode(SuccessTelegramChatIDResponse.self, from: data) {
+                let userChatID = data.userChatID
+                return userChatID
+            }
+            
+            if let error = try? decoder.decode(TelegramSubmitError.self, from: data) {
+                throw ServerErrorResponse.detailError(error.message)
+            } else {
+                throw ServerErrorResponse.decodingError()
+            }
+        } catch {
+            throw error
+        }
     }
     
     /*static func getData(complition: @escaping (Result<[Account], Error>) -> Void) {
