@@ -37,7 +37,8 @@ struct MarketManager {
         
         do {
             let decodedData = try decoder.decode([Symbol].self, from: marketData)
-            let sortedData = decodedData.sorted(by: { $0.symbol < $1.symbol })
+            let filteredData = decodedData.filter { !$0.symbol.contains("_") }
+            let sortedData = filteredData.sorted(by: { $0.symbol < $1.symbol })
             let symbols = sortedData.map { Symbol(symbol: $0.symbol, markPrice: $0.markPrice) }
             return .success(symbols)
         } catch {

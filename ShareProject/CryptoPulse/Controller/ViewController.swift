@@ -61,8 +61,8 @@ class ViewController: UIViewController {
         
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-                                     collectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 7),
-                                     collectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -7),
+                                     collectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 5),
+                                     collectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -5),
                                      collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)])
     }
     
@@ -138,10 +138,10 @@ extension ViewController: UICollectionViewDelegateFlowLayout {
         let offSet: CGFloat = 3.0
         
         let widthCell = frameVC.width / CGFloat(amountCells)
-        let heightCell = widthCell / 2
+        let heightCell = widthCell / 2.1
         
         let spacing = CGFloat((amountCells + 2)) * offSet / CGFloat(amountCells)
-        return CGSize(width: widthCell - spacing, height: heightCell - (offSet * 3))
+        return CGSize(width: widthCell - spacing, height: heightCell - (offSet * 4))
     }
 }
 

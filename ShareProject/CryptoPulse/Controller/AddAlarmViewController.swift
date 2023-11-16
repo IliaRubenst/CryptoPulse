@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import LightweightCharts
 
 enum AddAlarmState {
     case newAlarm
@@ -267,9 +268,10 @@ class AddAlarmViewController: UIViewController, UITextFieldDelegate, WebSocketMa
             
             let id = Int.random(in: 0...999999999)
             let idString = String(id)
+            let alarmColor = "#f00"
             
             if let openedChart {
-                openedChart.alarmManager?.setupAlarmLine(alarmPrice, id: idString)
+                openedChart.alarmManager?.setupAlarmLine(alarmPrice, id: idString, color: ChartColor(rawValue: alarmColor))
             }
             
         case .editAlarm:

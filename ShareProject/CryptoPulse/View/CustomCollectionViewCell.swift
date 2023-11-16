@@ -70,10 +70,29 @@ final class CustomCollectionViewCell: UICollectionViewCell {
     }
     
     func configure(with symbol: Symbol) {
-        tickerLabel.text = symbol.symbol
-        currentPriceLabel.text = symbol.markPrice
-        volumeLabel.text = symbol.volume
-        percentChangeLabel.text = "\(symbol.priceChangePercent ?? "0") %"
+            let formattedSymbol = formatTickerLabelText(with: symbol)
+            tickerLabel.text = formattedSymbol
+            tickerLabel.numberOfLines = 0
+            currentPriceLabel.text = symbol.markPrice
+            volumeLabel.text = symbol.volume
+            percentChangeLabel.text = "\(symbol.priceChangePercent ?? "0") %"
+            
+        tickerLabel.font = UIFont.systemFont(ofSize: 16)
+            currentPriceLabel.font = UIFont.systemFont(ofSize: 16)
+            volumeLabel.font = UIFont.systemFont(ofSize: 16)
+            percentChangeLabel.font = UIFont.systemFont(ofSize: 16)
+        }
+        
+    func formatTickerLabelText(with symbol: Symbol) -> String {
+        if symbol.symbol.contains("USDT") {
+            let parts = symbol.symbol.components(separatedBy: "USDT")
+            guard let firstPart = parts.first else { return symbol.symbol }
+            return "\(firstPart)/\nUSDT"
+        } else {
+            let parts = symbol.symbol.components(separatedBy: "BUSD")
+            guard let firstPart = parts.first else { return symbol.symbol }
+            return "\(firstPart)/\nВUSD"
+        }
     }
     
     private func resetLabels() {

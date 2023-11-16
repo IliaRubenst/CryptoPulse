@@ -26,16 +26,20 @@ final class AlarmManager {
     // Setup alarm lines from model data
     func setupAlarmLines() {
         for alarm in AlarmModelsArray.alarms {
-            setupAlarmLine(alarm.alarmPrice, id: String(alarm.alarmID))
+            setupAlarmLine(alarm.alarmPrice, id: String(alarm.alarmID), color: ChartColor(rawValue: alarm.alarmColor))
+//            func stringToChartColor(_ string: String) -> ChartColor {
+//                let color = string
+//                return ChartColor(rawValue: color)
+//            }
         }
     }
     
     // Setup a single alarm line
-    func setupAlarmLine(_ alarmPrice: Double, id: String) {
+    func setupAlarmLine(_ alarmPrice: Double, id: String, color: ChartColor) {
         let options = PriceLineOptions(
             id: id,
             price: alarmPrice,
-            color: "#f00",
+            color: color,
             lineWidth: .one,
             lineStyle: .solid
         )
@@ -70,34 +74,32 @@ final class AlarmManager {
     }
     
     func addAlarmAtSetPrice(alarmPrice: Double, closePrice: Double, symbol: String) {
-
         let isAlarmUpper = AlarmManager.isAlarmUpper(alarmPrice: alarmPrice, closePrice: closePrice)
-        
         let alarmID = UUID().uuidString
-        print(alarmID)
-        
         let currentDate = AlarmManager.convertCurrentDateToString()
+        let alarmColor = "#f00"
         
         guard let currentUserUserID = SavedCurrentUser.user.id else { return }
         
-        let newAlarm = AlarmModel(userID: currentUserUserID, alarmID: alarmID, symbol: symbol, alarmPrice: alarmPrice, isAlarmUpper: isAlarmUpper, isActive: true, creationDate: currentDate)
+        let newAlarm = AlarmModel(userID: currentUserUserID, alarmID: alarmID, symbol: symbol, alarmPrice: alarmPrice, isAlarmUpper: isAlarmUpper, isActive: true, creationDate: currentDate, alarmColor: alarmColor)
         
         storeAlarmInDB(newAlarm)
-        setupAlarmLine(alarmPrice, id: alarmID)
+        setupAlarmLine(alarmPrice, id: alarmID, color: ChartColor(rawValue: alarmColor))
     }
     
     func addAlarmForSelectedPrice(alarmPrice: Double, closePrice: Double, symbol: String) {
-
         let isAlarmUpper = AlarmManager.isAlarmUpper(alarmPrice: alarmPrice, closePrice: closePrice)
         let alarmID = UUID().uuidString
         let currentDate = AlarmManager.convertCurrentDateToString()
+        let alarmColor = "#f00"
         
         guard let currentUserUserID = SavedCurrentUser.user.id else { return }
         
-        let newAlarm = AlarmModel(userID: currentUserUserID, alarmID: alarmID, symbol: symbol, alarmPrice: alarmPrice, isAlarmUpper: isAlarmUpper, isActive: true, creationDate: currentDate)
+        let newAlarm = AlarmModel(userID: currentUserUserID, alarmID: alarmID, symbol: symbol, alarmPrice: alarmPrice, isAlarmUpper: isAlarmUpper, isActive: true, creationDate: currentDate, alarmColor: alarmColor)
         
         storeAlarmInDB(newAlarm)
-        setupAlarmLine(alarmPrice, id: alarmID)
+        setupAlarmLine(alarmPrice, id: alarmID, color: ChartColor(rawValue: alarmColor))
+        
     }
     
     // Store alarm in the database
