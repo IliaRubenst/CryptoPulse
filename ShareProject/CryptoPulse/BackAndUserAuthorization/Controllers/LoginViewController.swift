@@ -61,6 +61,9 @@ class LoginViewController: UIViewController {
             
             await loginFetch(request: request)
             await userFetch()
+            
+            guard let userID = SavedCurrentUser.user.id else { return }
+            await chatIDFetch(for: userID)
                     
             if let sceneDelegate = self.view.window?.windowScene?.delegate as? SceneDelegate {
                 sceneDelegate.checkAuthentication()
@@ -72,11 +75,8 @@ class LoginViewController: UIViewController {
         do {
             if let authToken = try await AuthService.loginFetch(request: request) {
                 AuthToken.authToken = authToken
-                
                 DataLoader.saveData(for: "AuthToken")
                 
-//                let userDefaults = DataLoader(keys: "AuthToken")
-//                userDefaults.saveData()
             }
         } catch ServerErrorResponse.invalidResponse(let message), ServerErrorResponse.detailError(let message), ServerErrorResponse.decodingError(let message) {
             AlertManager.showSignInErrorAlert(on: self, with: message)
@@ -89,12 +89,20 @@ class LoginViewController: UIViewController {
         do {
             if let user = try await DataService.getUser() {
                 SavedCurrentUser.user = user
-                
                 DataLoader.saveData(for: "CurrentUser")
-                
-//                let userDefaults = DataLoader(keys: "CurrentUser")
-//                userDefaults.saveData()
-                
+            }
+        } catch ServerErrorResponse.invalidResponse(let message), ServerErrorResponse.detailError(let message), ServerErrorResponse.decodingError(let message) {
+            print("DEBUG: \(message)")
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
+    
+    func chatIDFetch(for userID: Int) async {
+        do {
+            if let chatID = try await DataService.getUserChatID(for: userID) {
+                SavedCurrentUser.user.telegramChatId = chatID
+                DataLoader.saveData(for: "CurrentUser")
             }
         } catch ServerErrorResponse.invalidResponse(let message), ServerErrorResponse.detailError(let message), ServerErrorResponse.decodingError(let message) {
             print("DEBUG: \(message)")
