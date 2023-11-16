@@ -86,6 +86,12 @@ class DataService {
         }
     }
     
+    static func getUserChatID(request: URLRequest) async throws {
+        let (data, response) = try await URLSession.shared.data(for: request)
+        
+        
+    }
+    
     /*static func getData(complition: @escaping (Result<[Account], Error>) -> Void) {
         
         guard var request = Endpoint.getData().request else { return }

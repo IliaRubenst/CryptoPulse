@@ -119,7 +119,8 @@ final class AlarmManager {
     
     // Refresh alarm data from the database
     private func refreshAlarmDataFromDB() {
-        dbManager.performRequestDB { (data, error) in
+        guard let userID = SavedCurrentUser.user.id else { return }
+        dbManager.performRequestDB(userID: userID) /*{ (data, error) in
             if let error = error {
                 print("Не удалось создать аларм в БД: \(error.localizedDescription)")
             } else {
@@ -127,7 +128,7 @@ final class AlarmManager {
                 
                 self.sendPushNotification(message: "Аларм успешно создан")
             }
-        }
+        }*/
     }
     
     // Check alarm states and notify if the conditions are suitable
