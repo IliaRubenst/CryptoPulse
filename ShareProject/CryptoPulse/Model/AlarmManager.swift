@@ -51,7 +51,7 @@ final class AlarmManager {
     }
     
     // Add an alarm and associate it with a detail view controller
-    func addAlarm(symbol: String, closePrice: Double, openedChart: DetailViewController) {
+    func addAlarm(symbol: String, closePrice: Double, openedChart: ChartViewController) {
         let addAlarmVC = AddAlarmViewController()
         addAlarmVC.symbol = symbol
         addAlarmVC.closePrice = String(closePrice)

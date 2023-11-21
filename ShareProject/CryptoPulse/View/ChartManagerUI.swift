@@ -11,7 +11,7 @@ import LightweightCharts
 
 
 final class ChartManagerUI {
-    weak var delegate: DetailViewController!
+    weak var delegate: ChartViewController!
     
     let accentColor = UIColor(red: 0, green: 150/255.0, blue: 136/255.0, alpha: 1)
     
@@ -28,7 +28,7 @@ final class ChartManagerUI {
     
 
     
-    init(delegate: DetailViewController!) {
+    init(delegate: ChartViewController!) {
         self.delegate = delegate
         
         tooltipView = TooltipView(accentColor: self.accentColor)

@@ -72,12 +72,12 @@ final class AlarmTableViewCell: UITableViewCell {
      
      private func addLabelColorView() {
          self.contentView.addSubview(labelColor)
-         
+         let spacing = CGFloat(-5)
          NSLayoutConstraint.activate([
-             labelColor.topAnchor.constraint(equalTo: self.contentView.topAnchor),
-             labelColor.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor),
+             labelColor.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: -spacing),
+             labelColor.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: spacing),
              labelColor.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor),
-             labelColor.widthAnchor.constraint(equalToConstant: 5)
+             labelColor.widthAnchor.constraint(equalToConstant: -spacing)
          ])
      }
      

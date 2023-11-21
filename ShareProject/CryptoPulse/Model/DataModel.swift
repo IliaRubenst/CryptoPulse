@@ -47,7 +47,6 @@ struct IndividualSymbolTickerStreamsModel {
 }
 
 struct AlarmModel: Codable, Hashable {
-//    let id: Int
     let userID: Int
     let alarmID: String
     let symbol: String

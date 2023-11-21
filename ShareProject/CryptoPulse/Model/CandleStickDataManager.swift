@@ -15,7 +15,7 @@ enum NetworkError: Error {
 
 final class CandleStickDataManager {
     let binanceURL = "https://fapi.binance.com"
-    var delegate: DetailViewController!
+    var delegate: ChartViewController!
 
     func fetchCandles(from symbol: String, timeFrame: String, completion: @escaping (Result<[[Any]], NetworkError>) -> Void) {
         var urlComponents = URLComponents(string: binanceURL)

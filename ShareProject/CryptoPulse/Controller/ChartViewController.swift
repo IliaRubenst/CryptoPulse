@@ -23,14 +23,14 @@ private enum Constants {
     static let cameraImageName = "camera"
 }
 
-class DetailViewController: UIViewController {
+class ChartViewController: UIViewController {
     var lightWeightChartView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
-    var helper: DetailViewUI!
+    var helper: ChartViewUI!
     var webSocketManagers = [WebSocketManager]()
     var chartManager: ChartManager!
     var data = [CandlestickData]()
@@ -63,7 +63,7 @@ class DetailViewController: UIViewController {
         
         view.backgroundColor = .systemBackground
 
-        helper = DetailViewUI(viewController: self)
+        helper = ChartViewUI(viewController: self)
         helper.loadViewComponents()
     }
     
@@ -201,14 +201,18 @@ class DetailViewController: UIViewController {
 }
 
 // MARK: - WebSocketManagerDelegate Methods
-extension DetailViewController: WebSocketManagerDelegate {
+extension ChartViewController: WebSocketManagerDelegate {
     func didUpdateCandle(_ websocketManager: WebSocketManager, candleModel: CurrentCandleModel) {
         closePrice = Double(candleModel.closePrice)!
         isKlineClose = candleModel.isKlineClose
         currentCandelModel = candleModel
 
         chartManager.tick()
-        alarmManager?.alarmObserver(for: symbol, equal: closePrice)
+        if let alarmManager = alarmManager {
+            alarmManager.alarmObserver(for: symbol, equal: closePrice)
+        } else {
+            print("Error: alarmManager is not initialized yet!")
+        }
         ColorManager.percentText(priceChangePercent: priceChangePercent, rightLowerNavLabel: helper.rightLowerNavLabel)
         
         helper.rightLowerNavLabel.text = "\(priceChangePercent)%"
@@ -235,7 +239,6 @@ extension DetailViewController: WebSocketManagerDelegate {
     }
 }
 
-
 extension UIView {
     func makeScreenshot() -> UIImage {
         let renderer = UIGraphicsImageRenderer(bounds: self.bounds)
@@ -244,7 +247,3 @@ extension UIView {
         }
     }
 }
-
-
-
-

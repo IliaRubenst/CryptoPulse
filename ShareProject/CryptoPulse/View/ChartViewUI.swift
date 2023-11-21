@@ -8,8 +8,8 @@
 import Foundation
 import UIKit
 
-final class DetailViewUI {
-    unowned var viewController: DetailViewController
+final class ChartViewUI {
+    unowned var viewController: ChartViewController
     
     private let upperStackView = UIStackView()
     let leftNavLabel = UILabel()
@@ -32,7 +32,7 @@ final class DetailViewUI {
     
     private let buttonHeight = CGFloat(20)
 
-    init(viewController: DetailViewController) {
+    init(viewController: ChartViewController) {
         self.viewController = viewController
     }
     

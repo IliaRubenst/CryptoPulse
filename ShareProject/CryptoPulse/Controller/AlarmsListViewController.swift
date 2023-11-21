@@ -193,7 +193,7 @@ class AlarmsListViewController: UIViewController, UITableViewDelegate, UITableVi
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let chartVC = DetailViewController()
+        let chartVC = ChartViewController()
         chartVC.symbol = filtredAlarms[indexPath.item].symbol
         
         navigationController?.pushViewController(chartVC, animated: true)

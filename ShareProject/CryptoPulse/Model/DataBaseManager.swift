@@ -15,10 +15,11 @@ enum HTTPMethod: String {
 }
 
 // В запросах не обрабатываются ошибки с сервера.
+// теперь обрабатываются
 
 final class DataBaseManager {
     private let baseURLString = "http://127.0.0.1:8000/alarms_db/"
-//    let baseURLString = "https://cryptopulseapp.ru/api/account"
+//    let baseURLString = "https://cryptopulseapp.ru/alarms_db/"
     private let authorizationValue = "Token \(AuthToken.authToken)"
     
     func performRequestDB(userID: Int) /*, completion: @escaping (Data?, Error?) -> Void)*/ {
@@ -58,30 +59,49 @@ final class DataBaseManager {
     }
     
     private func performTaskWithRequestType(_ type: HTTPMethod,
-                                    urlString: String,
-                                    body: Data?,
-                                    completion: @escaping (Data?, Error?) -> Void) {
+                                            urlString: String,
+                                            body: Data?,
+                                            completion: @escaping (Data?, Error?) -> Void) {
         
         if let url = URL(string: urlString) {
             
             let request = createRequest(with: url, type: type.rawValue, body: body)
             URLSession.shared.dataTask(with: request) { data, response, error in
-                if error != nil {
-                    print(error!)
+                if let error = error {
+                    print("Error: \(error)")
+                    completion(nil, error)
                     return
                 }
                 
-                DispatchQueue.main.async { [self] in
-                    if let safeData = data, safeData.count != 0, type == .GET  {
-                        parseJSONDB(DBData: safeData)
+                if let response = response as? HTTPURLResponse {
+                    switch response.statusCode {
+                    case 200..<300:
+//                        print("Successful request.")
+                        
+                        if let data = data {
+                            DispatchQueue.main.async {
+                                if data.count != 0 {
+                                    self.parseJSONDB(DBData: data)
+                                }
+                            }
+                            completion(data, nil)
+                        }
+                    case 400..<500:
+                        print("Client error: \(response.statusCode).")
+                        completion(nil, NSError(domain: urlString, code: response.statusCode, userInfo: nil))
+                    case 500..<600:
+                        print("Server error: \(response.statusCode).")
+                        completion(nil, NSError(domain: urlString, code: response.statusCode, userInfo: nil))
+                    default:
+                        print("Unexpected status code: \(response.statusCode)")
+                        completion(nil, NSError(domain: urlString, code: response.statusCode, userInfo: nil))
                     }
+                    
+                    return
                 }
-                
-                completion(data, error)
             }.resume()
             
             print("Make \(request.httpMethod!) request to:\(url)")
-            
         }
     }
     

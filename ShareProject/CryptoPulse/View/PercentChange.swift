@@ -11,7 +11,7 @@ import UIKit
 final class PercentChange: UIView {
     private let percentLabel = UILabel()
     private let color: UIColor
-    weak var detailViewController: DetailViewController!
+    weak var detailViewController: ChartViewController!
     
     init(color: UIColor) {
         self.color = color

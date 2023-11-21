@@ -23,7 +23,7 @@ class AddAlarmViewController: UIViewController, UITextFieldDelegate, WebSocketMa
     var alarmPrice: Double?
     
     var webSocketManager: WebSocketManager! = nil
-    weak var openedChart: DetailViewController? = nil
+    weak var openedChart: ChartViewController? = nil
     var openedAlarmsList: AlarmsListViewController? = nil
     
     
@@ -97,7 +97,7 @@ class AddAlarmViewController: UIViewController, UITextFieldDelegate, WebSocketMa
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        colorButton = LabelColorButton(alarmColor: ColorManager.setAlarmColor(alarmID: alarmID ?? "BTCUSDT") ?? "#ffff00")
+        colorButton = LabelColorButton(alarmColor: ColorManager.setAlarmColor(alarmID: alarmID ?? "BTCUSDT") ?? "#f00")
         colorButton.layer.cornerRadius = 10
         colorButton.backgroundColor = .systemBlue
         colorButton.leftLabel.textColor = .white

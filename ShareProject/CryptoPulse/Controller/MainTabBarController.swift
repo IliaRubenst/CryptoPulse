@@ -18,7 +18,7 @@ class MainTabBarController: UITabBarController {
     
     private func generateTabBars() {
         viewControllers = [
-            generateVC(viewController: ViewController(),
+            generateVC(viewController: MainViewController(),
                        title: "Мои списки",
                        image: UIImage(systemName: "folder.fill"),
                        navController: true),

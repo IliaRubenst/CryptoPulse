@@ -15,7 +15,7 @@ enum SymbolsListSender {
 class SymbolsListController: UIViewController {
     private let searchController = UISearchController(searchResultsController: nil)
     var webSocket = WebSocketManager()
-    var viewCtr: ViewController!
+    var viewCtr: MainViewController!
     var addAlarmVC: AddAlarmViewController!
     var senderState: SymbolsListSender = .mainView
 //    let defaults = DataLoader(keys: "savedFullSymbolsData")

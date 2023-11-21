@@ -41,7 +41,7 @@ class WebSocketManager: NSObject, URLSessionWebSocketDelegate {
         let session = URLSession(configuration: .default, delegate: self, delegateQueue: .main)
         
         guard let url = URL(string: url) else { return }
-        print(url)
+//        print(url)
         webSocket = session.webSocketTask(with: url)
         webSocket?.resume()
     }
@@ -80,13 +80,13 @@ class WebSocketManager: NSObject, URLSessionWebSocketDelegate {
     }
     
     func urlSession(_ session: URLSession, webSocketTask: URLSessionWebSocketTask, didOpenWithProtocol protocol: String?) {
-        print("Did connect to socket")
+//        print("Did connect to socket")
         ping()
         receive()
     }
     
     func urlSession(_ session: URLSession, webSocketTask: URLSessionWebSocketTask, didCloseWith closeCode: URLSessionWebSocketTask.CloseCode, reason: Data?) {
-        print("Did close connection with reason")
+//        print("Did close connection with reason")
     }
     
     private func parseJSONWeb(socketString: String, state: State) {
@@ -156,9 +156,6 @@ class WebSocketManager: NSObject, URLSessionWebSocketDelegate {
                 }
                 
                 DataLoader.loadUserData(for: "savedFullSymbolsData")
-                
-//                let defaults = DataLoader(keys: "savedFullSymbolsData")
-//                defaults.loadUserData()
                 
                 for model in array {
                     if let index = SymbolsArray.symbols.firstIndex(where: { $0.symbol == model.s }) {

@@ -38,11 +38,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 
             } catch ServerErrorResponse.invalidResponse(let message), ServerErrorResponse.detailError(let message), ServerErrorResponse.decodingError(let message) {
                 print("DEBUG: \(message)")
+                goToController(main: false)
             } catch {
                 print(error.localizedDescription)
+                goToController(main: false)
             }
-            
-            goToController(main: false)
         }
     }
     

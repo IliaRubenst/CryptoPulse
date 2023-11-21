@@ -129,20 +129,3 @@ struct K: Codable {
     let l: String
     let x: Bool
 }
-
-/*
-struct Account: Codable, Hashable {
-    let id: Int
-    let userName: String
-    let symbol: String
-    let alarmPrice: Float
-    let isAlarmUpper: Bool
-    let isActive: Bool
-    let creationDate: String
-}
-
-struct AccountModel {
-    static var accounts = [Account]()
-}
-*/
-

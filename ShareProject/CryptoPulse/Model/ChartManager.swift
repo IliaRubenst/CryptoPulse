@@ -9,7 +9,7 @@ import Foundation
 import LightweightCharts
 
 final class ChartManager {
-    weak var delegate: DetailViewController!
+    weak var delegate: ChartViewController!
     var alarmManager: AlarmManager!
     var candleStickDataManager: CandleStickDataManager
     var chartManagerUI: ChartManagerUI?
@@ -33,7 +33,7 @@ final class ChartManager {
     private var currentBusinessDay = Date().timeIntervalSince1970
     lazy var currentBar = CandlestickData(time: .utc(timestamp: currentBusinessDay), open: nil, high: nil, low: nil, close: nil)
     
-    init(delegate: DetailViewController, symbol: String, timeFrame: String, candleStickDataManager: CandleStickDataManager) {
+    init(delegate: ChartViewController, symbol: String, timeFrame: String, candleStickDataManager: CandleStickDataManager) {
         self.delegate = delegate
         self.symbol = symbol
         self.timeFrame = timeFrame

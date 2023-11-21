@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class MainViewController: UIViewController {
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
@@ -84,7 +84,7 @@ class ViewController: UIViewController {
 }
 
 // MARK: - UICollectionViewDataSource Methods
-extension ViewController: UICollectionViewDataSource {
+extension MainViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return UserSymbols.savedSymbols.count
     }
@@ -97,8 +97,6 @@ extension ViewController: UICollectionViewDataSource {
         let symbol = UserSymbols.savedSymbols[indexPath.item]
         cell.configure(with: symbol)
         
-        ColorManager.changeCoinCell(indexPath: indexPath, cell: cell)
-        
         cell.layer.borderWidth = 1
         cell.layer.cornerRadius = 5
         
@@ -107,7 +105,7 @@ extension ViewController: UICollectionViewDataSource {
 }
 
 // MARK: - UICollectionViewDelegate Methods
-extension ViewController: UICollectionViewDelegate {
+extension MainViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         openDetailView(indexPath: indexPath)
     }
@@ -132,7 +130,7 @@ extension ViewController: UICollectionViewDelegate {
 }
 
 // MARK: - UICollectionViewDelegateFlowLayout Methods
-extension ViewController: UICollectionViewDelegateFlowLayout {
+extension MainViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let frameVC = collectionView.frame
         let offSet: CGFloat = 3.0
@@ -146,7 +144,7 @@ extension ViewController: UICollectionViewDelegateFlowLayout {
 }
 
 // MARK: - WebSocketManagerDelegate Methods
-extension ViewController: WebSocketManagerDelegate {
+extension MainViewController: WebSocketManagerDelegate {
     func getSymbolToWebSocket() {
         for symbol in UserSymbols.savedSymbols {
             setConnectForSymbols(symbol.symbol)
@@ -188,7 +186,10 @@ extension ViewController: WebSocketManagerDelegate {
                 if let index = UserSymbols.savedSymbols.firstIndex(where: { $0.symbol == symbol.symbol }) {
                     UserSymbols.savedSymbols[index].volume = symbol.volume24Format()
                     UserSymbols.savedSymbols[index].priceChangePercent = symbol.priceChangePercent
-                    
+                    if let cell = self.collectionView.cellForItem(at: IndexPath(item: index, section: 0)) as? CustomCollectionViewCell {
+                        ColorManager.changeCoinCell(symbol: UserSymbols.savedSymbols[index], cell: cell)
+                        cell.configure(with: UserSymbols.savedSymbols[index])
+                    }
                     if !isSelected {
 //                        let indexPath = IndexPath(item: index, section: 0)
 //                        collectionView.reloadItems(at: [indexPath])
@@ -205,7 +206,7 @@ extension ViewController: WebSocketManagerDelegate {
     }
 }
 
-extension ViewController {
+extension MainViewController {
     private func loadUserData() {
         DataLoader.loadUserData(for: "savedSymbols")
         
@@ -271,7 +272,7 @@ extension ViewController {
     }
     
     func openDetailView(indexPath: IndexPath) {
-        let chartVC = DetailViewController()
+        let chartVC = ChartViewController()
         chartVC.symbol = UserSymbols.savedSymbols[indexPath.item].symbol
         chartVC.price = UserSymbols.savedSymbols[indexPath.item].markPrice
         
