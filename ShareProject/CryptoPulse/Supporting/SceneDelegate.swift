@@ -34,14 +34,15 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                    let alarmsArray = try await DataService.getAlarms(for: currentUserUserID) {
                     AlarmModelsArray.alarms = alarmsArray
                     goToController(main: true)
+                } else {
+                    goToController(main: false)
                 }
                 
             } catch ServerErrorResponse.invalidResponse(let message), ServerErrorResponse.detailError(let message), ServerErrorResponse.decodingError(let message) {
                 print("DEBUG: \(message)")
-                goToController(main: false)
+                
             } catch {
                 print(error.localizedDescription)
-                goToController(main: false)
             }
         }
     }
